@@ -3,6 +3,10 @@
 @import "@material/layout-grid/mdc-layout-grid";
 @import "@material/card/mdc-card";
 
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
 .gk-card__media--text-title {
     font-size: 16px;
     

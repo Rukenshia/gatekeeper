@@ -1,0 +1,24 @@
+<h2>Listing Teams</h2>
+
+<div class="mdc-layout-grid">
+  <div class="mdc-layout-grid__inner">
+    <%= for team <- @teams do %>
+    <div class="mdc-layout-grid__cell">
+      <div class="mdc-card">
+        <div class="mdc-card__media mdc-card__media--square gk-card__media--text-title">
+          <div class="mdc-card__media-content"><%= team.name %></div>
+        </div>
+        <div class="mdc-card__actions">
+          <div class="mdc-card__action-buttons">
+            <%= link "Show", to: team_path(@conn, :show, team), class: "mdc-button mdc-card__action mdc-card__action--button" %>
+            <%= link "Edit", to: team_path(@conn, :edit, team), class: "mdc-button mdc-card__action mdc-card__action--button" %>
+            <%= link "Delete", to: team_path(@conn, :delete, team), method: :delete, data: [confirm: "Are you sure?"], class: "mdc-button mdc-card__action mdc-card__action--button" %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>
+
+<span><%= link "New Team", to: team_path(@conn, :new) %></span>

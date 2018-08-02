@@ -1,0 +1,15 @@
+version: "3"
+services: 
+  pintaecolorea_bd:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    ports: 
+      - "5432:5432"
+    networks: 
+      - "service"
+    volumes:
+      - ./data:/var/lib/postgresql/
+networks:
+  service:

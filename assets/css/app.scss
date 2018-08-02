@@ -1,0 +1,12 @@
+/* This file is for your main application css. */
+
+@import "@material/layout-grid/mdc-layout-grid";
+@import "@material/card/mdc-card";
+
+.gk-card__media--text-title {
+    font-size: 16px;
+    
+    .mdc-card__media-content {
+        padding: 8px;
+    }
+}

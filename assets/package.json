@@ -1,0 +1,40 @@
+{
+  "repository": {},
+  "license": "MIT",
+  "scripts": {
+    "deploy": "brunch build --production",
+    "watch": "brunch watch --stdin"
+  },
+  "dependencies": {
+    "phoenix": "file:../deps/phoenix",
+    "phoenix_html": "file:../deps/phoenix_html"
+  },
+  "devDependencies": {
+    "@material/auto-init": "^0.35.0",
+    "@material/base": "^0.35.0",
+    "@material/card": "^0.37.1",
+    "@material/dialog": "^0.37.1",
+    "@material/drawer": "^0.37.1",
+    "@material/grid-list": "^0.37.1",
+    "@material/icon-toggle": "^0.37.1",
+    "@material/layout-grid": "^0.34.0",
+    "@material/line-ripple": "^0.35.0",
+    "@material/linear-progress": "^0.35.0",
+    "@material/list": "^0.37.1",
+    "@material/menu": "^0.37.1",
+    "@material/mwc-base": "^0.1.2",
+    "@material/mwc-button": "^0.1.2",
+    "@material/mwc-checkbox": "^0.1.2",
+    "@material/mwc-fab": "^0.1.2",
+    "@material/mwc-icon": "^0.1.2",
+    "@material/mwc-switch": "^0.1.2",
+    "@material/notched-outline": "^0.37.1",
+    "@material/radio": "^0.37.1",
+    "@material/switch": "^0.36.1",
+    "babel-brunch": "6.1.1",
+    "brunch": "2.10.9",
+    "clean-css-brunch": "2.10.0",
+    "sass-brunch": "^2.10.4",
+    "uglify-js-brunch": "2.10.0"
+  }
+}

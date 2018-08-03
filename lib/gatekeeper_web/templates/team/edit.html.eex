@@ -1,5 +1,19 @@
 <h2>Edit Team</h2>
 
+<h2>Team</h2>
 <%= render "form.html", Map.put(assigns, :action, team_path(@conn, :update, @team)) %>
 
-<span><%= link "Back", to: team_path(@conn, :index) %></span>
+<h3>Members</h3>
+
+<div>
+    <%= if length(@team.members) == 0 do %>
+    No team members.
+    <% else %>
+        <%= for member <- @team.members do %>
+        <%= member.name %>
+        <% end %>
+    <% end %>
+</div>
+
+
+<%= link "Back", to: team_path(@conn, :index), class: "mdc-button  mdc-button--unelevated" %>

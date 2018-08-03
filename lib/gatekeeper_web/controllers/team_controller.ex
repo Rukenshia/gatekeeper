@@ -1,6 +1,7 @@
 defmodule GatekeeperWeb.TeamController do
   use GatekeeperWeb, :controller
 
+  alias Gatekeeper.Repo
   alias Gatekeeper.Teams
   alias Gatekeeper.Teams.Team
 
@@ -31,7 +32,9 @@ defmodule GatekeeperWeb.TeamController do
   end
 
   def edit(conn, %{"id" => id}) do
-    team = Teams.get_team!(id)
+    team =
+      Teams.get_team!(id)
+      |> Repo.preload(:members)
     changeset = Teams.change_team(team)
     render(conn, "edit.html", team: team, changeset: changeset)
   end

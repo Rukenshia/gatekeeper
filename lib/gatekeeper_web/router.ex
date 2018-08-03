@@ -19,6 +19,7 @@ defmodule GatekeeperWeb.Router do
     get "/", PageController, :index
 
     resources "/teams", TeamController
+    resources "/users", UserController
   end
 
   # Other scopes may use custom stacks.

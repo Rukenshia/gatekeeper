@@ -5,6 +5,9 @@ defmodule Gatekeeper.Teams.TeamMember do
 
   schema "team_members" do
     field :role, :string
+
+    belongs_to :user, Gatekeeper.Users.User
+    belongs_to :team, Gatekeeper.Teams.Team
     timestamps()
   end
 

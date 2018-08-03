@@ -6,6 +6,7 @@ defmodule Gatekeeper.Teams.Team do
   schema "teams" do
     field :name, :string
 
+    many_to_many :members, Gatekeeper.Users.User, join_through: "team_members"
     timestamps()
   end
 

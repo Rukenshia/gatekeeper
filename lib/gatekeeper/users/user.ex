@@ -18,4 +18,8 @@ defmodule Gatekeeper.Users.User do
     |> cast(attrs, [:name, :email])
     |> validate_required([:name, :email])
   end
+
+  def is_member_of(user, team) do
+    Enum.member?(user.teams, team)
+  end
 end

@@ -3,6 +3,7 @@ defmodule GatekeeperWeb.TeamController do
 
   alias Gatekeeper.Repo
   alias Gatekeeper.Teams
+  alias Gatekeeper.Users
   alias Gatekeeper.Teams.Team
 
   def index(conn, _params) do
@@ -35,8 +36,10 @@ defmodule GatekeeperWeb.TeamController do
     team =
       Teams.get_team!(id)
       |> Repo.preload(:members)
+    users = Users.list_users
+      |> Repo.preload(:teams)
     changeset = Teams.change_team(team)
-    render(conn, "edit.html", team: team, changeset: changeset)
+    render(conn, "edit.html", team: team, changeset: changeset, users: users)
   end
 
   def update(conn, %{"id" => id, "team" => team_params}) do

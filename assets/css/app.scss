@@ -1,8 +1,14 @@
 /* This file is for your main application css. */
+$mdc-theme-primary: #1a73e8;
+$mdc-theme-secondary: #9e9e9e;
+$mdc-theme-background: #fff;
+$corner-radius: 4px;
+
 
 @import "@material/layout-grid/mdc-layout-grid";
 @import "@material/card/mdc-card";
 @import "@material/button/mdc-button";
+@import "@material/elevation/mdc-elevation";
 
 * {
     font-family: 'Open Sans', sans-serif;
@@ -15,4 +21,8 @@
     .mdc-card__media-content {
         padding: 8px;
     }
+}
+
+.gk-button {
+    @include mdc-button-corner-radius($corner-radius);
 }

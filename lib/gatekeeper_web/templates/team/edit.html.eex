@@ -7,13 +7,20 @@
 
 <div>
     <%= if length(@team.members) == 0 do %>
-    No team members.
+        No team members.
     <% else %>
         <%= for member <- @team.members do %>
         <%= member.name %>
         <% end %>
     <% end %>
+
+    <h4>Add new member</h4>
+    <ul>
+    <%= for user <- Enum.filter(@users, fn x -> !Gatekeeper.Users.User.is_member_of(x, @team) end) do %>
+        <li><%= user.name %>
+    <% end %>
+    </ul>
 </div>
 
 
-<%= link "Back", to: team_path(@conn, :index), class: "mdc-button  mdc-button--unelevated" %>
+<%= link "Back", to: team_path(@conn, :index), class: "mdc-button gk-button mdc-button--unelevated" %>

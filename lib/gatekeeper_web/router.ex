@@ -26,6 +26,6 @@ defmodule GatekeeperWeb.Router do
   scope "/api", GatekeeperWeb do
     pipe_through :api
 
-    post "/teams/:id/members", TeamController.Add
+    post "/teams/:id/members", TeamController, :api_add_member
   end
 end

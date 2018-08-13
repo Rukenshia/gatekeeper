@@ -64,11 +64,22 @@ defmodule GatekeeperWeb.TeamController do
     |> redirect(to: team_path(conn, :index))
   end
 
+  # TODO: move into TeamControllerApi or something like that
   def api_add_member(conn, %{"id" => id, "user" => user_id}) do
     team = Teams.get_team!(id)
+    user = Users.get_user!(user_id)
 
-    conn
-    |> put_flash(:info, "Team deleted successfully.")
-    |> redirect(to: team_path(conn, :index))
+    changeset = Teams.TeamMember.changeset(%Teams.TeamMember{}, %{user: user, team: team, role: "administrator"})
+
+
+    case Repo.insert_or_update(changeset) do
+      {:ok, _} ->
+      conn
+      |> json(%{ok: true})
+      {:error, _} ->
+        conn
+        |> json(%{ok: false})
+    end
+
   end
 end

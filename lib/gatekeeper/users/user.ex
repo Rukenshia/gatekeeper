@@ -20,6 +20,6 @@ defmodule Gatekeeper.Users.User do
   end
 
   def is_member_of(user, team) do
-    Enum.member?(user.teams, team)
+    Enum.any?(user.teams, fn x -> x.id == team.id end)
   end
 end

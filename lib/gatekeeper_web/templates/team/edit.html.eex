@@ -5,7 +5,7 @@
 
 <h3>Members</h3>
 
-<div>
+<div id="app">
     <%= if length(@team.members) == 0 do %>
         No team members.
     <% else %>
@@ -21,11 +21,11 @@
             <div class="mdc-layout-grid__cell">
                 <div class="mdc-card">
                     <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
-                        <div class="mdc-card__media-content"><%= user.name %></div>
+                        <div class="mdc-card__media-content"><%= user.name %> </div>
                     </div>
                     <div class="mdc-card__actions">
                         <div class="mdc-card__action-buttons">
-                            <a href="#" class="mdc-button mdc-card__action mdc-card__action--button">Add</a>
+                            <a @click="addMember(<%= user.id %>, <%= @team.id %>)" class="mdc-button mdc-card__action mdc-card__action--button">Add</a>
                         </div>
                     </div>
                 </div>
@@ -37,3 +37,19 @@
 
 
 <%= link "Back", to: team_path(@conn, :index), class: "mdc-button gk-button mdc-button--unelevated" %>
+
+<script defer>
+var app = new Vue({
+    el: '#app',
+    data: {
+        message: 'Hello Vue!',
+    },
+    methods: {
+        addMember(userId, teamId) {
+            axios.post(`/api/teams/${teamId}/members`, { user: userId })
+                .then(response => console.log(response))
+                .then(() => window.reload());
+        },
+    },
+})
+</script>

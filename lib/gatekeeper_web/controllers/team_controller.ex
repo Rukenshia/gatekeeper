@@ -22,6 +22,7 @@ defmodule GatekeeperWeb.TeamController do
         conn
         |> put_flash(:info, "Team created successfully.")
         |> redirect(to: team_path(conn, :show, team))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -36,8 +37,11 @@ defmodule GatekeeperWeb.TeamController do
     team =
       Teams.get_team!(id)
       |> Repo.preload(:members)
-    users = Users.list_users
+
+    users =
+      Users.list_users()
       |> Repo.preload(:teams)
+
     changeset = Teams.change_team(team)
     render(conn, "edit.html", team: team, changeset: changeset, users: users)
   end
@@ -50,6 +54,7 @@ defmodule GatekeeperWeb.TeamController do
         conn
         |> put_flash(:info, "Team updated successfully.")
         |> redirect(to: team_path(conn, :show, team))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", team: team, changeset: changeset)
     end
@@ -66,20 +71,24 @@ defmodule GatekeeperWeb.TeamController do
 
   # TODO: move into TeamControllerApi or something like that
   def api_add_member(conn, %{"id" => id, "user" => user_id}) do
-    team = Teams.get_team!(id)
-    user = Users.get_user!(user_id)
+    # team = Teams.get_team!(id)
+    # user = Users.get_user!(user_id)
 
-    changeset = Teams.TeamMember.changeset(%Teams.TeamMember{}, %{user: user, team: team, role: "administrator"})
-
+    changeset =
+      Teams.TeamMember.changeset(%Teams.TeamMember{}, %{
+        user_id: user_id,
+        team_id: String.to_integer(id),
+        role: "administrator"
+      })
 
     case Repo.insert_or_update(changeset) do
       {:ok, _} ->
-      conn
-      |> json(%{ok: true})
+        conn
+        |> json(%{ok: true})
+
       {:error, _} ->
         conn
         |> json(%{ok: false})
     end
-
   end
 end

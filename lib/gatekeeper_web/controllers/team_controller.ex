@@ -69,6 +69,30 @@ defmodule GatekeeperWeb.TeamController do
     |> redirect(to: team_path(conn, :index))
   end
 
+  def add_member(conn, %{"team_id" => id, "user" => user_id}) do
+    team = Teams.get_team!(id)
+    # user = Users.get_user!(user_id)
+
+    changeset =
+      Teams.TeamMember.changeset(%Teams.TeamMember{}, %{
+        user_id: user_id,
+        team_id: String.to_integer(id),
+        role: "administrator"
+      })
+
+    case Repo.insert_or_update(changeset) do
+      {:ok, _} ->
+        conn
+        |> put_flash(:info, "Team updated successfully.")
+        |> redirect(to: team_path(conn, :show, team))
+
+      {:error, _} ->
+        conn
+        |> put_flash(:error, "Could not add member to team")
+        |> redirect(to: team_path(conn, :show, team))
+    end
+  end
+
   # TODO: move into TeamControllerApi or something like that
   def api_add_member(conn, %{"id" => id, "user" => user_id}) do
     # team = Teams.get_team!(id)

@@ -23,11 +23,14 @@
                     <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
                         <div class="mdc-card__media-content"><%= user.name %> </div>
                     </div>
+                    <%= form_for @conn, team_team_path(@conn, :add_member, @team), fn f -> %>
+                    <input type="hidden" name="user" value="<%= user.id %>" />
                     <div class="mdc-card__actions">
                         <div class="mdc-card__action-buttons">
-                            <a @click="addMember(<%= user.id %>, <%= @team.id %>)" class="mdc-button mdc-card__action mdc-card__action--button">Add</a>
+                            <button type="submit" class="mdc-button mdc-card__action mdc-card__action--button">Add</button>
                         </div>
                     </div>
+                    <% end %>
                 </div>
             </div>
             <% end %>

@@ -15,11 +15,24 @@
     <% end %>
 
     <h4>Add new member</h4>
-    <ul>
-    <%= for user <- Enum.filter(@users, fn x -> !Gatekeeper.Users.User.is_member_of(x, @team) end) do %>
-        <li><%= user.name %>
-    <% end %>
-    </ul>
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__inner">
+            <%= for user <- Enum.filter(@users, fn x -> !Gatekeeper.Users.User.is_member_of(x, @team) end) do %>
+            <div class="mdc-layout-grid__cell">
+                <div class="mdc-card">
+                    <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
+                        <div class="mdc-card__media-content"><%= user.name %></div>
+                    </div>
+                    <div class="mdc-card__actions">
+                        <div class="mdc-card__action-buttons">
+                            <a href="#" class="mdc-button mdc-card__action mdc-card__action--button">Add</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% end %>
+        </div>
+    </div>
 </div>
 
 

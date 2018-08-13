@@ -23,7 +23,9 @@ defmodule GatekeeperWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", GatekeeperWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", GatekeeperWeb do
+    pipe_through :api
+
+    post "/teams/:id/members", TeamController.Add
+  end
 end

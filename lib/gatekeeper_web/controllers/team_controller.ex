@@ -63,4 +63,12 @@ defmodule GatekeeperWeb.TeamController do
     |> put_flash(:info, "Team deleted successfully.")
     |> redirect(to: team_path(conn, :index))
   end
+
+  def api_add_member(conn, %{"id" => id, "user" => user_id}) do
+    team = Teams.get_team!(id)
+
+    conn
+    |> put_flash(:info, "Team deleted successfully.")
+    |> redirect(to: team_path(conn, :index))
+  end
 end

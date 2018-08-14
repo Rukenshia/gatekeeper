@@ -1,4 +1,6 @@
 defmodule GatekeeperWeb.TeamController do
+  require Logger
+
   use GatekeeperWeb, :controller
 
   alias Gatekeeper.Repo
@@ -84,28 +86,26 @@ defmodule GatekeeperWeb.TeamController do
       {:ok, _} ->
         conn
         |> put_flash(:info, "Team updated successfully.")
-        |> redirect(to: team_path(conn, :show, team))
+        |> redirect(to: team_path(conn, :edit, team))
 
       {:error, _} ->
         conn
         |> put_flash(:error, "Could not add member to team")
-        |> redirect(to: team_path(conn, :show, team))
+        |> redirect(to: team_path(conn, :edit, team))
     end
   end
 
-  # TODO: move into TeamControllerApi or something like that
-  def api_add_member(conn, %{"id" => id, "user" => user_id}) do
-    # team = Teams.get_team!(id)
-    # user = Users.get_user!(user_id)
+  def api_remove_member(conn, %{"team_id" => team_id, "user_id" => user_id}) do
+    membership =
+      Repo.get_by!(
+        Gatekeeper.Teams.TeamMember,
+        user_id: String.to_integer(user_id),
+        team_id: String.to_integer(team_id)
+      )
 
-    changeset =
-      Teams.TeamMember.changeset(%Teams.TeamMember{}, %{
-        user_id: user_id,
-        team_id: String.to_integer(id),
-        role: "administrator"
-      })
+    Logger.debug(inspect(membership))
 
-    case Repo.insert_or_update(changeset) do
+    case Repo.delete(membership) do
       {:ok, _} ->
         conn
         |> json(%{ok: true})

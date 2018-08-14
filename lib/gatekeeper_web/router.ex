@@ -30,6 +30,6 @@ defmodule GatekeeperWeb.Router do
   scope "/api", GatekeeperWeb do
     pipe_through(:api)
 
-    post("/teams/:id/members", TeamController, :api_add_member)
+    delete("/teams/:team_id/members/:user_id", TeamController, :api_remove_member)
   end
 end

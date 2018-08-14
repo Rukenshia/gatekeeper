@@ -11,20 +11,18 @@
     <% else %>
     <div class="mdc-layout-grid">
         <div class="mdc-layout-grid__inner">
-        <%= for user <- @team.members do %>
-            <div class="mdc-layout-grid__cell">
+            <div class="mdc-layout-grid__cell" v-for="member in members">
                 <div class="mdc-card">
                     <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
-                        <div class="mdc-card__media-content"><%= user.name %> </div>
+                        <div class="mdc-card__media-content">{{member.name}}</div>
                     </div>
                     <div class="mdc-card__actions">
                         <div class="mdc-card__action-buttons">
-                            <button @click="removeMember(<%= @team.id %>, <%= user.id %>)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button">Remove</button>
+                            <button @click="removeMember(member.id)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button">Remove</button>
                         </div>
                     </div>
                 </div>
             </div>
-        <% end %>
         </div>
     </div>
     <% end %>
@@ -59,12 +57,10 @@
 <script defer>
 var app = new Vue({
     el: '#app',
-    data: {
-        message: 'Hello Vue!',
-    },
+    data: <%= {:safe, @vue_data} %>,
     methods: {
-        removeMember(teamId, userId) {
-            axios.delete(`/api/teams/${teamId}/members/${userId}`)
+        removeMember(userId) {
+            axios.delete(`/api/teams/${this.id}/members/${userId}`)
                 .then(() => window.location.reload());
         },
     },

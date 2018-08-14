@@ -9,9 +9,24 @@
     <%= if length(@team.members) == 0 do %>
         No team members.
     <% else %>
-        <%= for member <- @team.members do %>
-        <%= member.name %>
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__inner">
+        <%= for user <- @team.members do %>
+            <div class="mdc-layout-grid__cell">
+                <div class="mdc-card">
+                    <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
+                        <div class="mdc-card__media-content"><%= user.name %> </div>
+                    </div>
+                    <div class="mdc-card__actions">
+                        <div class="mdc-card__action-buttons">
+                            <button @click="removeMember(<%= @team.id %>, <%= user.id %>)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <% end %>
+        </div>
+    </div>
     <% end %>
 
     <h4>Add new member</h4>
@@ -48,10 +63,9 @@ var app = new Vue({
         message: 'Hello Vue!',
     },
     methods: {
-        addMember(userId, teamId) {
-            axios.post(`/api/teams/${teamId}/members`, { user: userId })
-                .then(response => console.log(response))
-                .then(() => window.reload());
+        removeMember(teamId, userId) {
+            axios.delete(`/api/teams/${teamId}/members/${userId}`)
+                .then(() => window.location.reload());
         },
     },
 })

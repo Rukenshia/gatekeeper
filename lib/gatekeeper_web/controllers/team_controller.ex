@@ -45,7 +45,7 @@ defmodule GatekeeperWeb.TeamController do
       |> Repo.preload(:teams)
 
     changeset = Teams.change_team(team)
-    render(conn, "edit.html", team: team, changeset: changeset, users: users)
+    render(conn, "edit.html", team: team, changeset: changeset, users: users, vue_data: Poison.encode!(Team.safe_json(team), pretty: true))
   end
 
   def update(conn, %{"id" => id, "team" => team_params}) do
@@ -58,7 +58,7 @@ defmodule GatekeeperWeb.TeamController do
         |> redirect(to: team_path(conn, :show, team))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", team: team, changeset: changeset)
+        render(conn, "edit.html", team: team, changeset: changeset, vue_data: Poison.encode!(team.safe_json(team)))
     end
   end
 

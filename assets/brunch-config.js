@@ -46,14 +46,16 @@ exports.config = {
   plugins: {
     babel: {
       // Do not use ES6 compiler in vendor code
-      ignore: [/vendor/]
+      ignore: [/vendor/],
+      presets: ['env', 'stage-0'],
+      plugins: ['transform-es2015-modules-commonjs'],
     },
     sass: {
       mode: "native",
       options: {
         includePaths: ['node_modules'],
       }
-    }
+    },
   },
 
   modules: {
@@ -63,6 +65,7 @@ exports.config = {
   },
 
   npm: {
-    enabled: true
+    enabled: true,
+    compilers: ['babel-brunch'],
   }
 };

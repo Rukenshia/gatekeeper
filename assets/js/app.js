@@ -19,3 +19,16 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+
+import { MDCSnackbar, MDCSnackbarFoundation } from '@material/snackbar';
+MDCSnackbar.attachTo(document.querySelector('.mdc-snackbar'));
+
+const snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
+
+snackbar.show({
+    message: 'xxx',
+    actionText: 'Undo',
+    actionHandler: function () {
+        console.log('my cool function');
+    }
+});

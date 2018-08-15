@@ -19,9 +19,7 @@ defmodule GatekeeperWeb.Router do
 
     get("/", PageController, :index)
 
-    resources "/teams", TeamController do
-      post("/members", TeamController, :add_member)
-    end
+    resources("/teams", TeamController)
 
     resources("/users", UserController)
   end
@@ -30,6 +28,7 @@ defmodule GatekeeperWeb.Router do
   scope "/api", GatekeeperWeb do
     pipe_through(:api)
 
+    post("/teams/:team_id/members", TeamController, :api_add_member)
     delete("/teams/:team_id/members/:user_id", TeamController, :api_remove_member)
   end
 end

@@ -43,13 +43,26 @@ defmodule GatekeeperWeb.TeamController do
     users =
       Users.list_users()
       |> Repo.preload(:teams)
+      |> Enum.filter(fn x -> !Gatekeeper.Users.User.is_member_of(x, team) end)
+      |> Enum.map(fn x -> Gatekeeper.Users.User.safe_json(x) end)
 
     changeset = Teams.change_team(team)
-    render(conn, "edit.html", team: team, changeset: changeset, users: users, vue_data: Poison.encode!(Team.safe_json(team), pretty: true))
+
+    render(conn, "edit.html",
+      team: team,
+      changeset: changeset,
+      vue_data: Poison.encode!(%{team: Team.safe_json(team), users: users}, pretty: true)
+    )
   end
 
   def update(conn, %{"id" => id, "team" => team_params}) do
     team = Teams.get_team!(id)
+
+    users =
+      Users.list_users()
+      |> Repo.preload(:teams)
+      |> Enum.filter(fn x -> !Gatekeeper.Users.User.is_member_of(x, team) end)
+      |> Enum.map(fn x -> Gatekeeper.Users.User.safe_json(x) end)
 
     case Teams.update_team(team, team_params) do
       {:ok, team} ->
@@ -58,7 +71,11 @@ defmodule GatekeeperWeb.TeamController do
         |> redirect(to: team_path(conn, :show, team))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", team: team, changeset: changeset, vue_data: Poison.encode!(team.safe_json(team)))
+        render(conn, "edit.html",
+          team: team,
+          changeset: changeset,
+          vue_data: Poison.encode!(%{team: Team.safe_json(team), users: users}, pretty: true)
+        )
     end
   end
 
@@ -71,10 +88,7 @@ defmodule GatekeeperWeb.TeamController do
     |> redirect(to: team_path(conn, :index))
   end
 
-  def add_member(conn, %{"team_id" => id, "user" => user_id}) do
-    team = Teams.get_team!(id)
-    # user = Users.get_user!(user_id)
-
+  def api_add_member(conn, %{"team_id" => id, "user_id" => user_id}) do
     changeset =
       Teams.TeamMember.changeset(%Teams.TeamMember{}, %{
         user_id: user_id,
@@ -85,13 +99,11 @@ defmodule GatekeeperWeb.TeamController do
     case Repo.insert_or_update(changeset) do
       {:ok, _} ->
         conn
-        |> put_flash(:info, "Team updated successfully.")
-        |> redirect(to: team_path(conn, :edit, team))
+        |> json(%{ok: true})
 
       {:error, _} ->
         conn
-        |> put_flash(:error, "Could not add member to team")
-        |> redirect(to: team_path(conn, :edit, team))
+        |> json(%{ok: false})
     end
   end
 

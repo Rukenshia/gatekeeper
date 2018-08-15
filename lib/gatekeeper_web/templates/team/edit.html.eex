@@ -6,47 +6,47 @@
 <h3>Members</h3>
 
 <div id="app">
-    <%= if length(@team.members) == 0 do %>
-        No team members.
-    <% else %>
     <div class="mdc-layout-grid">
         <div class="mdc-layout-grid__inner">
-            <div class="mdc-layout-grid__cell" v-for="member in members">
+            <div class="mdc-layout-grid__cell" v-for="member in team.members">
                 <div class="mdc-card">
                     <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
                         <div class="mdc-card__media-content">{{member.name}}</div>
+                        {{member}}
                     </div>
                     <div class="mdc-card__actions">
                         <div class="mdc-card__action-buttons">
-                            <button @click="removeMember(member.id)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button">Remove</button>
+                            <button @click="removeMember(member)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button">Remove</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <% end %>
-
+<div class="mdc-snackbar"
+     aria-live="assertive"
+     aria-atomic="true"
+     aria-hidden="true">
+  <div class="mdc-snackbar__text"></div>
+  <div class="mdc-snackbar__action-wrapper">
+    <button type="button" class="mdc-snackbar__action-button"></button>
+  </div>
+</div>
     <h4>Add new member</h4>
     <div class="mdc-layout-grid">
         <div class="mdc-layout-grid__inner">
-            <%= for user <- Enum.filter(@users, fn x -> !Gatekeeper.Users.User.is_member_of(x, @team) end) do %>
-            <div class="mdc-layout-grid__cell">
+            <div class="mdc-layout-grid__cell" v-for="user in users">
                 <div class="mdc-card">
                     <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
-                        <div class="mdc-card__media-content"><%= user.name %> </div>
+                        <div class="mdc-card__media-content">{{user.name}}</div>
                     </div>
-                    <%= form_for @conn, team_team_path(@conn, :add_member, @team), fn f -> %>
-                    <input type="hidden" name="user" value="<%= user.id %>" />
                     <div class="mdc-card__actions">
                         <div class="mdc-card__action-buttons">
-                            <button type="submit" class="mdc-button mdc-card__action mdc-card__action--button">Add</button>
+                            <button @click="addMember(user)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button">Add</button>
                         </div>
                     </div>
-                    <% end %>
                 </div>
             </div>
-            <% end %>
         </div>
     </div>
 </div>
@@ -59,9 +59,19 @@ var app = new Vue({
     el: '#app',
     data: <%= {:safe, @vue_data} %>,
     methods: {
-        removeMember(userId) {
-            axios.delete(`/api/teams/${this.id}/members/${userId}`)
-                .then(() => window.location.reload());
+        addMember(user) {
+            axios.post(`/api/teams/${this.team.id}/members`, { user_id: user.id })
+                .then(() => {
+                    this.team.members.push(user);
+                    this.users.splice(this.users.indexOf(user), 1);
+                });
+        },
+        removeMember(user) {
+            axios.delete(`/api/teams/${this.team.id}/members/${user.id}`)
+                .then(() => {
+                    this.team.members = this.team.members.filter(m => m.id !== user.id);
+                    this.users.push(user);
+                });
         },
     },
 })

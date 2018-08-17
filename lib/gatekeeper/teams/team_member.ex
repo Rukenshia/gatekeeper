@@ -1,4 +1,5 @@
 defmodule Gatekeeper.Teams.TeamMember do
+  require Logger
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -15,5 +16,9 @@ defmodule Gatekeeper.Teams.TeamMember do
     team_member
     |> cast(attrs, [:user_id, :team_id, :role])
     |> validate_required([:user_id, :team_id, :role])
+  end
+
+  def safe_json(team_member) do
+    %{user_id: team_member.user_id, team_id: team_member.team_id, role: team_member.role}
   end
 end

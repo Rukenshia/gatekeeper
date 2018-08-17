@@ -24,6 +24,7 @@
         <button type="button" class="mdc-snackbar__action-button"></button>
       </div>
     </div>
+    <%= if get_flash(@conn, :info) do %>
       <aside id="gk-error-dialog"
         class="mdc-dialog"
         role="alertdialog"
@@ -45,6 +46,7 @@
         </div>
         <div class="mdc-dialog__backdrop"></div>
       </aside>
+    <% end %>
 
     <div class="mdc-layout-grid">
       <div class="mdc-layout-grid__inner">

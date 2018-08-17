@@ -15,7 +15,6 @@ const app = new Vue({
         this.users = window.vueData.users;
 
         // process memberships
-        console.log(this.team);
         this.team.memberships.forEach(ms => {
             const user = this.users.find(u => u.id === ms.user_id)
 

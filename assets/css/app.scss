@@ -10,9 +10,12 @@ $corner-radius: 4px;
 @import "@material/button/mdc-button";
 @import "@material/elevation/mdc-elevation";
 @import "@material/snackbar/mdc-snackbar";
+@import "@material/typography/mdc-typography";
 
-* {
-    font-family: 'Open Sans', sans-serif;
+@import "fonts";
+
+.gk-typography {
+    font-family: 'Product Sans', 'Open Sans', sans-serif;
     font-size: 16px;
 }
 
@@ -30,4 +33,6 @@ $corner-radius: 4px;
 
 .gk-button {
     @include mdc-button-corner-radius($corner-radius);
+
+    font-size: 12px;
 }

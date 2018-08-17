@@ -1,12 +1,11 @@
-<h2>Listing Teams</h2>
+<h2>Teams</h2>
 
 <div class="mdc-layout-grid">
   <div class="mdc-layout-grid__inner">
     <%= for team <- @teams do %>
-    <div class="mdc-layout-grid__cell">
-      <div class="mdc-card">
-        <div class="mdc-card__media mdc-card__media--square gk-card__media--text-title">
-          <div class="mdc-card__media-content"><%= team.name %></div>
+    <div class="mdc-layout-grid__cell mdc-card">
+        <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
+          <div class="mdc-card__media-content mdc-typography--headline5"><%= team.name %></div>
         </div>
         <div class="mdc-card__actions">
           <div class="mdc-card__action-buttons">
@@ -14,7 +13,6 @@
             <%= link "Edit", to: team_path(@conn, :edit, team), class: "mdc-button mdc-card__action mdc-card__action--button" %>
             <%= link "Delete", to: team_path(@conn, :delete, team), method: :delete, data: [confirm: "Are you sure?"], class: "mdc-button mdc-card__action mdc-card__action--button" %>
           </div>
-        </div>
       </div>
     </div>
     <% end %>

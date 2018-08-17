@@ -20,3 +20,28 @@ import "phoenix_html"
 
 // import socket from "./socket"
 
+import { MDCTextField } from '@material/textfield';
+const fieldSelector = document.querySelector('.mdc-text-field');
+
+if (fieldSelector) {
+  MDCTextField.attachTo(fieldSelector);
+}
+
+import { MDCSnackbar, MDCSnackbarFoundation } from '@material/snackbar';
+const snackbarSelector = document.querySelector('.mdc-snackbar');
+
+if (snackbarSelector) {
+  MDCSnackbar.attachTo(snackbarSelector);
+
+  window.snackbar = new MDCSnackbar(snackbarSelector);
+}
+
+import { MDCDialog, MDCDialogFoundation, util } from '@material/dialog';
+const dialogSelector = document.querySelector('#gk-error-dialog');
+
+if (dialogSelector) {
+  MDCDialog.attachTo(dialogSelector);
+
+  const dialog = new MDCDialog(dialogSelector);
+  dialog.show();
+}

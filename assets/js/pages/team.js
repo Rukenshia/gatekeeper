@@ -1,8 +1,3 @@
-import { MDCSnackbar, MDCSnackbarFoundation } from '@material/snackbar';
-MDCSnackbar.attachTo(document.querySelector('.mdc-snackbar'));
-
-const snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
-
 const app = new Vue({
     el: '#app',
     data: window.vueData,

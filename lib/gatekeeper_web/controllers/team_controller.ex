@@ -38,12 +38,11 @@ defmodule GatekeeperWeb.TeamController do
   def edit(conn, %{"id" => id}) do
     team =
       Teams.get_team!(id)
-      |> Repo.preload(:members)
+      |> Repo.preload(:memberships)
 
     users =
       Users.list_users()
       |> Repo.preload(:teams)
-      |> Enum.filter(fn x -> !Gatekeeper.Users.User.is_member_of(x, team) end)
       |> Enum.map(fn x -> Gatekeeper.Users.User.safe_json(x) end)
 
     changeset = Teams.change_team(team)
@@ -56,12 +55,14 @@ defmodule GatekeeperWeb.TeamController do
   end
 
   def update(conn, %{"id" => id, "team" => team_params}) do
-    team = Teams.get_team!(id)
+    team =
+      Teams.get_team!(id)
+      |> Repo.preload(:memberships)
 
     users =
       Users.list_users()
       |> Repo.preload(:teams)
-      |> Enum.filter(fn x -> !Gatekeeper.Users.User.is_member_of(x, team) end)
+      |> Repo.preload(:memberships)
       |> Enum.map(fn x -> Gatekeeper.Users.User.safe_json(x) end)
 
     case Teams.update_team(team, team_params) do
@@ -97,9 +98,9 @@ defmodule GatekeeperWeb.TeamController do
       })
 
     case Repo.insert_or_update(changeset) do
-      {:ok, _} ->
+      {:ok, changeset} ->
         conn
-        |> json(%{ok: true})
+        |> json(Teams.TeamMember.safe_json(changeset))
 
       {:error, _} ->
         conn

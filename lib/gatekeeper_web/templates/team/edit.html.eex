@@ -1,28 +1,49 @@
 <h2>Edit Team</h2>
 
-<h2>Team</h2>
 <%= render "form.html", Map.put(assigns, :action, team_path(@conn, :update, @team)) %>
 
-<h3>Members</h3>
-
 <div id="app">
+    <h3>Members</h3>
+
     <div class="mdc-layout-grid">
         <div class="mdc-layout-grid__inner">
             <div class="mdc-layout-grid__cell" v-for="member in team.members">
                 <div class="mdc-card">
                     <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
-                        <div class="mdc-card__media-content">{{member.name}}</div>
-                        {{member}}
+                        <div class="mdc-card__media-content mdc-typography--headline4">{{member.name}}</div>
                     </div>
                     <div class="mdc-card__actions">
                         <div class="mdc-card__action-buttons">
-                            <button @click="removeMember(member)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button">Remove</button>
+                            <button @click="removeMember(member)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Remove</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <h3>Add new member</h3>
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__cell" v-for="user in users">
+                <div class="mdc-card">
+                    <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
+                        <div class="mdc-card__media-content  mdc-typography--headline4">{{user.name}}</div>
+                    </div>
+                    <div class="mdc-card__actions">
+                        <div class="mdc-card__action-buttons">
+                            <button @click="addMember(user)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<%= link "Back", to: team_path(@conn, :index), class: "mdc-button gk-button" %>
+
+
 <div class="mdc-snackbar"
      aria-live="assertive"
      aria-atomic="true"
@@ -32,47 +53,8 @@
     <button type="button" class="mdc-snackbar__action-button"></button>
   </div>
 </div>
-    <h4>Add new member</h4>
-    <div class="mdc-layout-grid">
-        <div class="mdc-layout-grid__inner">
-            <div class="mdc-layout-grid__cell" v-for="user in users">
-                <div class="mdc-card">
-                    <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
-                        <div class="mdc-card__media-content">{{user.name}}</div>
-                    </div>
-                    <div class="mdc-card__actions">
-                        <div class="mdc-card__action-buttons">
-                            <button @click="addMember(user)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-
-<%= link "Back", to: team_path(@conn, :index), class: "mdc-button gk-button mdc-button--unelevated" %>
-
-<script defer>
-var app = new Vue({
-    el: '#app',
-    data: <%= {:safe, @vue_data} %>,
-    methods: {
-        addMember(user) {
-            axios.post(`/api/teams/${this.team.id}/members`, { user_id: user.id })
-                .then(() => {
-                    this.team.members.push(user);
-                    this.users.splice(this.users.indexOf(user), 1);
-                });
-        },
-        removeMember(user) {
-            axios.delete(`/api/teams/${this.team.id}/members/${user.id}`)
-                .then(() => {
-                    this.team.members = this.team.members.filter(m => m.id !== user.id);
-                    this.users.push(user);
-                });
-        },
-    },
-})
+<script>
+    window.vueData = <%= { :safe, @vue_data} %>;
 </script>
+<script src="<%= static_path(@conn, "/js/team.js") %>" type="text/javascript" />

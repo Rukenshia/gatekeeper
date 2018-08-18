@@ -50,7 +50,11 @@ exports.config = {
     babel: {
       // Do not use ES6 compiler in vendor code
       ignore: [/vendor/],
-      presets: ['env', 'stage-0'],
+      presets: [['env', {
+        "targets": {
+          "browsers": ["last 2 versions"],
+        },
+      }], 'stage-0'],
       plugins: ['transform-es2015-modules-commonjs'],
     },
     sass: {

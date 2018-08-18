@@ -18,7 +18,7 @@
                     <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
                       <div class="mdc-card__media-content ">
                         <span class="mdc-typography--headline5">{{member.name}}</span>
-                        <p :class="`gk-typography--role__${member.membership.role}`">{{member.membership.role | capitalize}}</p>
+                        <p :class="`gk-typography--role__${member.role}`">{{member.role | capitalize}}</p>
                       </div>
                     </div>
                     <div class="mdc-card__actions">
@@ -34,7 +34,7 @@
     <div class="mdc-layout-grid">
         <div class="mdc-layout-grid__inner">
             <div class="mdc-layout-grid__cell" v-for="user in users">
-                <div class="mdc-card" v-if="!user.membership">
+                <div class="mdc-card" v-if="!user.isMember">
                     <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
                         <div class="mdc-card__media-content  mdc-typography--headline5">{{user.name}}</div>
                     </div>

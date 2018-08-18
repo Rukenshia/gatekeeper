@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/Rukenshia/gatekeeper#readme",
   "devDependencies": {
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-0": "^6.24.1"
+    "babel-preset-env": "^1.7.0"
   }
 }

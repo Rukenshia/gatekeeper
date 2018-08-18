@@ -3,9 +3,7 @@ defmodule GatekeeperWeb.TeamController do
 
   use GatekeeperWeb, :controller
 
-  alias Gatekeeper.Repo
   alias Gatekeeper.Teams
-  alias Gatekeeper.Users
   alias Gatekeeper.Teams.Team
 
   def index(conn, _params) do
@@ -36,34 +34,19 @@ defmodule GatekeeperWeb.TeamController do
   end
 
   def edit(conn, %{"id" => id}) do
-    team =
-      Teams.get_team!(id)
-      |> Repo.preload(:memberships)
-
-    users =
-      Users.list_users()
-      |> Repo.preload(:teams)
-      |> Enum.map(fn x -> Gatekeeper.Users.User.safe_json(x) end)
+    team = Teams.get_team!(id)
 
     changeset = Teams.change_team(team)
 
     render(conn, "edit.html",
       team: team,
       changeset: changeset,
-      vue_data: Poison.encode!(%{team: Team.safe_json(team), users: users}, pretty: true)
+      vue_data: Poison.encode!(%{team: Team.safe_json(team)}, pretty: true)
     )
   end
 
   def update(conn, %{"id" => id, "team" => team_params}) do
-    team =
-      Teams.get_team!(id)
-      |> Repo.preload(:memberships)
-
-    users =
-      Users.list_users()
-      |> Repo.preload(:teams)
-      |> Repo.preload(:memberships)
-      |> Enum.map(fn x -> Gatekeeper.Users.User.safe_json(x) end)
+    team = Teams.get_team!(id)
 
     case Teams.update_team(team, team_params) do
       {:ok, team} ->
@@ -75,7 +58,7 @@ defmodule GatekeeperWeb.TeamController do
         render(conn, "edit.html",
           team: team,
           changeset: changeset,
-          vue_data: Poison.encode!(%{team: Team.safe_json(team), users: users}, pretty: true)
+          vue_data: Poison.encode!(%{team: Team.safe_json(team)}, pretty: true)
         )
     end
   end
@@ -87,45 +70,5 @@ defmodule GatekeeperWeb.TeamController do
     conn
     |> put_flash(:info, "Team deleted successfully.")
     |> redirect(to: team_path(conn, :index))
-  end
-
-  def api_add_member(conn, %{"team_id" => id, "user_id" => user_id}) do
-    changeset =
-      Teams.TeamMember.changeset(%Teams.TeamMember{}, %{
-        user_id: user_id,
-        team_id: String.to_integer(id),
-        role: "administrator"
-      })
-
-    case Repo.insert_or_update(changeset) do
-      {:ok, changeset} ->
-        conn
-        |> json(Teams.TeamMember.safe_json(changeset))
-
-      {:error, _} ->
-        conn
-        |> json(%{ok: false})
-    end
-  end
-
-  def api_remove_member(conn, %{"team_id" => team_id, "user_id" => user_id}) do
-    membership =
-      Repo.get_by!(
-        Gatekeeper.Teams.TeamMember,
-        user_id: String.to_integer(user_id),
-        team_id: String.to_integer(team_id)
-      )
-
-    Logger.debug(inspect(membership))
-
-    case Repo.delete(membership) do
-      {:ok, _} ->
-        conn
-        |> json(%{ok: true})
-
-      {:error, _} ->
-        conn
-        |> json(%{ok: false})
-    end
   end
 end

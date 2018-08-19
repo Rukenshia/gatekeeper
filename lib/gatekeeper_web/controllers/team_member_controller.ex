@@ -4,7 +4,6 @@ defmodule GatekeeperWeb.TeamMemberController do
   use GatekeeperWeb, :controller
 
   alias Gatekeeper.Repo
-  alias Gatekeeper.Teams.Team
   alias Gatekeeper.Teams.TeamMember
 
   def api_get_members(conn, %{"team_id" => id}) do

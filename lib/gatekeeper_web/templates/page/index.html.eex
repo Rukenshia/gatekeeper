@@ -1,36 +1,23 @@
-<div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h2>
-  <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
-</div>
+<h1>Hello, <%= assigns[:current_user].name %></h1>
 
-<div class="row marketing">
-  <div class="col-lg-6">
-    <h4>Resources</h4>
-    <ul>
-      <li>
-        <a href="http://phoenixframework.org/docs/overview">Guides</a>
-      </li>
-      <li>
-        <a href="https://hexdocs.pm/phoenix">Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-    </ul>
+<div class="mdc-layout-grid__inner">
+  <div class="mdc-layout-grid__cell mdc-card">
+    <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
+      <div class="mdc-card__media-content ">
+        <span class="mdc-typography--headline5">View teams</span>
+      </div>
+    </div>
+    <%#<div class="mdc-card__actions">%>
+        <%#<div class="mdc-card__action-buttons">%>
+            <%#<button @click="removeMember(member)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Remove</button>%>
+        <%#</div>%>
+    <%#</div>%>
   </div>
-
-  <div class="col-lg-6">
-    <h4>Help</h4>
-    <ul>
-      <li>
-        <a href="http://groups.google.com/group/phoenix-talk">Mailing list</a>
-      </li>
-      <li>
-        <a href="http://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">@elixirphoenix</a>
-      </li>
-    </ul>
+  <div class="mdc-layout-grid__cell mdc-card">
+    <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
+      <div class="mdc-card__media-content ">
+        <span class="mdc-typography--headline5">Do something else</span>
+      </div>
+    </div>
   </div>
 </div>

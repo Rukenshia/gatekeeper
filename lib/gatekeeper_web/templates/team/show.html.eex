@@ -1,13 +1,23 @@
-<h2>Show Team</h2>
+<div class="mdc-layout-grid__inner">
+  <div class="mdc-layout-grid__cell--span-12">
+    <h2>Team <strong><%= @team.name %></strong></h2>
+    <%= link "Edit", to: team_path(@conn, :edit, @team), class: "mdc-button mdc-button--raised" %>
+  </div>
+  <div class="mdc-layout-grid__cell--span-12">
+    <h3>Members</h3>
+  </div>
+  <%= for member <- @team.members do %>
+  <div class="mdc-layout-grid__cell mdc-card">
+    <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
+      <div class="mdc-card__media-content ">
+        <span class="mdc-typography--headline5"><%= member.name %></span>
+        <p>Role (todo)</p>
+      </div>
+    </div>
+  </div>
+  <% end %>
+  <div class="mdc-layout-grid__cell--span-12">
+    <span><%= link "Back", to: team_path(@conn, :index) %></span>
+  </div>
+</div>
 
-<ul>
-
-  <li>
-    <strong>Name:</strong>
-    <%= @team.name %>
-  </li>
-
-</ul>
-
-<span><%= link "Edit", to: team_path(@conn, :edit, @team) %></span>
-<span><%= link "Back", to: team_path(@conn, :index) %></span>

@@ -3,6 +3,7 @@ defmodule GatekeeperWeb.TeamController do
 
   use GatekeeperWeb, :controller
 
+  alias Gatekeeper.Repo
   alias Gatekeeper.Teams
   alias Gatekeeper.Teams.Team
 
@@ -29,7 +30,10 @@ defmodule GatekeeperWeb.TeamController do
   end
 
   def show(conn, %{"id" => id}) do
-    team = Teams.get_team!(id)
+    team =
+      Teams.get_team!(id)
+      |> Repo.preload(:members)
+
     render(conn, "show.html", team: team)
   end
 

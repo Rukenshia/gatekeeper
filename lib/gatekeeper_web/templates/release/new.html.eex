@@ -1,0 +1,5 @@
+<h2>New Release</h2>
+
+<%= render "form.html", Map.put(assigns, :action, team_release_path(@conn, :create, @team_id)) %>
+
+<span><%= link "Back", to: team_release_path(@conn, :index, @team_id) %></span>

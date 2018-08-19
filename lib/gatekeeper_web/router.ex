@@ -7,6 +7,16 @@ defmodule GatekeeperWeb.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+    plug(:set_current_user)
+  end
+
+  def set_current_user(conn, _args) do
+    if get_session(conn, :current_user) do
+      conn
+      |> assign(:current_user, get_session(conn, :current_user))
+    else
+      conn
+    end
   end
 
   pipeline :api do

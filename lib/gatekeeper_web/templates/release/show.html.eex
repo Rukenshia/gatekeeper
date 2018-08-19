@@ -1,0 +1,28 @@
+<h2>Show Release</h2>
+
+<ul>
+
+  <li>
+    <strong>Commit hash:</strong>
+    <%= @release.commit_hash %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @release.description %>
+  </li>
+
+  <li>
+    <strong>Version:</strong>
+    <%= @release.version %>
+  </li>
+
+  <li>
+    <strong>Released at:</strong>
+    <%= @release.released_at %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: team_release_path(@conn, :edit, @release.team_id, @release) %></span>
+<span><%= link "Back", to: team_release_path(@conn, :index, @release.team_id) %></span>

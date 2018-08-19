@@ -8,6 +8,7 @@ defmodule Gatekeeper.Teams.Team do
 
     many_to_many(:members, Gatekeeper.Users.User, join_through: "team_members")
     has_many(:memberships, Gatekeeper.Teams.TeamMember)
+    has_many(:releases, Gatekeeper.Releases.Release)
     timestamps()
   end
 

@@ -36,7 +36,9 @@ defmodule GatekeeperWeb.Router do
 
     get("/", PageController, :index)
 
-    resources("/teams", TeamController)
+    resources("/teams", TeamController) do
+      resources("/releases", ReleaseController)
+    end
 
     resources("/users", UserController)
   end

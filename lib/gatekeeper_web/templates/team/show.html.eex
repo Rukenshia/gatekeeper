@@ -1,7 +1,8 @@
 <div class="mdc-layout-grid__inner">
   <div class="mdc-layout-grid__cell--span-12">
     <h2>Team <strong><%= @team.name %></strong></h2>
-    <%= link "Edit", to: team_path(@conn, :edit, @team), class: "mdc-button mdc-button--raised" %>
+    <%= link "Create release", to: team_release_path(@conn, :new, @team.id), class: "mdc-button mdc-button--raised" %>
+    <%= link "Edit team", to: team_path(@conn, :edit, @team), class: "mdc-button" %>
   </div>
   <div class="mdc-layout-grid__cell--span-12">
     <h3>Members</h3>

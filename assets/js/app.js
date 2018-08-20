@@ -21,10 +21,10 @@ import "phoenix_html";
 // import socket from "./socket"
 
 import { MDCTextField } from '@material/textfield';
-const fieldSelector = document.querySelector('.mdc-text-field');
+const fieldSelector = document.querySelectorAll('.mdc-text-field');
 
 if (fieldSelector) {
-  MDCTextField.attachTo(fieldSelector);
+  [...fieldSelector].forEach(s => MDCTextField.attachTo(s));
 }
 
 import { MDCSnackbar, MDCSnackbarFoundation } from '@material/snackbar';

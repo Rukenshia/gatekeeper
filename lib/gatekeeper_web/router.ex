@@ -13,14 +13,17 @@ defmodule GatekeeperWeb.Router do
   end
 
   def set_current_user(conn, _args) do
-    if !get_session(conn, :current_user) do
-      # FIXME(jan): proper session handling... sometime...
-      user =
-        Users.get_user!(2)
-        |> Repo.preload(:teams)
+    conn =
+      if !get_session(conn, :current_user) do
+        # FIXME(jan): proper session handling... sometime...
+        user =
+          Users.get_user!(2)
+          |> Repo.preload(:teams)
 
-      conn = put_session(conn, :current_user, user)
-    end
+        conn = put_session(conn, :current_user, user)
+      else
+        conn
+      end
 
     conn
     |> assign(:current_user, get_session(conn, :current_user))

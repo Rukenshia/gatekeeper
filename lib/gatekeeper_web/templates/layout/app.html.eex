@@ -52,9 +52,7 @@
       <div class="mdc-layout-grid__inner">
         <div class="mdc-layout-grid__cell--span-2-desktop mdc-layout-grid__cell--span-2-tablet"></div>
         <div class="mdc-layout-grid__cell--span-10-desktop mdc-layout-grid__cell--span-10-tablet mdc-layout-grid__cell--span-12-phone">
-          <main role="main">
-            <%= render @view_module, @view_template, assigns %>
-          </main>
+          <%= render @view_module, @view_template, assigns %>
         </div>
       </div>
     </div>

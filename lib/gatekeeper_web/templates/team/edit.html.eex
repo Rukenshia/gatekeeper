@@ -33,8 +33,9 @@
     <h3>Add new member</h3>
     <div class="mdc-layout-grid">
         <div class="mdc-layout-grid__inner">
-            <div class="mdc-layout-grid__cell" v-for="user in users">
-                <div class="mdc-card" v-if="!user.isMember">
+            <template v-for="user in users">
+            <div class="mdc-layout-grid__cell" v-if="!user.isMember">
+                <div class="mdc-card">
                     <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
                         <div class="mdc-card__media-content  mdc-typography--headline5">{{user.name}}</div>
                     </div>
@@ -45,6 +46,7 @@
                     </div>
                 </div>
             </div>
+            </template>
         </div>
     </div>
 </div>

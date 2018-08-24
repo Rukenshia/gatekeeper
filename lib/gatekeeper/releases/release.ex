@@ -15,7 +15,7 @@ defmodule Gatekeeper.Releases.Release do
   @doc false
   def changeset(release, attrs) do
     release
-    |> cast(attrs, [:commit_hash, :description, :version, :released_at])
-    |> validate_required([:commit_hash, :description, :version, :released_at])
+    |> cast(attrs, [:commit_hash, :description, :version, :team_id])
+    |> validate_required([:commit_hash, :description, :version, :team_id])
   end
 end

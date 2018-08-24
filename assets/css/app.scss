@@ -37,7 +37,7 @@ $corner-radius: 4px;
 
 .gk-card__media--text-title {
     font-size: 16px;
-    
+
     .mdc-card__media-content {
         padding: 8px;
     }
@@ -45,6 +45,11 @@ $corner-radius: 4px;
 
 .gk-card__media--text-based {
     height: 7rem;
+}
+
+.gk-card__danger {
+    padding: 8px;
+    color: #db3236;
 }
 
 .gk-button {

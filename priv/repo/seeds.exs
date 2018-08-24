@@ -12,6 +12,7 @@
 alias Gatekeeper.Repo
 alias Gatekeeper.Teams
 alias Gatekeeper.Users
+alias Gatekeeper.Releases
 
 Repo.insert!(%Users.User{
   id: 1,
@@ -34,4 +35,12 @@ Repo.insert!(%Teams.TeamMember{
   user_id: 2,
   team_id: 1,
   role: "administrator"
+})
+
+Repo.insert!(%Releases.Release{
+  id: 1,
+  team_id: 1,
+  commit_hash: "a895fc7",
+  description: "A fancy release",
+  version: "0.3.9"
 })

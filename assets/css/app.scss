@@ -16,6 +16,7 @@ $corner-radius: 4px;
 @import "@material/dialog/mdc-dialog";
 @import "@material/select/mdc-select";
 @import "@material/list/mdc-list";
+@import "@material/chips/mdc-chips";
 
 @import "fonts";
 
@@ -57,4 +58,21 @@ $corner-radius: 4px;
     @include mdc-button-corner-radius($corner-radius);
 
     font-size: 12px;
+}
+
+.mdc-chip.gk-chip--small {
+    .mdc-chip__icon.mdc-chip__icon--leading:not(.mdc-chip__icon--leading-hidden){
+        height: 14px;
+        width: 14px;
+        font-size: 1rem;
+        margin-bottom: -1px;
+    }
+    margin-top: 1px;
+    height: 24px;
+    padding: 4px 8px;
+    font-size: .7rem;
+}
+
+.gk-chip--danger {
+    background-color: #ef5350;
 }

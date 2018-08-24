@@ -3,8 +3,9 @@ defmodule GatekeeperWeb.ApprovalController do
 
   alias Gatekeeper.Releases
   alias Gatekeeper.Releases.Approval
+  alias Gatekeeper.Repo
 
-  action_fallback GatekeeperWeb.FallbackController
+  action_fallback(GatekeeperWeb.FallbackController)
 
   def index(conn, _params) do
     release_approvals = Releases.list_release_approvals()
@@ -15,7 +16,10 @@ defmodule GatekeeperWeb.ApprovalController do
     with {:ok, %Approval{} = approval} <- Releases.create_approval(approval_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", approval_path(conn, :show, approval))
+      |> put_resp_header(
+        "location",
+        approval_path(conn, :show, approval)
+      )
       |> render("show.json", approval: approval)
     end
   end
@@ -35,6 +39,7 @@ defmodule GatekeeperWeb.ApprovalController do
 
   def delete(conn, %{"id" => id}) do
     approval = Releases.get_approval!(id)
+
     with {:ok, %Approval{}} <- Releases.delete_approval(approval) do
       send_resp(conn, :no_content, "")
     end

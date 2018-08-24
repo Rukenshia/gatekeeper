@@ -71,6 +71,7 @@
                 </li>
               </template>
             </ul>
+            <input name="release[approvers]" type="hidden" :value="selected.map(u => u.user.id).join(',')" />
           </div>
         </div>
       </div>

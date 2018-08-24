@@ -3,6 +3,7 @@ defmodule GatekeeperWeb.ReleaseController do
 
   alias Gatekeeper.Releases
   alias Gatekeeper.Releases.Release
+  alias Gatekeeper.Repo
 
   def index(conn, %{"team_id" => team_id}) do
     releases = Releases.list_releases()
@@ -31,7 +32,10 @@ defmodule GatekeeperWeb.ReleaseController do
   end
 
   def show(conn, %{"id" => id}) do
-    release = Releases.get_release!(id)
+    release =
+      Releases.get_release!(id)
+      |> Repo.preload(:approvals)
+
     render(conn, "show.html", release: release)
   end
 
@@ -62,5 +66,13 @@ defmodule GatekeeperWeb.ReleaseController do
     conn
     |> put_flash(:info, "Release deleted successfully.")
     |> redirect(to: team_release_path(conn, :index, release.team_id))
+  end
+
+  def api_get_approvals(conn, %{"release_id" => id, "release_id" => id}) do
+    release =
+      Releases.get_release!(id)
+      |> Repo.preload(:approvals)
+
+    render(conn, "approvals.json", approvals: release.approvals)
   end
 end

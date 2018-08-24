@@ -9,6 +9,7 @@ defmodule Gatekeeper.Releases.Release do
     field(:version, :string)
 
     belongs_to(:team, Gatekeeper.Teams.Team)
+    has_many(:approvals, Gatekeeper.Releases.Approval)
     timestamps()
   end
 

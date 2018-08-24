@@ -1,4 +1,6 @@
 defmodule Gatekeeper.Releases do
+  require Logger
+
   @moduledoc """
   The Releases context.
   """
@@ -50,9 +52,37 @@ defmodule Gatekeeper.Releases do
 
   """
   def create_release(attrs \\ %{}) do
-    %Release{}
-    |> Release.changeset(attrs)
-    |> Repo.insert()
+    {approvers, attrs} =
+      attrs
+      |> Map.pop("approvers", [])
+
+    approvers =
+      approvers
+      |> String.split(",")
+      |> Enum.map(fn s -> String.to_integer(s) end)
+      |> Enum.map(fn id -> Gatekeeper.Users.get_user!(id) end)
+
+    release =
+      %Release{}
+      |> Release.changeset(attrs)
+      |> Repo.insert()
+
+    case release do
+      {:ok, release} ->
+        for approver <- approvers do
+          Logger.debug("Creation empty approval for user #{approver.name}")
+
+          create_approval(%{
+            release_id: release.id,
+            user_id: approver.id
+          })
+        end
+
+        {:ok, release}
+
+      release ->
+        release
+    end
   end
 
   @doc """

@@ -15,6 +15,10 @@ defmodule GatekeeperWeb.ReleaseController do
   end
 
   def create(conn, %{"release" => release_params, "team_id" => team_id}) do
+    release_params =
+      release_params
+      |> Map.put("team_id", team_id)
+
     case Releases.create_release(release_params) do
       {:ok, release} ->
         conn
@@ -34,7 +38,7 @@ defmodule GatekeeperWeb.ReleaseController do
   def edit(conn, %{"id" => id}) do
     release = Releases.get_release!(id)
     changeset = Releases.change_release(release)
-    render(conn, "edit.html", release: release, changeset: changeset)
+    render(conn, "edit.html", release: release, changeset: changeset, team_id: release.team_id)
   end
 
   def update(conn, %{"id" => id, "release" => release_params}) do

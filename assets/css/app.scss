@@ -17,6 +17,7 @@ $corner-radius: 4px;
 @import "@material/select/mdc-select";
 @import "@material/list/mdc-list";
 @import "@material/chips/mdc-chips";
+@import "@material/linear-progress/mdc-linear-progress";
 
 @import "fonts";
 
@@ -27,6 +28,10 @@ $corner-radius: 4px;
 
 .gk-typography--color__error {
     color: #db3236;
+}
+
+.gk-typography--color__success {
+    color: #2ecc71;
 }
 
 .gk-typography--role__administrator {
@@ -75,4 +80,8 @@ $corner-radius: 4px;
 
 .gk-chip--danger {
     background-color: #ef5350;
+}
+
+.gk-linear-progress {
+    border-radius: 4px;
 }

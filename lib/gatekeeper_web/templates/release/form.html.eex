@@ -40,9 +40,52 @@
       </div>
     </div>
 
+    <%= if assigns[:with_approver_selection] do %>
+      <div class="mdc-layout-grid__cell--span-12">
+        <h3>Approvers</h3>
+      </div>
+
+      <div id="app" class="mdc-layout-grid__cell--span-12">
+        <div v-if="loading" class="mdc-layout-grid__inner">
+          <div class="mdc-layout-grid__cell--span-1"></div>
+          <div class="mdc-layout-grid__cell--span-4">
+            <div role="progressbar" style="width: 100%" class="mdc-linear-progress gk-linear-progress mdc-linear-progress--indeterminate">
+              <div class="mdc-linear-progress__buffer"></div>
+              <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+                <span class="mdc-linear-progress__bar-inner"></span>
+              </div>
+              <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+                <span class="mdc-linear-progress__bar-inner"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else class="mdc-layout-grid__inner">
+          <div class="mdc-layout-grid__cell--span-6">
+            <ul id="approver-selection-list" class="mdc-list" aria-orientation="vertical">
+              <template v-for="member in members">
+                <li @click="toggle(member)" class="mdc-list-item">
+                  <span class="mdc-list-item__graphic material-icons gk-typography--color__success" v-if="selected.indexOf(member) != -1">check_box</span>
+                  <span class="mdc-list-item__graphic material-icons" v-else>check_box_outline_blank</span>
+                  <span class="mdc-list-item__text">{{member.user.name}}</span>
+                </li>
+              </template>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
     <div class="mdc-layout-grid__cell--span-12">
       <%= submit "Create", class: "mdc-button mdc-button--raised" %>
       <%= link "Back", to: team_path(@conn, :show, @team_id), class: "mdc-button gk-button" %>
     </div>
   </div>
+<% end %>
+
+<%= if assigns[:with_approver_selection] do %>
+  <script>
+    window.vueData = { teamId: <%= @team_id %> };
+  </script>
+  <script src="<%= static_path(@conn, "/js/approver_selection.js") %>" type="text/javascript"></script>
 <% end %>

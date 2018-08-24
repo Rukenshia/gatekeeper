@@ -3,6 +3,6 @@
     <h2>New Release</h2>
   </div>
   <div class="mdc-layout-grid__cell--span-12">
-    <%= render "form.html", Map.put(assigns, :action, team_release_path(@conn, :create, @team_id)) %>
+    <%= render "form.html", Map.put(Map.put(assigns, :with_approver_selection, true), :action, team_release_path(@conn, :create, @team_id)) %>
   </div>
 </div>

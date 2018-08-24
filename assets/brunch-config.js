@@ -5,6 +5,7 @@ exports.config = {
       joinTo: {
         "js/app.js": /^(?!js\/pages)/,
         "js/team.js": /^(node_modules|js\/pages\/team)/,
+        "js/approver_selection.js": /^(node_modules|js\/pages\/approver_selection)/,
       },
 
       // To use a separate vendor.js bundle, specify two files path
@@ -68,7 +69,8 @@ exports.config = {
   modules: {
     autoRequire: {
       "js/app.js": ["js/app"],
-      "js/team.js": ["js/pages/team"]
+      "js/team.js": ["js/pages/team"],
+      "js/approver_selection.js": ["js/pages/approver_selection"],
     }
   },
 

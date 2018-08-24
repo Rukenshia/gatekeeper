@@ -1,28 +1,13 @@
-<table class="table">
-  <thead>
-    <tr>
-      <th>Commit hash</th>
-      <th>Description</th>
-      <th>Version</th>
-      <th>Released at</th>
-
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for release <- @releases do %>
-    <tr>
-      <td><%= release.commit_hash %></td>
-      <td><%= release.description %></td>
-      <td><%= release.version %></td>
-      <td><%= release.released_at %></td>
-
-      <td class="text-right">
-        <span><%= link "Show", to: team_release_path(@conn, :show, release.team_id, release), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: team_release_path(@conn, :edit, release.team_id, release), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: team_release_path(@conn, :delete, release.team_id, release), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
+<ul class="mdc-list mdc-list--avatar-list mdc-list--two-line" aria-orientation="vertical">
+  <%= for release <- Enum.filter(@releases, fn r -> is_nil(r.released_at) end) do %>
+    <li class="mdc-list-item">
+      <span class="mdc-list-item__text">
+        <span class="mdc-list-item__primary-text"><%= release.version %></span>
+        <span class="mdc-list-item__secondary-text"><%= release.commit_hash %></span>
+      </span>
+      <span class="mdc-list-item__meta">
+        <%= link "Show", to: team_release_path(@conn, :show, release.team_id, release), class: "mdc-button" %>
+      </span>
+    </li>
+  <% end %>
+</ul>

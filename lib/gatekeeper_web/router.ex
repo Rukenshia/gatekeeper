@@ -49,5 +49,7 @@ defmodule GatekeeperWeb.Router do
     get("/teams/:team_id/members", TeamMemberController, :api_get_members)
     post("/teams/:team_id/members", TeamMemberController, :api_add_member)
     delete("/teams/:team_id/members/:user_id", TeamMemberController, :api_remove_member)
+
+    resources("/releases/:release_id/approvals", ApprovalController, except: [:new, :edit])
   end
 end

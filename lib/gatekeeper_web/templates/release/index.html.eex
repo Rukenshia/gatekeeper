@@ -1,8 +1,16 @@
 <ul class="mdc-list mdc-list--avatar-list mdc-list--two-line" aria-orientation="vertical">
-  <%= for release <- Enum.filter(@releases, fn r -> is_nil(r.released_at) end) do %>
+  <%= for release <- @releases do %>
     <li class="mdc-list-item">
       <span class="mdc-list-item__text">
-        <span class="mdc-list-item__primary-text"><%= release.version %></span>
+        <span class="mdc-list-item__primary-text">
+          <%= release.version %>
+          <%= if is_nil(release.released_at) do %>
+            <div class="mdc-chip gk-chip--small gk-chip--danger">
+              <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">error_outline</i>
+              <div class="mdc-chip__text">unreleased</div>
+            </div>
+        <% end %>
+        </span>
         <span class="mdc-list-item__secondary-text"><%= release.commit_hash %></span>
       </span>
       <span class="mdc-list-item__meta">

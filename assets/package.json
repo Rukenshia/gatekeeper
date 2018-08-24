@@ -18,6 +18,7 @@
     "@material/auto-init": "^0.35.0",
     "@material/base": "^0.35.0",
     "@material/card": "^0.37.1",
+    "@material/chips": "^0.38.1",
     "@material/dialog": "^0.37.1",
     "@material/drawer": "^0.37.1",
     "@material/grid-list": "^0.37.1",

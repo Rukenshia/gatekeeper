@@ -19,10 +19,14 @@
 
   <li>
     <strong>Released at:</strong>
-    <%= @release.released_at %>
+    <%= if is_nil(@release.released_at) do %>
+      <span class="gk-typography--color__error">unreleased</span>
+    <% else %>
+      <%= @release.released_at %>
+  <% end %>
   </li>
 
 </ul>
 
-<span><%= link "Edit", to: team_release_path(@conn, :edit, @release.team_id, @release) %></span>
-<span><%= link "Back", to: team_release_path(@conn, :index, @release.team_id) %></span>
+<span><%= link "Edit", to: team_release_path(@conn, :edit, @release.team_id, @release), class: "mdc-button mdc-button--raised gk-button" %></span>
+<span><%= link "Back", to: team_path(@conn, :show, @release.team_id), class: "mdc-button gk-button" %></span>

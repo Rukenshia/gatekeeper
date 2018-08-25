@@ -33,13 +33,22 @@
     <h3>Approvals</h3>
   </div>
   <div class="mdc-layout-grid__cell--span-12">
-    <ul>
-      <%= for approval <- @release.approvals do %>
-        <li><%= approval.user_id %></li>
-      <% end %>
-    </ul>
+    <div class="mdc-layout-grid__inner">
+      <div class="mdc-layout-grid__cell--span-6">
+        <ul id="approver-selection-list" class="mdc-list mdc-list--non-interactive" aria-orientation="vertical">
+          <%= for approval <- @release.approvals do %>
+            <li class="mdc-list-item">
+              <span class="mdc-list-item__graphic material-icons gk-typography--color__success">check_box</span>
+              <span class="mdc-list-item__text"><%= approval.user.name %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="mdc-layout-grid__cell--span-12">
+    <span><%= link "Edit", to: team_release_path(@conn, :edit, @release.team_id, @release), class: "mdc-button mdc-button--raised gk-button" %></span>
+    <span><%= link "Back", to: team_path(@conn, :show, @release.team_id), class: "mdc-button gk-button" %></span>
   </div>
 </div>
 
-<span><%= link "Edit", to: team_release_path(@conn, :edit, @release.team_id, @release), class: "mdc-button mdc-button--raised gk-button" %></span>
-<span><%= link "Back", to: team_path(@conn, :show, @release.team_id), class: "mdc-button gk-button" %></span>

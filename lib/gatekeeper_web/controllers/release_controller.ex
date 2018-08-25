@@ -36,6 +36,13 @@ defmodule GatekeeperWeb.ReleaseController do
       Releases.get_release!(id)
       |> Repo.preload(:approvals)
 
+    release =
+      Map.put(
+        release,
+        :approvals,
+        Enum.map(release.approvals, fn a -> Repo.preload(a, :user) end)
+      )
+
     render(conn, "show.html", release: release)
   end
 

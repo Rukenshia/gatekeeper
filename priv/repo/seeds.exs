@@ -44,3 +44,9 @@ Repo.insert!(%Releases.Release{
   description: "A fancy release",
   version: "0.3.9"
 })
+
+Repo.insert!(%Releases.Approval{
+  id: 1,
+  release_id: 1,
+  user_id: 2
+})

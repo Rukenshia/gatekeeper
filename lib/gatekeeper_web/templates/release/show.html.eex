@@ -38,7 +38,7 @@
         <ul id="approver-selection-list" class="mdc-list mdc-list--non-interactive" aria-orientation="vertical">
           <%= for approval <- @release.approvals do %>
             <li class="mdc-list-item">
-              <span class="mdc-list-item__graphic material-icons gk-typography--color__success">check_box</span>
+              <span class="mdc-list-item__graphic material-icons <%= approval_icon_color_class approval %>"><%= approval_icon approval %></span>
               <span class="mdc-list-item__text"><%= approval.user.name %></span>
             </li>
           <% end %>

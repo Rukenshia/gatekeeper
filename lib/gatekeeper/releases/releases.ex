@@ -74,7 +74,8 @@ defmodule Gatekeeper.Releases do
 
           create_approval(%{
             release_id: release.id,
-            user_id: approver.id
+            user_id: approver.id,
+            status: "initial"
           })
         end
 

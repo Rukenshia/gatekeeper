@@ -32,9 +32,17 @@ Repo.insert!(%Teams.Team{
 })
 
 Repo.insert!(%Teams.TeamMember{
+  user_id: 1,
+  team_id: 1,
+  role: "developer",
+  mandatory_approver: false
+})
+
+Repo.insert!(%Teams.TeamMember{
   user_id: 2,
   team_id: 1,
-  role: "administrator"
+  role: "administrator",
+  mandatory_approver: true
 })
 
 Repo.insert!(%Releases.Release{
@@ -48,5 +56,6 @@ Repo.insert!(%Releases.Release{
 Repo.insert!(%Releases.Approval{
   id: 1,
   release_id: 1,
-  user_id: 2
+  user_id: 2,
+  status: "initial"
 })

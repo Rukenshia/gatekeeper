@@ -11,7 +11,16 @@ const app = new Vue({
   async mounted() {
     const { data } = await axios.get(`/api/teams/${window.vueData.teamId}/members`);
 
-    this.members = data;
+    this.members = data.sort((a, b) => {
+      if (a.mandatory_approver && !b.mandatory_approver) {
+        return -1;
+      } else if (!a.mandatory_approver && b.mandatory_approver) {
+        return 1;
+      }
+      return 0;
+    });
+
+    this.selected = this.members.filter(m => m.mandatory_approver);
 
     setTimeout(() => {
       this.loading = false;

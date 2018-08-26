@@ -16,7 +16,8 @@ defmodule GatekeeperWeb.TeamMemberController do
       TeamMember.changeset(%TeamMember{}, %{
         user_id: user_id,
         team_id: String.to_integer(id),
-        role: "administrator"
+        role: "administrator",
+        mandatory_approver: false
       })
 
     case Repo.insert_or_update(changeset) do

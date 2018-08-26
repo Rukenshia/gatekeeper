@@ -43,7 +43,11 @@ defmodule GatekeeperWeb.ReleaseController do
         Enum.map(release.approvals, fn a -> Repo.preload(a, :user) end)
       )
 
-    render(conn, "show.html", release: release)
+    render(conn, "show.html",
+      release: release,
+      user_approval:
+        Enum.find(release.approvals, fn a -> a.user_id == get_session(conn, :current_user).id end)
+    )
   end
 
   def edit(conn, %{"id" => id}) do

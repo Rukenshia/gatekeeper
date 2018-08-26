@@ -42,6 +42,10 @@ $corner-radius: 4px;
     --mdc-theme-primary: #db3236;
 }
 
+.gk-button__success {
+    --mdc-theme-primary: #2ecc71;
+}
+
 .gk-card__media--text-title {
     font-size: 16px;
 
@@ -54,7 +58,11 @@ $corner-radius: 4px;
     height: 7rem;
 }
 
-.gk-card__danger {
+.gk-card--text {
+    padding: 8px;
+}
+
+.gk-card__error {
     padding: 8px;
     color: #db3236;
 }

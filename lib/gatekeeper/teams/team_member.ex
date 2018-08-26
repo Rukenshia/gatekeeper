@@ -5,6 +5,7 @@ defmodule Gatekeeper.Teams.TeamMember do
 
   schema "team_members" do
     field(:role, :string)
+    field(:mandatory_approver, :boolean)
 
     belongs_to(:user, Gatekeeper.Users.User)
     belongs_to(:team, Gatekeeper.Teams.Team)
@@ -14,12 +15,17 @@ defmodule Gatekeeper.Teams.TeamMember do
   @doc false
   def changeset(team_member, attrs) do
     team_member
-    |> cast(attrs, [:user_id, :team_id, :role])
-    |> validate_required([:user_id, :team_id, :role])
+    |> cast(attrs, [:user_id, :team_id, :role, :mandatory_approver])
+    |> validate_required([:user_id, :team_id, :role, :mandatory_approver])
   end
 
   def safe_json(team_member) do
-    %{user_id: team_member.user_id, team_id: team_member.team_id, role: team_member.role}
+    %{
+      user_id: team_member.user_id,
+      team_id: team_member.team_id,
+      role: team_member.role,
+      mandatory_approver: team_member.mandatory_approver
+    }
     |> safe_json_user(team_member)
   end
 

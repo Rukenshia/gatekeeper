@@ -13,9 +13,11 @@
     <div class="mdc-layout-grid__cell--span-12">
       <div class="mdc-layout-grid__inner">
         <div class="mdc-layout-grid__cell--span-6 mdc-text-field">
-        <%= label f, :commit_hash, class: "mdc-floating-label" %>
-        <%= text_input f, :commit_hash, class: "mdc-text-field__input" %>
-        <%= error_tag f, :commit_hash %>
+          <%= label f, :commit_hash, class: "mdc-floating-label" %>
+          <%= text_input f, :commit_hash, class: "mdc-text-field__input" %>
+        </div>
+        <div class="mdc-layout-grid__cell--span-2">
+          <div class="mdc-card gk-card__danger"><%= error_tag f, :commit_hash %></div>
         </div>
       </div>
     </div>
@@ -25,7 +27,9 @@
         <div class="mdc-layout-grid__cell--span-6 mdc-text-field mdc-text-field--fullwidth mdc-text-field--textarea">
           <%= label f, :description, class: "mdc-floating-label" %>
           <%= textarea f, :description, class: "mdc-text-field__input", rows: 3 %>
-          <%= error_tag f, :description %>
+        </div>
+        <div class="mdc-layout-grid__cell--span-2">
+          <div class="mdc-card gk-card__danger"><%= error_tag f, :description %></div>
         </div>
       </div>
     </div>
@@ -33,9 +37,11 @@
     <div class="mdc-layout-grid__cell--span-12">
       <div class="mdc-layout-grid__inner">
         <div class="mdc-layout-grid__cell--span-6 mdc-text-field">
-          <%= label f, :version, class: "mdc-floating-label" %>
-          <%= text_input f, :version, class: "mdc-text-field__input" %>
-          <%= error_tag f, :version %>
+            <%= label f, :version, class: "mdc-floating-label" %>
+            <%= text_input f, :version, class: "mdc-text-field__input" %>
+        </div>
+        <div class="mdc-layout-grid__cell--span-2">
+          <div class="mdc-card gk-card__danger"><%= error_tag f, :version %></div>
         </div>
       </div>
     </div>
@@ -64,11 +70,19 @@
           <div class="mdc-layout-grid__cell--span-6">
             <ul id="approver-selection-list" class="mdc-list" aria-orientation="vertical">
               <template v-for="member in members">
+                <template v-if="member.mandatory_approver">
+                <li class="mdc-list-item">
+                  <span class="mdc-list-item__graphic material-icons gk-typography--color__success">priority_high</span>
+                  <span class="mdc-list-item__text">{{member.user.name}} (mandatory)</span>
+                </li>
+                </template>
+                <template v-else>
                 <li @click="toggle(member)" class="mdc-list-item">
                   <span class="mdc-list-item__graphic material-icons gk-typography--color__success" v-if="selected.indexOf(member) != -1">check_box</span>
                   <span class="mdc-list-item__graphic material-icons" v-else>check_box_outline_blank</span>
                   <span class="mdc-list-item__text">{{member.user.name}}</span>
                 </li>
+                </template>
               </template>
             </ul>
             <input name="release[approvers]" type="hidden" :value="selected.map(u => u.user.id).join(',')" />

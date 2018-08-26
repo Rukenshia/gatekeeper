@@ -5,6 +5,7 @@ defmodule Gatekeeper.Repo.Migrations.CreateReleaseApprovals do
     create table(:release_approvals) do
       add(:user_id, :integer)
       add(:release_id, :integer)
+      add(:status, :string)
 
       timestamps()
     end

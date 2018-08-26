@@ -59,3 +59,10 @@ Repo.insert!(%Releases.Approval{
   user_id: 2,
   status: "initial"
 })
+
+Repo.insert!(%Releases.Approval{
+  id: 2,
+  release_id: 1,
+  user_id: 1,
+  status: "approved"
+})

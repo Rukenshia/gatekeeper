@@ -51,6 +51,19 @@ defmodule GatekeeperWeb.Router do
     delete("/teams/:team_id/members/:user_id", TeamMemberController, :api_remove_member)
 
     get("/teams/:team_id/releases/:release_id/approvals", ReleaseController, :api_get_approvals)
+
+    post(
+      "/teams/:team_id/releases/:release_id/approvals/:approval_id/approve",
+      ReleaseController,
+      :api_approve_release
+    )
+
+    post(
+      "/teams/:team_id/releases/:release_id/approvals/:approval_id/decline",
+      ReleaseController,
+      :api_decline_release
+    )
+
     resources("/releases/:release_id/approvals", ApprovalController, except: [:new, :edit])
   end
 end

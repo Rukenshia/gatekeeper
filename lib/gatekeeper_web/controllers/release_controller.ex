@@ -86,4 +86,38 @@ defmodule GatekeeperWeb.ReleaseController do
 
     render(conn, "approvals.json", approvals: release.approvals)
   end
+
+  def api_approve_release(conn, %{"approval_id" => approval}) do
+    # TODO: guard for user id
+    # TODO: guard for approval id -> release id
+    approval = Releases.get_approval!(approval)
+
+    case Releases.update_approval(approval, %{status: "approved"}) do
+      {:ok, _} ->
+        conn
+        |> json(%{ok: true})
+
+      {:error, _} ->
+        conn
+        |> put_status(500)
+        |> json(%{ok: false})
+    end
+  end
+
+  def api_decline_release(conn, %{"approval_id" => approval}) do
+    # TODO: guard for user id
+    # TODO: guard for approval id -> release id
+    approval = Releases.get_approval!(approval)
+
+    case Releases.update_approval(approval, %{status: "declined"}) do
+      {:ok, _} ->
+        conn
+        |> json(%{ok: true})
+
+      {:error, _} ->
+        conn
+        |> put_status(500)
+        |> json(%{ok: false})
+    end
+  end
 end

@@ -1,11 +1,18 @@
 defmodule GatekeeperWeb.ReleaseView do
   use GatekeeperWeb, :view
 
-  def render(conn, approvals: approvals) do
-    approvals
-    |> Enum.map(fn a ->
-      %{release_id: a.release_id, user_id: a.user_id, created_at: a.created_at}
-    end)
+  def render("release_update.json", %{release: release}) do
+    %{
+      ok: true,
+      release: %{
+        id: release.id,
+        version: release.version,
+        commit_hash: release.commit_hash,
+        team_id: release.team_id,
+        description: release.description,
+        released_at: release.released_at
+      }
+    }
   end
 
   def approval_icon(approval) do

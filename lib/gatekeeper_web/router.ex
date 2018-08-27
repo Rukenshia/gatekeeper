@@ -50,6 +50,7 @@ defmodule GatekeeperWeb.Router do
     post("/teams/:team_id/members", TeamMemberController, :api_add_member)
     delete("/teams/:team_id/members/:user_id", TeamMemberController, :api_remove_member)
 
+    post("/teams/:team_id/releases/:release_id/release", ReleaseController, :api_release)
     get("/teams/:team_id/releases/:release_id/approvals", ReleaseController, :api_get_approvals)
 
     post(

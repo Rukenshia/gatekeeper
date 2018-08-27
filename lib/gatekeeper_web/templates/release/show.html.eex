@@ -1,98 +1,112 @@
-<h2>Show Release</h2>
+<div id="app">
+  <h2>Show Release</h2>
 
-<%= if !is_nil(@user_approval) do %>
-<div id="app" class="mdc-layout-grid__inner">
-  <div class="mdc-layout-grid__cell--span-12">
-    <%= if @user_approval.status == "initial" do %>
-      <div class="mdc-layout-grid__inner">
-        <div class="mdc-layout-grid__cell--span-6 mdc-card mdc-card--outlined">
-          <div class="gk-card--text">
-            This release is awaiting your approval
-          </div>
-          <div class="mdc-card__actions">
-            <a class="mdc-button mdc-button--raised mdc-card__action mdc-card__action--button" @click="approve">
-              Approve
-            </a>
-            <a class="mdc-button gk-button__error mdc-card__action mdc-card__action--button" @click="decline">
-              Decline
-            </a>
-          </div>
-        </div>
-      </div>
-  <% end %>
-  </div>
-</div>
-<% end %>
-
-<ul>
-
-  <li>
-    <strong>Commit hash:</strong>
-    <%= @release.commit_hash %>
-  </li>
-
-  <li>
-    <strong>Description:</strong>
-    <%= @release.description %>
-  </li>
-
-  <li>
-    <strong>Version:</strong>
-    <%= @release.version %>
-  </li>
-
-  <li>
-    <strong>Released at:</strong>
-    <%= if is_nil(@release.released_at) do %>
-      <span class="gk-typography--color__error">unreleased</span>
-    <% else %>
-      <%= @release.released_at %>
-  <% end %>
-  </li>
-
-</ul>
-
-
-<div class="mdc-layout-grid__inner">
-  <div class="mdc-layout-grid__cell--span-12">
-    <h3>Approvals</h3>
-  </div>
-  <div class="mdc-layout-grid__cell--span-12">
+  <%= if is_nil(@release.released_at) do %>
     <div class="mdc-layout-grid__inner">
-      <div class="mdc-layout-grid__cell--span-6">
-        <ul id="approver-selection-list" class="mdc-list mdc-list--non-interactive" aria-orientation="vertical">
-          <%= for approval <- @release.approvals do %>
-            <li class="mdc-list-item">
-              <span class="mdc-list-item__graphic material-icons <%= approval_icon_color_class approval %>"><%= approval_icon approval %></span>
-              <span class="mdc-list-item__text"><%= approval.user.name %></span>
-            </li>
-          <% end %>
-        </ul>
+      <div class="mdc-layout-grid__cell--span-12">
+        <span class="mdc-button mdc-button--raised" @click="release">Release</span>
       </div>
     </div>
-  </div>
-  <div class="mdc-layout-grid__cell--span-12">
-    <span><%= link "Edit", to: team_release_path(@conn, :edit, @release.team_id, @release), class: "mdc-button mdc-button--raised gk-button" %></span>
-    <span><%= link "Back", to: team_path(@conn, :show, @release.team_id), class: "mdc-button gk-button" %></span>
-  </div>
-</div>
+  <% end %>
 
-<%= if !is_nil(@user_approval) do %>
-<script>
-  new Vue({
-    el: '#app',
-    data: {
-    },
-    methods: {
-      approve() {
-        axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/approve', {})
-          .then(() => window.location.reload());
+  <%= if !is_nil(@user_approval) do %>
+  <div class="mdc-layout-grid__inner">
+    <div class="mdc-layout-grid__cell--span-12">
+      <%= if @user_approval.status == "initial" do %>
+        <div class="mdc-layout-grid__inner">
+          <div class="mdc-layout-grid__cell--span-6 mdc-card mdc-card--outlined">
+            <div class="gk-card--text">
+              This release is awaiting your approval
+            </div>
+            <div class="mdc-card__actions">
+              <a class="mdc-button mdc-button--raised mdc-card__action mdc-card__action--button" @click="approve">
+                Approve
+              </a>
+              <a class="mdc-button gk-button__error mdc-card__action mdc-card__action--button" @click="decline">
+                Decline
+              </a>
+            </div>
+          </div>
+        </div>
+    <% end %>
+    </div>
+  </div>
+  <% end %>
+
+  <ul>
+
+    <li>
+      <strong>Commit hash:</strong>
+      <%= @release.commit_hash %>
+    </li>
+
+    <li>
+      <strong>Description:</strong>
+      <%= @release.description %>
+    </li>
+
+    <li>
+      <strong>Version:</strong>
+      <%= @release.version %>
+    </li>
+
+    <li>
+      <strong>Released at:</strong>
+      <%= if is_nil(@release.released_at) do %>
+        <span class="gk-typography--color__error">unreleased</span>
+      <% else %>
+        <%= @release.released_at %>
+    <% end %>
+    </li>
+
+  </ul>
+
+
+  <div class="mdc-layout-grid__inner">
+    <div class="mdc-layout-grid__cell--span-12">
+      <h3>Approvals</h3>
+    </div>
+    <div class="mdc-layout-grid__cell--span-12">
+      <div class="mdc-layout-grid__inner">
+        <div class="mdc-layout-grid__cell--span-6">
+          <ul id="approver-selection-list" class="mdc-list mdc-list--non-interactive" aria-orientation="vertical">
+            <%= for approval <- @release.approvals do %>
+              <li class="mdc-list-item">
+                <span class="mdc-list-item__graphic material-icons <%= approval_icon_color_class approval %>"><%= approval_icon approval %></span>
+                <span class="mdc-list-item__text"><%= approval.user.name %></span>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="mdc-layout-grid__cell--span-12">
+      <span><%= link "Edit", to: team_release_path(@conn, :edit, @release.team_id, @release), class: "mdc-button mdc-button--raised gk-button" %></span>
+      <span><%= link "Back", to: team_path(@conn, :show, @release.team_id), class: "mdc-button gk-button" %></span>
+    </div>
+  </div>
+
+  <%= if !is_nil(@user_approval) do %>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
       },
-      decline() {
-        axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/decline', {})
-          .then(() => window.location.reload());
+      methods: {
+        release() {
+          axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/release', {})
+            .then(() => window.location.reload());
+        },
+        approve() {
+          axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/approve', {})
+            .then(() => window.location.reload());
+        },
+        decline() {
+          axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/decline', {})
+            .then(() => window.location.reload());
+        },
       },
-    },
-  });
-</script>
-<% end %>
+    });
+  </script>
+  <% end %>
+</div>

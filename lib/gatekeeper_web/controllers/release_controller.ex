@@ -120,4 +120,31 @@ defmodule GatekeeperWeb.ReleaseController do
         |> json(%{ok: false})
     end
   end
+
+  def api_release(conn, %{"release_id" => release}) do
+    require Logger
+    # TODO: guard for user id
+    release =
+      Releases.get_release!(release)
+      |> Repo.preload(:approvals)
+
+    if is_nil(release.released_at) do
+      case Releases.update_release(release, %{
+             released_at: Ecto.DateTime.to_string(Ecto.DateTime.utc())
+           }) do
+        {:ok, release} ->
+          conn
+          |> render("release_update.json", release: release)
+
+        {:error, _} ->
+          conn
+          |> put_status(500)
+          |> json(%{ok: false, message: "Database update failed"})
+      end
+    else
+      conn
+      |> put_status(409)
+      |> json(%{ok: false, message: "Already released"})
+    end
+  end
 end

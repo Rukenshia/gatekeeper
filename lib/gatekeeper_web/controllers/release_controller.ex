@@ -153,8 +153,8 @@ defmodule GatekeeperWeb.ReleaseController do
   end
 
   def api_release(conn, %{"release_id" => release}) do
-    require Logger
     # TODO: guard for user id
+    # TODO: guard for release approval
     release =
       Releases.get_release!(release)
       |> Repo.preload(:approvals)

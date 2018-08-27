@@ -13,7 +13,30 @@
     </div>
     <div class="mdc-card__actions">
         <div class="mdc-card__action-buttons">
-          <a href="<%= team_path(@conn, :show, team.id) %>" class="mdc-button mdc-card__action mdc-card__action--button gk-button">View</a>
+          <a href="<%= team_path(@conn, :show, team.id) %>" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Show</a>
+        </div>
+    </div>
+  </div>
+  <% end %>
+  <div class="mdc-layout-grid__cell--span-12">
+    <h2>Waiting for your approval</h2>
+  </div>
+  <%= if length(@approvals) == 0 do %>
+    <div class="mdc-layout-grid__cell--span-12">
+      No releases are currently waiting for your approval.
+    </div>
+  <%= end %>
+  <%= for approval <- @approvals do %>
+  <div class="mdc-layout-grid__cell mdc-card">
+    <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
+      <div class="mdc-card__media-content ">
+        <span class="mdc-typography--headline5"><%= approval.release.version %></span>
+        <span class="mdc-typography--subtitle1"><%= release_team(approval.release, assigns[:current_user].teams).name %></span>
+      </div>
+    </div>
+    <div class="mdc-card__actions">
+        <div class="mdc-card__action-buttons">
+          <a href="<%= team_release_path(@conn, :show, approval.release.team_id, approval.release_id) %>" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Show</a>
         </div>
     </div>
   </div>

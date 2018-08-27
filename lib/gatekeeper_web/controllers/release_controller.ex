@@ -1,9 +1,13 @@
 defmodule GatekeeperWeb.ReleaseController do
+  require Logger
+
   use GatekeeperWeb, :controller
 
   alias Gatekeeper.Releases
   alias Gatekeeper.Releases.Release
   alias Gatekeeper.Repo
+
+  import Ecto.Query, only: [from: 2]
 
   def index(conn, %{"team_id" => team_id}) do
     releases = Releases.list_releases()
@@ -43,10 +47,37 @@ defmodule GatekeeperWeb.ReleaseController do
         Enum.map(release.approvals, fn a -> Repo.preload(a, :user) end)
       )
 
+    user =
+      conn
+      |> get_session(:current_user)
+
+    required_approvers =
+      release.approvals
+      |> Enum.map(fn a ->
+        Repo.get_by!(Gatekeeper.Teams.TeamMember, user_id: a.user_id, team_id: release.team_id)
+      end)
+      |> Enum.filter(fn tm -> tm.mandatory_approver end)
+      |> Enum.filter(fn tm ->
+        Enum.any?(release.approvals, fn a ->
+          a.user_id == tm.user_id and a.status != "approved"
+        end)
+      end)
+
+    Logger.debug(inspect(required_approvers))
+
+    can_release =
+      if length(required_approvers) == 0 && is_nil(release.released_at) &&
+           !Enum.any?(release.approvals, fn a -> a.status == "declined" end) do
+        true
+      else
+        false
+      end
+
     render(conn, "show.html",
       release: release,
       user_approval:
-        Enum.find(release.approvals, fn a -> a.user_id == get_session(conn, :current_user).id end)
+        Enum.find(release.approvals, fn a -> a.user_id == get_session(conn, :current_user).id end),
+      can_release: can_release
     )
   end
 

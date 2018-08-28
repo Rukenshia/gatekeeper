@@ -17,6 +17,10 @@ config :gatekeeper, GatekeeperWeb.Endpoint,
   pubsub: [name: Gatekeeper.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :ueberauth, Ueberauth,
+  providers: [
+  ]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

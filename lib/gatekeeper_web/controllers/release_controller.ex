@@ -7,8 +7,6 @@ defmodule GatekeeperWeb.ReleaseController do
   alias Gatekeeper.Releases.Release
   alias Gatekeeper.Repo
 
-  import Ecto.Query, only: [from: 2]
-
   def index(conn, %{"team_id" => team_id}) do
     releases = Releases.list_releases()
     render(conn, "index.html", releases: releases, team_id: team_id)
@@ -46,10 +44,6 @@ defmodule GatekeeperWeb.ReleaseController do
         :approvals,
         Enum.map(release.approvals, fn a -> Repo.preload(a, :user) end)
       )
-
-    user =
-      conn
-      |> get_session(:current_user)
 
     required_approvers =
       release.approvals

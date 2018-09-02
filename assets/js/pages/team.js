@@ -21,7 +21,7 @@ const app = new Vue({
 
     const users = await axios.get('/api/users');
 
-    this.users = users.data.map(u => ({ ...u, isMember: this.team.members.find(m => m.id === u.id) }));
+    this.users = users.data.map(u => ({ ...u, isMember: typeof this.team.members.find(m => m.id === u.id) !== 'undefined' }));
   },
   methods: {
     addMember(user) {
@@ -42,6 +42,8 @@ const app = new Vue({
           this.team.members = this.team.members.filter(m => m.id !== user.id);
           user.isMember = false;
           user.role = undefined;
+
+          console.log(this.users);
 
           snackbar.show({
             message: `Successfully removed ${user.name} from the team`,

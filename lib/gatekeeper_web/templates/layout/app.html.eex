@@ -9,14 +9,21 @@
 
     <title>Gatekeeper</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    <script src="<%= static_path(@conn, "/js/vue.js") %>"></script>
+    <script src="<%= static_path(@conn, "/js/axios.min.js") %>"></script>
+    <link href="<%= static_path(@conn, "/css/material-icons.css") %>"
       rel="stylesheet">
   </head>
 
   <body class="gk-typography">
+    <header class="mdc-top-app-bar gk-top-app-bar mdc-elevation--z6">
+      <div class="mdc-top-app-bar__row">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+          <a href="/" class="material-icons mdc-top-app-bar__navigation-icon">home</a>
+          <span class="mdc-top-app-bar__title">Gatekeeper <span class="mdc-typography--subtitle2">keeping gates since 2018</span></span>
+        </section>
+      </div>
+    </header>
     <div class="mdc-snackbar"
         aria-live="assertive"
         aria-atomic="true"
@@ -50,7 +57,7 @@
       </aside>
     <% end %>
 
-    <div class="mdc-layout-grid">
+    <div class="gk-content mdc-layout-grid">
       <div class="mdc-layout-grid__inner">
         <div class="mdc-layout-grid__cell--span-2-desktop mdc-layout-grid__cell--span-2-tablet"></div>
         <div class="mdc-layout-grid__cell--span-10-desktop mdc-layout-grid__cell--span-10-tablet mdc-layout-grid__cell--span-12-phone">

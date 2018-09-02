@@ -18,8 +18,26 @@ $corner-radius: 4px;
 @import "@material/list/mdc-list";
 @import "@material/chips/mdc-chips";
 @import "@material/linear-progress/mdc-linear-progress";
+@import "@material/top-app-bar/mdc-top-app-bar";
 
 @import "fonts";
+
+body {
+    margin: 0;
+}
+
+.gk-top-app-bar {
+    @include mdc-top-app-bar-ink-color(#000);
+    @include mdc-top-app-bar-fill-color(#fff);
+    
+    .mdc-top-app-bar__navigation-icon {
+        color: #000;
+    }
+}
+
+.gk-content {
+    padding-top: 80px;
+}
 
 .gk-typography {
     font-family: 'Product Sans', 'Open Sans', sans-serif;

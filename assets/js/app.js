@@ -19,6 +19,11 @@ import "phoenix_html";
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+import {MDCTopAppBar} from '@material/top-app-bar/index';
+
+// Instantiation
+const topAppBarElement = document.querySelector('.mdc-top-app-bar');
+const topAppBar = new MDCTopAppBar(topAppBarElement);
 
 import { MDCTextField } from '@material/textfield';
 const fieldSelector = document.querySelectorAll('.mdc-text-field');

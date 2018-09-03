@@ -19,8 +19,9 @@
     <header class="mdc-top-app-bar gk-top-app-bar mdc-elevation--z6">
       <div class="mdc-top-app-bar__row">
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+          <a href="#" class="material-icons mdc-top-app-bar__navigation-icon">menu</a>
           <a href="/" class="material-icons mdc-top-app-bar__navigation-icon">home</a>
-          <span class="mdc-top-app-bar__title">Gatekeeper <span class="mdc-typography--subtitle2">keeping gates since 2018</span></span>
+          <span class="mdc-top-app-bar__title">Gatekeeper</span>
         </section>
       </div>
     </header>

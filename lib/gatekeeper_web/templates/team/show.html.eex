@@ -19,10 +19,10 @@
   </div>
   <%= for member <- @team.members do %>
   <div class="mdc-layout-grid__cell mdc-card">
-    <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
-      <div class="mdc-card__media-content ">
-        <span class="mdc-typography--headline5"><%= member.name %></span>
-        <p>Role (todo)</p>
+    <div class="mdc-card__media gk-card__media--text">
+      <div class="gk-card__media--text-title">
+        <div class="gk-card__media--text-headline"><%= member.name %></div>
+        <div class="gk-card__media--text-subtitle" :class="`gk-typography--role__todo`">Role(todo)</div>
       </div>
     </div>
   </div>

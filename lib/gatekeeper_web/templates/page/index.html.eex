@@ -1,25 +1,6 @@
-<h1>Hello, <%= assigns[:current_user].name %></h1>
-
 <div class="mdc-layout-grid__inner">
-  <div class="mdc-layout-grid__cell--span-12">
-    <h2>Your teams</h2>
-  </div>
-  <%= for team <- assigns[:current_user].teams do %>
-  <div class="mdc-layout-grid__cell mdc-card">
-    <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
-      <div class="mdc-card__media-content ">
-        <span class="mdc-typography--headline5"><%= team.name %></span>
-      </div>
-    </div>
-    <div class="mdc-card__actions">
-        <div class="mdc-card__action-buttons">
-          <a href="<%= team_path(@conn, :show, team.id) %>" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Show</a>
-        </div>
-    </div>
-  </div>
-  <% end %>
-  <div class="mdc-layout-grid__cell--span-12">
-    <h2>Waiting for your approval</h2>
+  <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
+    <h2 class="mdc-typography--headline3">Waiting for your approval</h2>
   </div>
   <%= if length(@approvals) == 0 do %>
     <div class="mdc-layout-grid__cell--span-12">
@@ -28,15 +9,33 @@
   <%= end %>
   <%= for approval <- @approvals do %>
   <div class="mdc-layout-grid__cell mdc-card">
-    <div class="mdc-card__media gk-card__media--text-based gk-card__media--text-title">
-      <div class="mdc-card__media-content ">
-        <span class="mdc-typography--headline5"><%= approval.release.version %></span>
-        <span class="mdc-typography--subtitle1"><%= release_team(approval.release, assigns[:current_user].teams).name %></span>
+    <div class="mdc-card__media gk-card__media--text">
+      <div class="gk-card__media--text-title">
+        <div class="gk-card__media--text-headline"><%= approval.release.version %></div>
+        <div class="gk-card__media--text-subtitle"><%= release_team(approval.release, assigns[:current_user].teams).name %></div>
+        <div class="gk-card__media--text-body"><%= approval.release.description |> truncate(length: 30) %></div>
       </div>
     </div>
     <div class="mdc-card__actions">
         <div class="mdc-card__action-buttons">
           <a href="<%= team_release_path(@conn, :show, approval.release.team_id, approval.release_id) %>" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Show</a>
+        </div>
+    </div>
+  </div>
+  <% end %>
+  <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
+    <h2 class="mdc-typography--headline3">Your teams</h2>
+  </div>
+  <%= for team <- assigns[:current_user].teams do %>
+  <div class="mdc-layout-grid__cell mdc-card">
+    <div class="mdc-card__media gk-card__media--text">
+      <div class="gk-card__media--text-title">
+        <div class="gk-card__media--text-headline"><%= team.name %></div>
+      </div>
+    </div>
+    <div class="mdc-card__actions">
+        <div class="mdc-card__action-buttons">
+          <a href="<%= team_path(@conn, :show, team.id) %>" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Show</a>
         </div>
     </div>
   </div>

@@ -20,7 +20,7 @@ defmodule Gatekeeper.Mixfile do
   def application do
     [
       mod: {Gatekeeper.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ueberauth]
+      extra_applications: [:logger, :runtime_tools, :ueberauth, :phoenix_html_simplified_helpers]
     ]
   end
 
@@ -41,7 +41,8 @@ defmodule Gatekeeper.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:ueberauth, "~> 0.4"}
+      {:ueberauth, "~> 0.4"},
+      {:phoenix_html_simplified_helpers, "~> 2.0"}
     ]
   end
 

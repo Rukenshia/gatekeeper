@@ -13,13 +13,7 @@ defmodule GatekeeperWeb.Router do
   end
 
   def set_current_user(conn, _args) do
-    # FIXME(jan): proper session handling... sometime...
-    user =
-      Users.get_user!(2)
-      |> Repo.preload(:teams)
-
     conn
-    |> put_session(:current_user, user)
     |> assign(:current_user, get_session(conn, :current_user))
   end
 
@@ -38,6 +32,15 @@ defmodule GatekeeperWeb.Router do
     end
 
     resources("/users", UserController)
+  end
+
+  scope "/auth", GatekeeperWeb do
+    pipe_through([:browser])
+
+    get("/:provider", AuthController, :request)
+    get("/:provider/callback", AuthController, :callback)
+    post("/:provider/callback", AuthController, :callback)
+    delete("/logout", AuthController, :delete)
   end
 
   # Other scopes may use custom stacks.

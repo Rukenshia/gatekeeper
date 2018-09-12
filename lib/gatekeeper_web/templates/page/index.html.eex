@@ -1,5 +1,8 @@
 <div class="mdc-layout-grid__inner">
   <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
+    <h2 class="mdc-typography--overline">Logged in as <%= assigns[:current_user].name %></h2>
+  </div>
+  <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
     <h2 class="mdc-typography--headline3">Waiting for your approval</h2>
   </div>
   <%= if length(@approvals) == 0 do %>

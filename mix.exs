@@ -20,7 +20,13 @@ defmodule Gatekeeper.Mixfile do
   def application do
     [
       mod: {Gatekeeper.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ueberauth, :phoenix_html_simplified_helpers]
+      extra_applications: [
+        :logger,
+        :runtime_tools,
+        :ueberauth,
+        :ueberauth_keycloak_strategy,
+        :phoenix_html_simplified_helpers
+      ]
     ]
   end
 
@@ -42,6 +48,7 @@ defmodule Gatekeeper.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:ueberauth, "~> 0.4"},
+      {:ueberauth_keycloak_strategy, path: "/Users/jan/src/ueberauth_keycloak"},
       {:phoenix_html_simplified_helpers, "~> 2.0"}
     ]
   end

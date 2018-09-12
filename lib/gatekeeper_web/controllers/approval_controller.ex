@@ -3,7 +3,6 @@ defmodule GatekeeperWeb.ApprovalController do
 
   alias Gatekeeper.Releases
   alias Gatekeeper.Releases.Approval
-  alias Gatekeeper.Repo
 
   action_fallback(GatekeeperWeb.FallbackController)
 

@@ -1,19 +1,14 @@
 <div class="mdc-layout-grid__inner">
-  <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
-    <div class="mdc-layout-grid__inner">
-      <div class="mdc-layout-grid__cell gk-layout-grid__cell--short">
+      <div class="mdc-layout-grid__cell">
         <h2 class="mdc-typography--headline2">Gatekeeper</h2>
+        <br />
+        <p class="mdc-typography--subtitle1">Here to help you in the release approval process.</p>
+
+        <%= link "Login", to: auth_path(@conn, :request, "keycloak"), class: "mdc-button mdc-button--raised" %>
       </div>
-      <div class="mdc-layout-grid__cell--span-2 gk-layout-grid__cell--short">
+      <div class="mdc-layout-grid__cell--span-6">
         <div id="success"></div>
       </div>
-    </div>
-  </div>
-  <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
-    <p class="mdc-typography--subtitle1">Here to help you in the release approval process.</p>
-
-    <%= link "Login", to: auth_path(@conn, :request, "keycloak"), class: "mdc-button mdc-button--raised" %>
-  </div>
 </div>
 
 <script>

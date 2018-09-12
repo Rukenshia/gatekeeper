@@ -7,12 +7,20 @@ defmodule GatekeeperWeb.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+  end
+
+  pipeline :maybe_browser_auth do
+    plug(Gatekeeper.MaybeAuthPipeline)
     plug(:set_current_user)
+  end
+
+  pipeline :ensure_authed_access do
+    plug(Guardian.Plug.EnsureAuthenticated)
   end
 
   def set_current_user(conn, _args) do
     conn
-    |> assign(:current_user, get_session(conn, :current_user))
+    |> assign(:current_user, Guardian.Plug.current_resource(conn))
   end
 
   pipeline :api do
@@ -21,7 +29,7 @@ defmodule GatekeeperWeb.Router do
 
   scope "/", GatekeeperWeb do
     # Use the default browser stack
-    pipe_through(:browser)
+    pipe_through([:browser, :maybe_browser_auth, :ensure_authed_access])
 
     get("/", PageController, :index)
 
@@ -38,7 +46,7 @@ defmodule GatekeeperWeb.Router do
     get("/:provider", AuthController, :request)
     get("/:provider/callback", AuthController, :callback)
     post("/:provider/callback", AuthController, :callback)
-    delete("/logout", AuthController, :delete)
+    get("/:provider/logout", AuthController, :delete)
   end
 
   # Other scopes may use custom stacks.

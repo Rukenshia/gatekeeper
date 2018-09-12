@@ -114,10 +114,11 @@ defmodule Gatekeeper.Users do
         {:ok, Repo.preload(user, :teams)}
 
       nil ->
+        Logger.debug("creating user with name #{auth.info.name} and email #{auth.info.email}")
+
         %User{}
         |> User.changeset(%{name: auth.info.name, email: auth.info.email})
         |> Repo.insert()
-        |> Repo.preload(:teams)
     end
   end
 end

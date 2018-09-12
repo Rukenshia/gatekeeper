@@ -23,8 +23,12 @@ config :ueberauth, Ueberauth,
 
 config :ueberauth, Ueberauth.Strategy.Keycloak.OAuth,
   client_id: "gatekeeper",
-  client_secret: "89566914-6325-4c4d-9e80-fe786cac9110",
+  client_secret: "505055a7-4aa3-450d-b8fa-76f668fc354b",
   redirect_uri: "http://localhost:4000/auth/keycloak"
+
+config :gatekeeper, Gatekeeper.Guardian,
+  issuer: "gatekeeper",
+  secret_key: "XGeQLQiAf768aKp2RIugOl/Yty0T5pfi3qL03LCeqKWQ2v5bwOFtbjdpfSbVPEuM"
 
 # Configures Elixir's Logger
 config :logger, :console,

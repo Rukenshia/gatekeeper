@@ -25,7 +25,8 @@ defmodule Gatekeeper.Mixfile do
         :runtime_tools,
         :ueberauth,
         :ueberauth_keycloak_strategy,
-        :phoenix_html_simplified_helpers
+        :phoenix_html_simplified_helpers,
+        :guardian
       ]
     ]
   end
@@ -47,6 +48,7 @@ defmodule Gatekeeper.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
+      {:guardian, "~> 1.1"},
       {:ueberauth, "~> 0.4"},
       {:ueberauth_keycloak_strategy, "~> 0.1"},
       {:phoenix_html_simplified_helpers, "~> 2.0"}

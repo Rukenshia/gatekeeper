@@ -1,6 +1,6 @@
 version: "3"
 services: 
-  pintaecolorea_bd:
+  db:
     image: postgres
     environment:
       POSTGRES_PASSWORD: postgres
@@ -11,5 +11,12 @@ services:
       - "service"
     volumes:
       - ./data:/var/lib/postgresql/
+  idp:
+    image: jboss/keycloak
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    ports:
+      - 8080:8080
 networks:
   service:

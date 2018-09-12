@@ -36,7 +36,7 @@ body {
     @include mdc-top-app-bar-ink-color(#000);
     @include mdc-top-app-bar-fill-color(#fff);
     
-    .mdc-top-app-bar__navigation-icon {
+    .mdc-top-app-bar__navigation-icon,.mdc-top-app-bar__action-item {
         color: #000;
     }
 }

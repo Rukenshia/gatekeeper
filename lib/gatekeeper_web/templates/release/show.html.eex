@@ -14,17 +14,21 @@
     <div class="mdc-layout-grid__cell--span-12">
       <%= if @user_approval.status == "initial" do %>
         <div class="mdc-layout-grid__inner">
-          <div class="mdc-layout-grid__cell--span-6 mdc-card mdc-card--outlined">
-            <div class="gk-card--text">
-              This release is awaiting your approval
+          <div class="mdc-layout-grid__cell--span-6 mdc-card">
+            <div class="mdc-card__media gk-card__media--text">
+              <div class="gk-card__media--text-title">
+                  This release is awaiting your approval
+              </div>
             </div>
             <div class="mdc-card__actions">
-              <a class="mdc-button mdc-button--raised mdc-card__action mdc-card__action--button" @click="approve">
-                Approve
-              </a>
-              <a class="mdc-button gk-button__error mdc-card__action mdc-card__action--button" @click="decline">
-                Decline
-              </a>
+              <div class="mdc-card__action-buttons">
+                <a class="mdc-button mdc-button--raised mdc-card__action mdc-card__action--button" @click="approve">
+                  Approve
+                </a>
+                <a class="mdc-button gk-button__error mdc-card__action mdc-card__action--button" @click="decline">
+                  Decline
+                </a>
+              </div>
             </div>
           </div>
         </div>

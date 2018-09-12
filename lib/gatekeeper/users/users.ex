@@ -2,6 +2,7 @@ defmodule Gatekeeper.Users do
   @moduledoc """
   The Users context.
   """
+  require Logger
 
   import Ecto.Query, warn: false
   alias Gatekeeper.Repo
@@ -100,5 +101,23 @@ defmodule Gatekeeper.Users do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  @doc """
+  Finds or creates a user from Auth parameters
+  """
+  def find_or_create_from_auth(auth) do
+    Logger.debug("find_or_create_from_auth for #{inspect(auth.info)}")
+
+    case Repo.get_by(User, email: auth.info.email) do
+      user when user != nil ->
+        {:ok, Repo.preload(user, :teams)}
+
+      nil ->
+        %User{}
+        |> User.changeset(%{name: auth.info.name, email: auth.info.email})
+        |> Repo.insert()
+        |> Repo.preload(:teams)
+    end
   end
 end

@@ -9,7 +9,7 @@
     <div class="mdc-layout-grid__cell--span-12">
       No releases are currently waiting for your approval.
     </div>
-  <%= end %>
+  <% end %>
   <%= for approval <- @approvals do %>
   <div class="mdc-layout-grid__cell mdc-card">
     <div class="mdc-card__media gk-card__media--text">

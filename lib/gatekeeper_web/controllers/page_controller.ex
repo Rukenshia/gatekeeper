@@ -2,10 +2,11 @@ defmodule GatekeeperWeb.PageController do
   use GatekeeperWeb, :controller
 
   alias Gatekeeper.Repo
+  alias Gatekeeper.Guardian
 
   def index(conn, _params) do
     user =
-      get_session(conn, :current_user)
+      Guardian.Plug.current_resource(conn)
       |> Repo.preload(:approvals)
 
     approvals =

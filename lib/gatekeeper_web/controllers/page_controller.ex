@@ -4,6 +4,10 @@ defmodule GatekeeperWeb.PageController do
   alias Gatekeeper.Repo
   alias Gatekeeper.Guardian
 
+  def landing(conn, _params) do
+    render(conn, "landing.html")
+  end
+
   def index(conn, _params) do
     user =
       Guardian.Plug.current_resource(conn)

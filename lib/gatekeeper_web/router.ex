@@ -31,7 +31,7 @@ defmodule GatekeeperWeb.Router do
     # Use the default browser stack
     pipe_through([:browser, :maybe_browser_auth, :ensure_authed_access])
 
-    get("/", PageController, :index)
+    get("/home", PageController, :index)
 
     resources("/teams", TeamController) do
       resources("/releases", ReleaseController)
@@ -40,13 +40,18 @@ defmodule GatekeeperWeb.Router do
     resources("/users", UserController)
   end
 
+  scope "/", GatekeeperWeb do
+    pipe_through([:browser])
+    get("/", PageController, :landing)
+    get("/logout", AuthController, :delete)
+  end
+
   scope "/auth", GatekeeperWeb do
     pipe_through([:browser])
 
     get("/:provider", AuthController, :request)
     get("/:provider/callback", AuthController, :callback)
     post("/:provider/callback", AuthController, :callback)
-    get("/:provider/logout", AuthController, :delete)
   end
 
   # Other scopes may use custom stacks.

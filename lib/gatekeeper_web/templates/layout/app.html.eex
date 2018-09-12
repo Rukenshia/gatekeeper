@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <script src="<%= static_path(@conn, "/js/vue.js") %>"></script>
     <script src="<%= static_path(@conn, "/js/axios.min.js") %>"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/4.13.0/bodymovin_light.min.js"></script>
     <link href="<%= static_path(@conn, "/css/material-icons.css") %>"
       rel="stylesheet">
   </head>

@@ -1,0 +1,29 @@
+<div class="mdc-layout-grid__inner">
+  <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
+    <div class="mdc-layout-grid__inner">
+      <div class="mdc-layout-grid__cell gk-layout-grid__cell--short">
+        <h2 class="mdc-typography--headline2">Gatekeeper</h2>
+      </div>
+      <div class="mdc-layout-grid__cell--span-2 gk-layout-grid__cell--short">
+        <div id="success"></div>
+      </div>
+    </div>
+  </div>
+  <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
+    <p class="mdc-typography--subtitle1">Here to help you in the release approval process.</p>
+
+    <%= link "Login", to: auth_path(@conn, :request, "keycloak"), class: "mdc-button mdc-button--raised" %>
+  </div>
+</div>
+
+<script>
+  setTimeout(() => {
+    bodymovin.loadAnimation({
+      container: document.getElementById('success'),
+      renderer: 'svg',
+      loop: false,
+      autoplay: true,
+      path: '<%= static_path(@conn, "/images/success.json") %>'
+    });
+  }, 1000);
+</script>

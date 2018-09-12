@@ -1,7 +1,5 @@
 defmodule GatekeeperWeb.Router do
   use GatekeeperWeb, :router
-  alias Gatekeeper.Repo
-  alias Gatekeeper.Users
 
   pipeline :browser do
     plug(:accepts, ["html"])

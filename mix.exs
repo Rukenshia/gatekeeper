@@ -48,7 +48,7 @@ defmodule Gatekeeper.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:ueberauth, "~> 0.4"},
-      {:ueberauth_keycloak_strategy, path: "/Users/jan/src/ueberauth_keycloak"},
+      {:ueberauth_keycloak_strategy, "~> 0.1"},
       {:phoenix_html_simplified_helpers, "~> 2.0"}
     ]
   end

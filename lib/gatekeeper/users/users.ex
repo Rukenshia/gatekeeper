@@ -110,7 +110,7 @@ defmodule Gatekeeper.Users do
     Logger.debug("find_or_create_from_auth for #{inspect(auth.info)}")
 
     case Repo.get_by(User, email: auth.info.email) do
-      user ->
+      user when user != nil ->
         {:ok, Repo.preload(user, :teams)}
 
       nil ->

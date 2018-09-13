@@ -23,6 +23,7 @@ defmodule GatekeeperWeb.TeamController do
     team =
       Teams.get_team!(id)
       |> Repo.preload(:members)
+      |> Repo.preload(:memberships)
       |> Repo.preload(:releases)
 
     render(conn, "show.html", team: team)

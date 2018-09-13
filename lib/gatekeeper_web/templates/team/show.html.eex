@@ -22,7 +22,9 @@
     <div class="mdc-card__media gk-card__media--text">
       <div class="gk-card__media--text-title">
         <div class="gk-card__media--text-headline"><%= member.name %></div>
-        <div class="gk-card__media--text-subtitle" :class="`gk-typography--role__todo`">Role(todo)</div>
+        <%= with membership <- get_membership(member, @team.memberships) do %>
+          <div class="gk-card__media--text-subtitle gk-typography--role__<%= membership.role %>"><%= membership.role |> String.capitalize %></div>
+        <% end %>
       </div>
     </div>
   </div>

@@ -10,6 +10,7 @@ upload:
 	docker push gcr.io/mps-gatekeeper/gatekeeper:${VERSION}
 
 deploy:
+	sed -i "" 's/gatekeeper:.*/gatekeeper:'"${VERSION}"'/g' k8s/deployment.yml
 	kubectl apply -f k8s/deployment.yml
 
 .PHONY: start

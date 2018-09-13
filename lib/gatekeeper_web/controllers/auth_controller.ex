@@ -38,7 +38,7 @@ defmodule GatekeeperWeb.AuthController do
       Teams.check_or_create!(team)
     end
 
-    case Users.find_or_create_from_auth(user, user.extra.raw_info.user["teams"]) do
+    case Users.find_or_create_from_auth(user, user.extra.raw_info.user["teams"] || []) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Good to see you, #{user.name}")

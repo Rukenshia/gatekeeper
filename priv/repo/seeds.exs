@@ -15,13 +15,11 @@ alias Gatekeeper.Users
 alias Gatekeeper.Releases
 
 Repo.insert!(%Users.User{
-  id: 1,
   name: "Hubert",
   email: "hubert@fkn.space"
 })
 
 Repo.insert!(%Users.User{
-  id: 2,
   name: "Karolin",
   email: "karolin@fkn.space"
 })
@@ -46,7 +44,6 @@ Repo.insert!(%Teams.TeamMember{
 })
 
 Repo.insert!(%Releases.Release{
-  id: 1,
   team_id: 1,
   commit_hash: "a895fc7",
   description: "A fancy release",
@@ -54,14 +51,12 @@ Repo.insert!(%Releases.Release{
 })
 
 Repo.insert!(%Releases.Approval{
-  id: 1,
   release_id: 1,
   user_id: 2,
   status: "initial"
 })
 
 Repo.insert!(%Releases.Approval{
-  id: 2,
   release_id: 1,
   user_id: 1,
   status: "approved"

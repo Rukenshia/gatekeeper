@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <script src="<%= static_path(@conn, "/js/vue.js") %>"></script>
     <script src="<%= static_path(@conn, "/js/axios.min.js") %>"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/4.13.0/bodymovin_light.min.js"></script>
     <link href="<%= static_path(@conn, "/css/material-icons.css") %>"
       rel="stylesheet">
   </head>
@@ -20,9 +21,14 @@
       <div class="mdc-top-app-bar__row">
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
           <a href="#" class="material-icons mdc-top-app-bar__navigation-icon">menu</a>
-          <a href="/" class="material-icons mdc-top-app-bar__navigation-icon">home</a>
+          <a href="<%= if is_nil(assigns[:current_user]), do: page_path(@conn, :landing), else: page_path(@conn, :index)  %> " class="material-icons mdc-top-app-bar__navigation-icon">home</a>
           <span class="mdc-top-app-bar__title">Gatekeeper</span>
         </section>
+        <%= if !is_nil(assigns[:current_user]) do %>
+          <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+            <a href="<%= auth_path(@conn, :delete) %>" class="material-icons mdc-top-app-bar__action-item" aria-label="Logout" alt="Logout">power_settings_new</a>
+          </section>
+        <% end %>
       </div>
     </header>
     <div class="mdc-snackbar"

@@ -9,6 +9,7 @@ defmodule GatekeeperWeb.AuthController do
 
   alias Ueberauth.Strategy.Helpers
   alias Gatekeeper.Users
+  alias Gatekeeper.Guardian
 
   def request(conn, _params) do
     conn
@@ -17,8 +18,8 @@ defmodule GatekeeperWeb.AuthController do
 
   def delete(conn, _params) do
     conn
-    |> put_flash(:info, "You have been logged out!")
     |> configure_session(drop: true)
+    |> Guardian.Plug.sign_out()
     |> redirect(to: "/")
   end
 
@@ -31,17 +32,14 @@ defmodule GatekeeperWeb.AuthController do
   def callback(%{assigns: %{ueberauth_auth: user}} = conn, _params) do
     case Users.find_or_create_from_auth(user) do
       {:ok, user} ->
-        Logger.debug(inspect(user))
-
         conn
-        |> put_flash(:info, "Successfully authenticated.")
-        |> put_session(:current_user, user)
-        |> redirect(to: "/")
+        |> put_flash(:info, "Good to see you, #{user.name}")
+        |> Guardian.Plug.sign_in(user)
+        |> redirect(to: "/home")
 
       {:error, reason} ->
         conn
         |> put_flash(:error, reason)
-        |> put_session(:current_user, %Gatekeeper.Users.User{name: "unknown"})
         |> redirect(to: "/")
     end
   end

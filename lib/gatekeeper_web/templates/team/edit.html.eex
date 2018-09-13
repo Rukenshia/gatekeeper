@@ -46,7 +46,7 @@
 </div>
 
 
-<%= link "Back", to: team_path(@conn, :index), class: "mdc-button gk-button" %>
+<%= link "Back", to: team_path(@conn, :show, @team.id), class: "mdc-button" %>
 
 <script>
   window.vueData = <%= { :safe, @vue_data} %>;

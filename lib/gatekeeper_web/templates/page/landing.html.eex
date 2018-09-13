@@ -1,14 +1,18 @@
 <div class="mdc-layout-grid__inner">
-      <div class="mdc-layout-grid__cell">
+      <div class="mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-6-tablet mdc-layout-grid__cell--span-3-phone">
         <h2 class="mdc-typography--headline2">Gatekeeper</h2>
         <br />
         <p class="mdc-typography--subtitle1">Here to help you in the release approval process.</p>
 
         <%= link "Login", to: auth_path(@conn, :request, "keycloak"), class: "mdc-button mdc-button--raised" %>
+
       </div>
-      <div class="mdc-layout-grid__cell--span-6">
-        <div id="success"></div>
-      </div>
+      <%#<div class="mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-2-tablet gk-layout-grid__cell--hidden-phone">%>
+        <%#<div id="success"></div>%>
+      <%#</div>%>
+</div>
+<div class="gk-landing--container">
+  <div style="display: none" id="success"></div>
 </div>
 
 <script>
@@ -20,5 +24,9 @@
       autoplay: true,
       path: '<%= static_path(@conn, "/images/success.json") %>'
     });
-  }, 1000);
+
+    setTimeout(() => {
+      document.getElementById('success').style.display = 'initial';
+    }, 800);
+  }, 200);
 </script>

@@ -46,6 +46,16 @@ body {
     margin-bottom: -1.5rem;
 }
 
+.gk-layout-grid__cell--hidden-phone {
+    display: none;
+}
+
+@media (min-width: #{map-get($mdc-layout-grid-breakpoints, tablet)}) {
+    .gk-layout-grid__cell--hidden-phone {
+        display: inherit;
+    }
+}
+
 .gk-content {
     padding-top: 80px;
 }
@@ -128,4 +138,12 @@ body {
 
 .gk-linear-progress {
     border-radius: 4px;
+}
+
+.gk-landing--container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    transform: translate(35%, 40%);
+    width: 80%;
 }

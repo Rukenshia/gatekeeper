@@ -3,6 +3,7 @@ defmodule GatekeeperWeb.PageController do
 
   alias Gatekeeper.Repo
   alias Gatekeeper.Guardian
+  alias Gatekeeper.Teams
 
   def landing(conn, _params) do
     render(conn, "landing.html")
@@ -18,6 +19,6 @@ defmodule GatekeeperWeb.PageController do
       |> Repo.preload(:release)
       |> Enum.filter(fn a -> a.status == "initial" end)
 
-    render(conn, "index.html", approvals: approvals)
+    render(conn, "index.html", approvals: approvals, teams: Teams.list_teams())
   end
 end

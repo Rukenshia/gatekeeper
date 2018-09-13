@@ -114,6 +114,15 @@ defmodule Gatekeeper.Users do
         user =
           user
           |> Repo.preload(:teams)
+          |> Repo.preload(:memberships)
+
+        # Remove user from teams he is not part of anymore
+        for team <- user.teams do
+          if is_nil(Enum.find(teams, fn t -> t == team.name end)) do
+            Enum.find(user.memberships, fn m -> m.team_id == team.id end)
+            |> Repo.delete!()
+          end
+        end
 
         for team <- teams || [] do
           if is_nil(Enum.find(user.teams, fn t -> t.name == team end)) do

@@ -25,8 +25,7 @@ Repo.insert!(%Users.User{
 })
 
 Repo.insert!(%Teams.Team{
-  id: 1,
-  name: "JSI"
+  name: "jsi"
 })
 
 Repo.insert!(%Teams.TeamMember{

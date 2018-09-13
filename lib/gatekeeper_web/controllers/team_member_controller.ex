@@ -3,11 +3,18 @@ defmodule GatekeeperWeb.TeamMemberController do
 
   use GatekeeperWeb, :controller
 
+  import Ecto.Query, only: [from: 2]
   alias Gatekeeper.Repo
   alias Gatekeeper.Teams.TeamMember
 
   def api_get_members(conn, %{"team_id" => id}) do
-    members = Repo.all(TeamMember, team_id: id)
+    query =
+      from(t in TeamMember,
+        where: t.team_id == ^id
+      )
+
+    members = Repo.all(query)
+    Logger.debug(inspect(members))
     render(conn, "members.json", members: members)
   end
 

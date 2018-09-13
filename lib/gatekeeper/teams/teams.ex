@@ -101,4 +101,13 @@ defmodule Gatekeeper.Teams do
   def change_team(%Team{} = team) do
     Team.changeset(team, %{})
   end
+
+  @doc """
+  Checks whether a team exists or creates a new one
+  """
+  def check_or_create!(name) do
+    if is_nil(Repo.get_by(Team, name: name)) do
+      create_team(%{name: name})
+    end
+  end
 end

@@ -9,6 +9,7 @@ defmodule GatekeeperWeb.AuthController do
 
   alias Ueberauth.Strategy.Helpers
   alias Gatekeeper.Users
+  alias Gatekeeper.Teams
   alias Gatekeeper.Guardian
 
   def request(conn, _params) do
@@ -30,7 +31,13 @@ defmodule GatekeeperWeb.AuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: user}} = conn, _params) do
-    case Users.find_or_create_from_auth(user) do
+    Logger.debug(inspect(user.extra.raw_info.user))
+
+    for team <- user.extra.raw_info.user["teams"] do
+      Teams.check_or_create!(team)
+    end
+
+    case Users.find_or_create_from_auth(user, user.extra.raw_info.user["teams"]) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Good to see you, #{user.name}")

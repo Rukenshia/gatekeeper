@@ -106,12 +106,31 @@ defmodule Gatekeeper.Users do
   @doc """
   Finds or creates a user from Auth parameters
   """
-  def find_or_create_from_auth(auth) do
+  def find_or_create_from_auth(auth, teams) do
     Logger.debug("find_or_create_from_auth for #{inspect(auth.info)}")
 
     case Repo.get_by(User, email: auth.info.email) do
       user when user != nil ->
-        {:ok, Repo.preload(user, :teams)}
+        user =
+          user
+          |> Repo.preload(:teams)
+
+        for team <- teams do
+          if is_nil(Enum.find(user.teams, fn t -> t.name == team end)) do
+            team = Repo.get_by!(Gatekeeper.Teams.Team, name: team)
+
+            %Gatekeeper.Teams.TeamMember{}
+            |> Gatekeeper.Teams.TeamMember.changeset(%{
+              user_id: user.id,
+              team_id: team.id,
+              role: "administrator",
+              mandatory_approver: true
+            })
+            |> Repo.insert!()
+          end
+        end
+
+        {:ok, user}
 
       nil ->
         Logger.debug("creating user with name #{auth.info.name} and email #{auth.info.email}")

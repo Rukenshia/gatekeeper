@@ -35,13 +35,6 @@ Repo.insert!(%Teams.TeamMember{
   mandatory_approver: false
 })
 
-Repo.insert!(%Teams.TeamMember{
-  user_id: 2,
-  team_id: 1,
-  role: "administrator",
-  mandatory_approver: true
-})
-
 Repo.insert!(%Releases.Release{
   team_id: 1,
   commit_hash: "a895fc7",

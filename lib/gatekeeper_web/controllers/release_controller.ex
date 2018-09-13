@@ -70,7 +70,9 @@ defmodule GatekeeperWeb.ReleaseController do
     render(conn, "show.html",
       release: release,
       user_approval:
-        Enum.find(release.approvals, fn a -> a.user_id == get_session(conn, :current_user).id end),
+        Enum.find(release.approvals, fn a ->
+          a.user_id == Gatekeeper.Guardian.Plug.current_resource(conn).id
+        end),
       can_release: can_release
     )
   end

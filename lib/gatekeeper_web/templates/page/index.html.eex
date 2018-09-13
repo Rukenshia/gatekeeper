@@ -15,7 +15,7 @@
     <div class="mdc-card__media gk-card__media--text">
       <div class="gk-card__media--text-title">
         <div class="gk-card__media--text-headline"><%= approval.release.version %></div>
-        <div class="gk-card__media--text-subtitle"><%= release_team(approval.release, assigns[:current_user].teams).name %></div>
+        <div class="gk-card__media--text-subtitle"><%= release_team(approval.release, @teams).name %></div>
         <div class="gk-card__media--text-body"><%= approval.release.description |> truncate(length: 30) %></div>
       </div>
     </div>

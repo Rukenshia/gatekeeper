@@ -50,7 +50,7 @@ defmodule Gatekeeper.Mixfile do
       {:cowboy, "~> 1.0"},
       {:guardian, "~> 1.1"},
       {:ueberauth, "~> 0.4"},
-      {:ueberauth_keycloak_strategy, "~> 0.1"},
+      {:ueberauth_keycloak_strategy, "~> 0.1.1"},
       {:phoenix_html_simplified_helpers, "~> 2.0"}
     ]
   end

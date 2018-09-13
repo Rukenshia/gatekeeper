@@ -31,9 +31,10 @@ defmodule GatekeeperWeb.AuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: user}} = conn, _params) do
-    Logger.debug(inspect(user.extra.raw_info.user))
+    Logger.info(inspect(user))
+    Logger.info(inspect(user.extra.raw_info.user))
 
-    for team <- user.extra.raw_info.user["teams"] do
+    for team <- user.extra.raw_info.user["teams"] || [] do
       Teams.check_or_create!(team)
     end
 

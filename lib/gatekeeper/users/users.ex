@@ -115,7 +115,7 @@ defmodule Gatekeeper.Users do
           user
           |> Repo.preload(:teams)
 
-        for team <- teams do
+        for team <- teams || [] do
           if is_nil(Enum.find(user.teams, fn t -> t.name == team end)) do
             team = Repo.get_by!(Gatekeeper.Teams.Team, name: team)
 

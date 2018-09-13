@@ -28,7 +28,7 @@
   </div>
   <% end %>
   <div class="mdc-layout-grid__cell--span-12">
-    <span><%= link "Back", to: team_path(@conn, :index) %></span>
+    <%= link "Back", to: page_path(@conn, :index), class: "mdc-button" %>
   </div>
 </div>
 

@@ -1,61 +1,54 @@
 <h2>Edit Team</h2>
 
-<div class="mdc-layout-grid">
-    <div class="mdc-layout-grid__inner">
-        <div class="mdc-layout-grid__cell">
-            <%= render "form.html", Map.put(assigns, :action, team_path(@conn, :update, @team)) %>
-        </div>
-    </div>
-</div>
-
 <div id="app">
-    <h3>Members</h3>
+  <h3>Members</h3>
 
-    <div class="mdc-layout-grid">
-        <div class="mdc-layout-grid__inner">
-            <div class="mdc-layout-grid__cell" v-for="member in team.members">
-                <div class="mdc-card">
-                  <div class="mdc-card__media gk-card__media--text">
-                    <div class="gk-card__media--text-title">
-                      <div class="gk-card__media--text-headline">{{member.name}}</div>
-                      <div class="gk-card__media--text-subtitle" :class="`gk-typography--role__${member.role}`">{{member.role | capitalize }}</div>
-                    </div>
-                  </div>
-                  <div class="mdc-card__actions">
-                      <div class="mdc-card__action-buttons">
-                          <button @click="removeMember(member)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Remove</button>
-                      </div>
-                  </div>
+  <div class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+      <div class="mdc-layout-grid__cell" v-for="member in team.members">
+        <div class="mdc-card">
+          <div class="mdc-card__media gk-card__media--text">
+            <div class="gk-card__media--text-title">
+              <div class="gk-card__media--text-headline">{{member.name}}</div>
+              <div class="gk-card__media--text-subtitle" :class="`gk-typography--role__${member.role}`">{{member.role | capitalize }}</div>
             </div>
-        </div>
-    </div>
-    <h3>Add new member</h3>
-    <div class="mdc-layout-grid">
-        <div class="mdc-layout-grid__inner">
-          <template v-for="user in users.filter(u => !u.isMember)">
-            <div class="mdc-layout-grid__cell">
-                <div class="mdc-card">
-                  <div class="mdc-card__media gk-card__media--text">
-                    <div class="gk-card__media--text-title">
-                      <div class="gk-card__media--text-headline">{{user.name}}</div>
-                    </div>
-                  </div>
-                    <div class="mdc-card__actions">
-                        <div class="mdc-card__action-buttons">
-                            <button @click="addMember(user)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Add</button>
-                        </div>
-                    </div>
-                </div>
+          </div>
+          <div class="mdc-card__actions">
+            <div class="mdc-card__action-buttons">
+              <button @click="removeMember(member)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Remove</button>
             </div>
-            </template>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+  <h3>Add new member</h3>
+  <div class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+      <template v-for="user in users.filter(u => !u.isMember)">
+        <div class="mdc-layout-grid__cell">
+          <div class="mdc-card">
+            <div class="mdc-card__media gk-card__media--text">
+              <div class="gk-card__media--text-title">
+                <div class="gk-card__media--text-headline">{{user.name}}</div>
+              </div>
+            </div>
+            <div class="mdc-card__actions">
+              <div class="mdc-card__action-buttons">
+                <button @click="addMember(user)" type="submit" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
 </div>
 
 
 <%= link "Back", to: team_path(@conn, :index), class: "mdc-button gk-button" %>
 
 <script>
-    window.vueData = <%= { :safe, @vue_data} %>;
+  window.vueData = <%= { :safe, @vue_data} %>;
 </script>
 <script src="<%= static_path(@conn, "/js/team.js") %>" type="text/javascript"></script>

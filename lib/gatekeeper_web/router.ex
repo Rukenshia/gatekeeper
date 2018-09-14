@@ -33,11 +33,11 @@ defmodule GatekeeperWeb.Router do
 
     get("/home", PageController, :index)
 
-    resources("/teams", TeamController) do
+    resources("/teams", TeamController, only: [:show, :edit]) do
       resources("/releases", ReleaseController)
     end
 
-    resources("/users", UserController)
+    resources("/users", UserController, only: [:show])
   end
 
   scope "/", GatekeeperWeb do
@@ -57,8 +57,6 @@ defmodule GatekeeperWeb.Router do
   # Other scopes may use custom stacks.
   scope "/api", GatekeeperWeb do
     pipe_through(:api)
-
-    get("/users", UserController, :api_get_users)
 
     get("/teams/:team_id/members", TeamMemberController, :api_get_members)
     post("/teams/:team_id/members", TeamMemberController, :api_add_member)

@@ -1,0 +1,38 @@
+@import "@material/chips/mdc-chips";
+
+.mdc-chip.gk-chip--success {
+    @include gk-content--success;
+    @include gk-typography--color__success;
+
+    .mdc-chip__icon {
+        @include gk-typography--color__success;
+    }
+}
+
+.gk-tagline {
+    .gk-tagline__item {
+        display: inline-flex;
+        margin-top: .5em;
+
+        color: $gk-color--secondary-text;
+
+        .material-icons {
+            font-size: 15px;
+            margin-right: 4px;
+        }
+
+        .gk-tagline__item--content {
+            font-size: 14px;
+        }
+    }
+
+    .gk-tagline__divider {
+        display: inline-flex;
+        margin: 4px;
+        font-size: 20px;
+
+        &:before {
+            content: '\00b7';
+        }
+    }
+}

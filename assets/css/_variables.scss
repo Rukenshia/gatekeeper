@@ -1,0 +1,13 @@
+/* Colors */
+$gk-color--primary: #1a73e8;
+$gk-color--secondary: #9e9e9e;
+$gk-color--secondary-text: #5f6368;
+$gk-color--background: #fff;
+
+$gk-color--success: #266120;
+$gk-color--error: #db3236;
+
+$gk-color__background--success: lighten($gk-color--success, 70%);
+
+/* Shape */
+$corner-radius: 4px;

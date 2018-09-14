@@ -1,0 +1,5 @@
+@import "variables";
+
+@mixin gk-content--success {
+    background-color: $gk-color__background--success;
+}

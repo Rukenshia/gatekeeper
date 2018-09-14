@@ -1,8 +1,8 @@
-/* This file is for your main application css. */
-$mdc-theme-primary: #1a73e8;
-$mdc-theme-secondary: #9e9e9e;
-$mdc-theme-background: #fff;
-$corner-radius: 4px;
+@import "variables";
+
+$mdc-theme-primary: $gk-color--primary;
+$mdc-theme-secondary: $gk-color--secondary;
+$mdc-theme-background: $gk-color--background;
 
 $mdc-typography-styles-headline3: (
     font-family: 'Product Sans',
@@ -22,11 +22,14 @@ $mdc-typography-styles-headline3: (
 @import "@material/dialog/mdc-dialog";
 @import "@material/select/mdc-select";
 @import "@material/list/mdc-list";
-@import "@material/chips/mdc-chips";
 @import "@material/linear-progress/mdc-linear-progress";
 @import "@material/top-app-bar/mdc-top-app-bar";
 
+@import "content";
+@import "typography";
 @import "fonts";
+@import "card";
+@import "chip";
 
 body {
     margin: 0;
@@ -60,87 +63,18 @@ body {
     padding-top: 80px;
 }
 
-.gk-typography {
-    font-family: 'Product Sans', 'Open Sans', sans-serif;
-    font-size: 16px;
-}
-
-.gk-typography--color__error {
-    color: #db3236;
-}
-
-.gk-typography--color__success {
-    color: #2ecc71;
-}
-
-.gk-typography--role__administrator {
-    color: #db3236;
-}
-
 .gk-button__error {
-    --mdc-theme-primary: #db3236;
+    --mdc-theme-primary: $gk-color--error;
 }
 
 .gk-button__success {
-    --mdc-theme-primary: #2ecc71;
-}
-
-.gk-card--flat {
-    @include mdc-card-fill-color(#f8f9fa);
-    @include mdc-elevation(0);
-
-    color: #5f6368;
-}
-
-.gk-card__media--text-title {
-    font-size: 16px;
-
-    .gk-card__media--text-headline {
-        @include mdc-typography(headline5);
-    }
-
-    .gk-card__media--text-subtitle {
-        @include mdc-typography(subtitle2);
-    }
-}
-
-.gk-card__media--text {
-    min-height: 5rem;
-    padding: 1rem;
-
-    .gk-card__media--text-body {
-        @include mdc-typography(body1);
-
-        padding-top: .5rem;
-    }
-}
-
-.gk-card__error {
-    padding: 8px;
-    color: #db3236;
+    --mdc-theme-primary: $gk-color--success;
 }
 
 .gk-button {
     @include mdc-button-corner-radius($corner-radius);
 
     font-size: 12px;
-}
-
-.mdc-chip.gk-chip--small {
-    .mdc-chip__icon.mdc-chip__icon--leading:not(.mdc-chip__icon--leading-hidden){
-        height: 14px;
-        width: 14px;
-        font-size: 1rem;
-        margin-bottom: -1px;
-    }
-    margin-top: 1px;
-    height: 24px;
-    padding: 4px 8px;
-    font-size: .7rem;
-}
-
-.gk-chip--danger {
-    background-color: #ef5350;
 }
 
 .gk-linear-progress {

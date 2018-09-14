@@ -22,7 +22,11 @@
     <div class="mdc-card__actions">
         <div class="mdc-card__action-buttons">
           <a href="<%= team_release_path(@conn, :show, approval.release.team_id, approval.release_id) %>" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Show</a>
+        <div class="mdc-chip">
+          <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">check</i>
+          <div class="mdc-chip__text"><%= length(Enum.filter(approval.release.approvals, fn a -> a.status == "approved" end)) %> /  <%= length(approval.release.approvals) %></div>
         </div>
+      </div>        
     </div>
   </div>
   <% end %>

@@ -18,6 +18,8 @@ defmodule GatekeeperWeb.PageController do
       user.approvals
       |> Repo.preload(:release)
       |> Enum.filter(fn a -> a.status == "initial" end)
+      |> Enum.map(fn a -> Map.put(a, :release, Repo.preload(a.release, :approvals)) end)
+
 
     render(conn, "index.html", approvals: approvals, teams: Teams.list_teams())
   end

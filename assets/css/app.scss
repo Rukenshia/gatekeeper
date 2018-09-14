@@ -85,7 +85,7 @@ body {
     --mdc-theme-primary: #2ecc71;
 }
 
-.gk-card--secondary {
+.gk-card--flat {
     @include mdc-card-fill-color(#f8f9fa);
     @include mdc-elevation(0);
 

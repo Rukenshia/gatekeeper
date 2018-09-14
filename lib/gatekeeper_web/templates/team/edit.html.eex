@@ -34,7 +34,7 @@
   <h3>Add new member</h3>
   <div class="mdc-layout-grid">
     <div class="mdc-layout-grid__inner">
-      <div class="mdc-layout-grid__cell--span-8 mdc-card gk-card--secondary">
+      <div class="mdc-layout-grid__cell--span-8 mdc-card gk-card--flat">
         <div class="gk-card__media--text">
           <div class="gk-card__media--text-title">
             <span class="gk-card__media--text-headline">Members are added automatically</span>

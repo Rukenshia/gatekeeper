@@ -85,6 +85,13 @@ body {
     --mdc-theme-primary: #2ecc71;
 }
 
+.gk-card--secondary {
+    @include mdc-card-fill-color(#f8f9fa);
+    @include mdc-elevation(0);
+
+    color: #5f6368;
+}
+
 .gk-card__media--text-title {
     font-size: 16px;
 
@@ -95,17 +102,17 @@ body {
     .gk-card__media--text-subtitle {
         @include mdc-typography(subtitle2);
     }
+}
+
+.gk-card__media--text {
+    min-height: 5rem;
+    padding: 1rem;
 
     .gk-card__media--text-body {
         @include mdc-typography(body1);
 
         padding-top: .5rem;
     }
-}
-
-.gk-card__media--text {
-    min-height: 5rem;
-    padding: 1rem;
 }
 
 .gk-card__error {

@@ -5,7 +5,6 @@ defmodule GatekeeperWeb.TeamController do
 
   alias Gatekeeper.Repo
   alias Gatekeeper.Teams
-  alias Gatekeeper.Teams.Team
 
   def create(conn, %{"team" => team_params}) do
     case Teams.create_team(team_params) do
@@ -33,8 +32,7 @@ defmodule GatekeeperWeb.TeamController do
     team = Teams.get_team!(id)
 
     render(conn, "edit.html",
-      team: team,
-      vue_data: Poison.encode!(%{team: Team.safe_json(team)}, pretty: true)
+      team: team
     )
   end
 end

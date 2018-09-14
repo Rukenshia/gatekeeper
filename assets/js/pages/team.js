@@ -8,48 +8,21 @@ const app = new Vue({
       members: [],
     },
     users: [],
+    loading: true,
   },
   async mounted() {
     this.team = {
       ...this.team,
-      ...window.vueData.team,
+      ...window.vueData,
     };
 
     const { data } = await axios.get(`/api/teams/${this.team.id}/members`);
 
     this.team.members = data.map(m => ({ ...m.user, role: m.role }));
 
-    const users = await axios.get('/api/users');
-
-    this.users = users.data.map(u => ({ ...u, isMember: typeof this.team.members.find(m => m.id === u.id) !== 'undefined' }));
-  },
-  methods: {
-    addMember(user) {
-      axios.post(`/api/teams/${this.team.id}/members`, { user_id: user.id })
-        .then(res => {
-          user.isMember = true;
-          user.role = res.data.role;
-          this.team.members.push(user);
-
-          snackbar.show({
-            message: `Successfully added ${user.name} to the team`,
-          });
-        });
-    },
-    removeMember(user) {
-      axios.delete(`/api/teams/${this.team.id}/members/${user.id}`)
-        .then(() => {
-          this.team.members = this.team.members.filter(m => m.id !== user.id);
-          user.isMember = false;
-          user.role = undefined;
-
-          console.log(this.users);
-
-          snackbar.show({
-            message: `Successfully removed ${user.name} from the team`,
-          });
-        });
-    },
+    setTimeout(() => {
+      this.loading = false;
+    }, 500);
   },
   filters: {
     capitalize: function (value) {

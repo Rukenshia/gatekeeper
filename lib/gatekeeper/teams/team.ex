@@ -18,24 +18,4 @@ defmodule Gatekeeper.Teams.Team do
     |> cast(attrs, [:name])
     |> validate_required([:name])
   end
-
-  def safe_json(team) do
-    %{
-      id: team.id,
-      name: team.name
-    }
-    |> safe_json_memberships(team)
-  end
-
-  def safe_json_memberships(obj, team) do
-    if Ecto.assoc_loaded?(team.memberships) do
-      obj
-      |> Map.put(
-        "memberships",
-        Enum.map(team.memberships, fn m -> Gatekeeper.Teams.TeamMember.safe_json(m) end)
-      )
-    else
-      obj
-    end
-  end
 end

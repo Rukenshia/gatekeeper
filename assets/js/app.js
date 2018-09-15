@@ -60,10 +60,8 @@ toggles.forEach(toggle => {
   const teaser = card.querySelector('.gk-card__toggle--teaser');
   const content = card.querySelector('.gk-card__toggle--content');
 
-  const closedHeight = teaser.parentElement.clientHeight - content.clientHeight;
-  const openedHeight = teaser.parentElement.clientHeight;
-  card.style.maxHeight = `${closedHeight}px`;
-  card.style.overflow = 'hidden';
+  const openedHeight = content.scrollHeight;
+  content.style.height = 0;
 
   let collapsed = true;
   toggle.addEventListener('click', () => {
@@ -71,12 +69,10 @@ toggles.forEach(toggle => {
 
     if (collapsed) {
       icon.innerHTML = 'keyboard_arrow_down';
-      content.style.visibility = 'hidden';
-      card.style.maxHeight = `${closedHeight}px`;
+      content.style.height = 0;
     } else {
       icon.innerHTML = 'keyboard_arrow_up';
-      content.style.visibility = 'visible';
-      card.style.maxHeight = `${openedHeight}px`;
+      content.style.height = `${openedHeight}px`;
     }
   });
 });

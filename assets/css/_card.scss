@@ -25,25 +25,40 @@
         @include mdc-typography(body1);
 
         padding-top: .5rem;
+        word-wrap: break-word;
     }
 }
 
 .gk-card--expandable {
     position: relative;
-    padding-right: 3rem;
 
-    transition: max-height .2s;
+    .gk-card__media--text {
+        padding-right:3rem;
+    }
 
     .gk-card__toggle {
         position: absolute;
         transform: translateY(100%);
         right: 1.5rem;
+        color: $gk-color--secondary;
+        z-index: 1;
 
         cursor: pointer;
     }
 
     .gk-card__toggle--content {
-        visibility: hidden;
+        padding: 0;
+        margin: 0;
+        transition: height .2s;
+        overflow: hidden;
+    }
+
+    .gk-card__media--text + .mdc-card__actions {
+        padding-bottom: 0;
+    }
+
+    .mdc-card__actions {
+        border-top: 1px solid #e0e0e0;
     }
 }
 

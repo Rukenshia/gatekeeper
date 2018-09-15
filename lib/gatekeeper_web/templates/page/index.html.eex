@@ -6,46 +6,55 @@
     <h2 class="mdc-typography--headline3">Waiting for your approval</h2>
   </div>
   <%= if length(@approvals) == 0 do %>
-    <div class="mdc-layout-grid__cell--span-12">
-      No releases are currently waiting for your approval.
-    </div>
-  <% end %>
-  <%= for approval <- @approvals do %>
-  <div class="mdc-layout-grid__cell mdc-card gk-card--expandable">
-    <div class="gk-card__toggle" data-teaser="approval_<%= approval.id %>">
-      <i class="material-icons">keyboard_arrow_down</i>
-    </div>
-    <div class="mdc-card__media">
-      <div class="gk-card__media--text gk-card__media--text-title">
-        <div class="gk-card__toggle--teaser">
-          <div class="gk-card__media--text-headline"><%= approval.release.version %></div>
-          <div class="gk-tagline">
-            <div class="gk-tagline__item">
-              <i class="material-icons">group</i>
-              <div class="gk-tagline__item--content">
-                <%= release_team(approval.release, @teams).name %>
-              </div>
-            </div>
-            <div class="gk-tagline__divider"></div>
-            <div class="gk-tagline__item">
-              <i class="material-icons gk-typography--color__success">check</i>
-              <div class="gk-tagline__item--content gk-typography--color__success">
-                <%= length(Enum.filter(approval.release.approvals, fn a -> a.status == "approved" end)) %> /  <%= length(approval.release.approvals) %>
-              </div>
-            </div>
-          </div>
+    <div class="mdc-layout-grid__cell--span-8 mdc-card gk-card--flat">
+      <div class="gk-card__media--text">
+        <div class="gk-card__media--text-title">
+          <span class="gk-card__media--text-headline">Nothing to do</span>
         </div>
-        <div class="gk-card__toggle--content">
-          <div class="gk-card__media--text-body"><%= approval.release.description %></div>
+        <div class="gk-card__media--text-body">
+          You currently don't have any releases that are desperately waiting for your approval.
+          Good job!
         </div>
       </div>
     </div>
-    <!-- <div class="mdc-card__actions">
-        <div class="mdc-card__action-buttons">
-          <a href="<%= team_release_path(@conn, :show, approval.release.team_id, approval.release_id) %>" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Show</a>
-      </div>        
+  <% end %>
+  <%= for approval <- @approvals do %>
+  <div class="mdc-layout-grid__cell">
+    <div class="mdc-card gk-card--expandable">
+      <div class="gk-card__toggle" data-teaser="approval_<%= approval.id %>">
+        <i class="material-icons">keyboard_arrow_down</i>
+      </div>
+      <div class="mdc-card__media gk-card__media--text">
+        <div class="gk-card__media--text-title">
+          <div class="gk-card__toggle--teaser">
+            <div class="gk-card__media--text-headline"><%= approval.release.version %></div>
+            <div class="gk-tagline">
+              <div class="gk-tagline__item">
+                <i class="material-icons">group</i>
+                <div class="gk-tagline__item--content">
+                  <%= release_team(approval.release, @teams).name %>
+                </div>
+              </div>
+              <div class="gk-tagline__divider"></div>
+              <div class="gk-tagline__item">
+                <i class="material-icons gk-typography--color__success">check</i>
+                <div class="gk-tagline__item--content gk-typography--color__success">
+                  <%= length(Enum.filter(approval.release.approvals, fn a -> a.status == "approved" end)) %> /  <%= length(approval.release.approvals) %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="gk-card__toggle--content">
+            <div class="gk-card__media--text-body"><%= approval.release.description %></div>
+          </div>
+        </div>
+      </div>
+      <div class="mdc-card__actions">
+          <div class="mdc-card__action-buttons">
+            <a href="<%= team_release_path(@conn, :show, approval.release.team_id, approval.release_id) %>" class="mdc-button mdc-card__action mdc-card__action--button gk-button">Show</a>
+        </div>        
+      </div>
     </div>
-    -->
   </div>
   <% end %>
   <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">

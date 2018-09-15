@@ -3,6 +3,12 @@
     @include mdc-elevation(0);
 
     color: #5f6368;
+
+    .gk-card__media--text-title .gk-card__media--text-headline {
+        @include mdc-typography(headline6);
+        font-family: 'Display Sans';
+        font-weight: bold;
+    }
 }
 
 .gk-card__media--text-title {
@@ -10,6 +16,7 @@
 
     .gk-card__media--text-headline {
         @include mdc-typography(headline5);
+        font-family: 'Display Sans';
     }
 
     .gk-card__media--text-subtitle {

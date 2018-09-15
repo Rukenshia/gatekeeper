@@ -4,13 +4,6 @@ $mdc-theme-primary: $gk-color--primary;
 $mdc-theme-secondary: $gk-color--secondary;
 $mdc-theme-background: $gk-color--background;
 
-$mdc-typography-styles-headline3: (
-    font-family: 'Product Sans',
-    font-size: 24px,
-    font-weight: 500,
-    line-height: normal,
-);
-
 @import "@material/layout-grid/mdc-layout-grid";
 @import "@material/card/mdc-card";
 @import "@material/button/mdc-button";
@@ -24,12 +17,14 @@ $mdc-typography-styles-headline3: (
 @import "@material/list/mdc-list";
 @import "@material/linear-progress/mdc-linear-progress";
 @import "@material/top-app-bar/mdc-top-app-bar";
+@import "@material/textfield/helper-text/mdc-text-field-helper-text";
 
 @import "content";
 @import "typography";
 @import "fonts";
 @import "card";
 @import "chip";
+@import "validation";
 
 body {
     margin: 0;

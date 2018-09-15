@@ -1,25 +1,25 @@
 <%= form_for @changeset, @action, fn f -> %>
   <div class="mdc-layout-grid__inner">
     <%= if @changeset.action do %>
-    <div class="mdc-layout-grid__cell--span-12">
-      <div class="mdc-layout-grid__inner">
-        <div class="mdc-layout-grid__cell--span-6 mdc-card gk-card__error">
-          <p>Oops, something went wrong! Please check the errors below.</p>
+      <div class="mdc-layout-grid__cell--span-12">
+        <div class="mdc-layout-grid__inner">
+          <div class="mdc-layout-grid__cell--span-6 mdc-card gk-card__error">
+            <p>Oops, something went wrong! Please check the errors below.</p>
+          </div>
         </div>
       </div>
-    </div>
     <% end %>
 
     <div class="mdc-layout-grid__cell--span-12">
-      <div class="mdc-layout-grid__inner">
-        <div class="mdc-layout-grid__cell--span-6 mdc-text-field">
-          <%= label f, :commit_hash, class: "mdc-floating-label" %>
-          <%= text_input f, :commit_hash, class: "mdc-text-field__input" %>
-        </div>
-        <div class="mdc-layout-grid__cell--span-2">
-          <div class="mdc-card gk-card__error"><%= error_tag f, :commit_hash %></div>
-        </div>
+      <div class="mdc-text-field">
+        <%= label f, :commit_hash, class: "mdc-floating-label" %>
+        <%= text_input f, :commit_hash, class: "mdc-text-field__input", "aria-controls": "commit-hash-validation", "aria-describedby": "commit-hash-validation" %>
       </div>
+      <%= if !is_nil(f.errors |> Keyword.get(:commit_hash)) do %>
+      <p id="commit-hash-validation" class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--persistent gk-text-field-helper-text--validation-msg__error">
+        <%= f.errors[:commit_hash] |> elem(0) %>
+      </p>
+    <% end %>
     </div>
 
     <div class="mdc-layout-grid__cell--span-12">
@@ -37,8 +37,8 @@
     <div class="mdc-layout-grid__cell--span-12">
       <div class="mdc-layout-grid__inner">
         <div class="mdc-layout-grid__cell--span-6 mdc-text-field">
-            <%= label f, :version, class: "mdc-floating-label" %>
-            <%= text_input f, :version, class: "mdc-text-field__input" %>
+          <%= label f, :version, class: "mdc-floating-label" %>
+          <%= text_input f, :version, class: "mdc-text-field__input" %>
         </div>
         <div class="mdc-layout-grid__cell--span-2">
           <div class="mdc-card gk-card__error"><%= error_tag f, :version %></div>
@@ -71,17 +71,17 @@
             <ul id="approver-selection-list" class="mdc-list" aria-orientation="vertical">
               <template v-for="member in members">
                 <template v-if="member.mandatory_approver">
-                <li class="mdc-list-item">
-                  <span class="mdc-list-item__graphic material-icons gk-typography--color__success">priority_high</span>
-                  <span class="mdc-list-item__text">{{member.user.name}} (mandatory)</span>
-                </li>
+                  <li class="mdc-list-item">
+                    <span class="mdc-list-item__graphic material-icons gk-typography--color__success">priority_high</span>
+                    <span class="mdc-list-item__text">{{member.user.name}} (mandatory)</span>
+                  </li>
                 </template>
                 <template v-else>
-                <li @click="toggle(member)" class="mdc-list-item">
-                  <span class="mdc-list-item__graphic material-icons gk-typography--color__success" v-if="selected.indexOf(member) != -1">check_box</span>
-                  <span class="mdc-list-item__graphic material-icons" v-else>check_box_outline_blank</span>
-                  <span class="mdc-list-item__text">{{member.user.name}}</span>
-                </li>
+                  <li @click="toggle(member)" class="mdc-list-item">
+                    <span class="mdc-list-item__graphic material-icons gk-typography--color__success" v-if="selected.indexOf(member) != -1">check_box</span>
+                    <span class="mdc-list-item__graphic material-icons" v-else>check_box_outline_blank</span>
+                    <span class="mdc-list-item__text">{{member.user.name}}</span>
+                  </li>
                 </template>
               </template>
             </ul>
@@ -100,7 +100,7 @@
 
 <%= if assigns[:with_approver_selection] do %>
   <script>
-    window.vueData = { teamId: <%= @team_id %> };
+window.vueData = { teamId: <%= @team_id %> };
   </script>
   <script src="<%= static_path(@conn, "/js/approver_selection.js") %>" type="text/javascript"></script>
 <% end %>

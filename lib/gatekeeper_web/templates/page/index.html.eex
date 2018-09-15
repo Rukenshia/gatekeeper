@@ -3,17 +3,16 @@
     <h2 class="mdc-typography--overline">Logged in as <%= assigns[:current_user].name %></h2>
   </div>
   <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
-    <h2 class="mdc-typography--headline3">Waiting for your approval</h2>
+    <h2 class="mdc-typography--headline3">Waiting for you</h2>
   </div>
   <%= if length(@approvals) == 0 do %>
-    <div class="mdc-layout-grid__cell--span-8 mdc-card gk-card--flat">
+    <div class="mdc-layout-grid__cell--span-4 mdc-card gk-card--flat">
       <div class="gk-card__media--text">
         <div class="gk-card__media--text-title">
-          <span class="gk-card__media--text-headline">Nothing to do</span>
+          <span class="gk-card__media--text-headline">All done</span>
         </div>
         <div class="gk-card__media--text-body">
-          You currently don't have any releases that are desperately waiting for your approval.
-          Good job!
+          Releases that are waiting for approval from you will show up here
         </div>
       </div>
     </div>

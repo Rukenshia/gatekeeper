@@ -51,6 +51,17 @@ if (dialogSelector) {
   dialog.show();
 }
 
+import {MDCTextFieldHelperText} from '@material/textfield/helper-text';
+
+const textFieldHelperSelector = document.querySelectorAll('.mdc-text-field-helper-text');
+
+if (textFieldHelperSelector) {
+  textFieldHelperSelector.forEach(s => {
+    new MDCTextFieldHelperText(f);
+  });
+}
+
+
 // Initialise toggles
 const toggles = document.querySelectorAll('.gk-card__toggle');
 

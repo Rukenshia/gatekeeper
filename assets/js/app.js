@@ -57,7 +57,7 @@ const textFieldHelperSelector = document.querySelectorAll('.mdc-text-field-helpe
 
 if (textFieldHelperSelector) {
   textFieldHelperSelector.forEach(s => {
-    new MDCTextFieldHelperText(f);
+    new MDCTextFieldHelperText(s);
   });
 }
 
@@ -84,6 +84,25 @@ toggles.forEach(toggle => {
     } else {
       icon.innerHTML = 'keyboard_arrow_up';
       content.style.height = `${openedHeight}px`;
+    }
+  });
+});
+
+// Form validation: reset when changin data
+document.querySelectorAll('.gk-validation--failed').forEach(validation => {
+  // find input
+  const input = validation.querySelector('input textarea');
+  const message = validation.querySelector('.mdc-text-field-helper-text');
+
+  if (!input) {
+    return;
+  }
+
+  input.addEventListener('focus', () => {
+    validation.classList.remove('gk-validation--failed');
+
+    if (message) {
+      message.classList.remove('mdc-text-field-helper-text--persistent');
     }
   });
 });

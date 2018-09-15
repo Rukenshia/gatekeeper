@@ -50,3 +50,33 @@ if (dialogSelector) {
   const dialog = new MDCDialog(dialogSelector);
   dialog.show();
 }
+
+// Initialise toggles
+const toggles = document.querySelectorAll('.gk-card__toggle');
+
+toggles.forEach(toggle => {
+  const icon = toggle.querySelector('.material-icons');
+  const card = toggle.parentElement;
+  const teaser = card.querySelector('.gk-card__toggle--teaser');
+  const content = card.querySelector('.gk-card__toggle--content');
+
+  const closedHeight = teaser.parentElement.clientHeight - content.clientHeight;
+  const openedHeight = teaser.parentElement.clientHeight;
+  card.style.maxHeight = `${closedHeight}px`;
+  card.style.overflow = 'hidden';
+
+  let collapsed = true;
+  toggle.addEventListener('click', () => {
+    collapsed = !collapsed;
+
+    if (collapsed) {
+      icon.innerHTML = 'keyboard_arrow_down';
+      content.style.visibility = 'hidden';
+      card.style.maxHeight = `${closedHeight}px`;
+    } else {
+      icon.innerHTML = 'keyboard_arrow_up';
+      content.style.visibility = 'visible';
+      card.style.maxHeight = `${openedHeight}px`;
+    }
+  });
+});

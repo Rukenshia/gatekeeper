@@ -28,6 +28,25 @@
     }
 }
 
+.gk-card--expandable {
+    position: relative;
+    padding-right: 3rem;
+
+    transition: max-height .2s;
+
+    .gk-card__toggle {
+        position: absolute;
+        transform: translateY(100%);
+        right: 1.5rem;
+
+        cursor: pointer;
+    }
+
+    .gk-card__toggle--content {
+        visibility: hidden;
+    }
+}
+
 .gk-card__error {
     padding: 8px;
     color: #db3236;

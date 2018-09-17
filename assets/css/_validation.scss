@@ -1,13 +1,19 @@
 .gk-validation {
+
     &.gk-validation--failed {
         .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--textarea) {
-            .mdc-text-field__input {
+            .mdc-text-field__input,.mdc-notched-outline__idle {
                 border-color: $gk-color--error;
             }
 
             .mdc-floating-label {
                 color: $gk-color--error;
             }
+        }
+
+
+        .mdc-notched-outline--notched svg path.mdc-notched-outline__path {
+            stroke: $gk-color--error;
         }
 
         .mdc-text-field--textarea:not(.mdc-text-field--disabled) {

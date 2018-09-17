@@ -1,27 +1,44 @@
 <%= form_for @changeset, @action, fn f -> %>
   <div class="mdc-layout-grid__inner">
-    <%= if @changeset.action do %>
-      <div class="mdc-layout-grid__cell--span-12">
-        <div class="mdc-layout-grid__inner">
-          <div class="mdc-layout-grid__cell--span-6 mdc-card gk-card__error">
-            <p>Oops, something went wrong! Please check the errors below.</p>
-          </div>
-        </div>
-      </div>
-    <% end %>
-
-    <div class="mdc-layout-grid__inner mdc-layout-grid__cell--span-12">
-      <div class="mdc-layout-grid__cell--span-6">
+    <div class="mdc-layout-grid__cell--span-12">
         <div class="gk-validation <%= if !is_nil(f.errors |> Keyword.get(:commit_hash)) do %>gk-validation--failed<% end %>">
-          <div class="mdc-text-field mdc-text-field--fullwidth">
+          <div class="mdc-text-field mdc-text-field--outlined">
             <%= label f, :commit_hash, class: "mdc-floating-label" %>
             <%= text_input f, :commit_hash, class: "mdc-text-field__input", "aria-controls": "commit-hash-validation", "aria-describedby": "commit-hash-validation" %>
+            <div class="mdc-notched-outline">
+              <svg>
+                <path class="mdc-notched-outline__path"/>
+              </svg>
+            </div>
+            <div class="mdc-notched-outline__idle"></div>
           </div>
           <%= if !is_nil(f.errors |> Keyword.get(:commit_hash)) do %>
           <p id="commit-hash-validation" class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--persistent">
             <%= f.errors[:commit_hash] |> elem(0) %>
           </p>
           <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="mdc-layout-grid__cell--span-12">
+        <div class="gk-validation <%= if !is_nil(f.errors |> Keyword.get(:version)) do %>gk-validation--failed<% end %>">
+          <div class="mdc-text-field mdc-text-field--outlined">
+            <%= label f, :version, class: "mdc-floating-label" %>
+            <%= text_input f, :version, class: "mdc-text-field__input" %>
+            <div class="mdc-notched-outline">
+              <svg>
+                <path class="mdc-notched-outline__path"/>
+              </svg>
+            </div>
+            <div class="mdc-notched-outline__idle"></div>
+          </div>
+
+            <%= if !is_nil(f.errors |> Keyword.get(:version)) do %>
+            <p id="version-validation" class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--persistent">
+              <%= f.errors[:version] |> elem(0) %>
+            </p>
+            <% end %>
         </div>
       </div>
     </div>
@@ -39,18 +56,6 @@
           </p>
           <% end %>
         </p>
-      </div>
-    </div>
-
-    <div class="mdc-layout-grid__cell--span-12">
-      <div class="mdc-layout-grid__inner">
-        <div class="mdc-layout-grid__cell--span-6 mdc-text-field">
-          <%= label f, :version, class: "mdc-floating-label" %>
-          <%= text_input f, :version, class: "mdc-text-field__input" %>
-        </div>
-        <div class="mdc-layout-grid__cell--span-2">
-          <div class="mdc-card gk-card__error"><%= error_tag f, :version %></div>
-        </div>
       </div>
     </div>
 

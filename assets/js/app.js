@@ -91,7 +91,7 @@ toggles.forEach(toggle => {
 // Form validation: reset when changin data
 document.querySelectorAll('.gk-validation--failed').forEach(validation => {
   // find input
-  const input = validation.querySelector('input textarea');
+  const input = validation.querySelector('input,textarea');
   const message = validation.querySelector('.mdc-text-field-helper-text');
 
   if (!input) {

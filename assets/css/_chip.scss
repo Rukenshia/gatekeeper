@@ -10,26 +10,39 @@
 }
 
 .gk-tagline {
+    font-size: 16px;
+    display: flex;
+
+    &.mdc-list-item__secondary-text {
+        font-size: 14px;
+
+        .material-icons {
+            font-size: 14px;
+        }
+    }
+
     .gk-tagline__item {
         display: inline-flex;
-        margin-top: .5em;
+        justify-content: center;
+        align-items: center;
 
         color: $gk-color--secondary-text;
 
+        &.gk-tagline__item--text {
+        }
+
         .material-icons {
-            font-size: 15px;
+            font-size: 16px;
             margin-right: 4px;
         }
 
         .gk-tagline__item--content {
-            font-size: 14px;
         }
     }
 
     .gk-tagline__divider {
         display: inline-flex;
         margin: 4px;
-        font-size: 20px;
 
         &:before {
             content: '\00b7';

@@ -1,3 +1,12 @@
+.mdc-card {
+    border-radius: $corner-radius;
+
+    &.mdc-card--outlined.mdc-list {
+        margin: 0;
+        padding: 0;
+    }
+}
+
 .gk-card--flat {
     @include mdc-card-fill-color(#f8f9fa);
     @include mdc-elevation(0);

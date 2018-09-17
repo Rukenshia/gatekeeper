@@ -13,9 +13,21 @@ $gk-color__background--success: lighten($gk-color--success, 70%);
 $corner-radius: 4px;
 
 /* Typography */
+$mdc-typography-styles-headline2: (
+    font-family: 'Display Sans',
+);
+
 $mdc-typography-styles-headline3: (
     font-family: 'Display Sans',
     font-size: 24px,
+    font-weight: normal,
+    line-height: normal,
+    color: darken($gk-color--secondary-text, 25%),
+);
+
+$mdc-typography-styles-headline4: (
+    font-family: 'Display Sans',
+    font-size: 20,
     font-weight: normal,
     line-height: normal,
     color: darken($gk-color--secondary-text, 25%),

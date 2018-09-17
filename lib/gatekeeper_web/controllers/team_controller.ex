@@ -25,14 +25,16 @@ defmodule GatekeeperWeb.TeamController do
       |> Repo.preload(:memberships)
       |> Repo.preload(:releases)
 
+    team =
+      team
+      |> Map.put(:releases, Enum.map(team.releases, fn r -> Repo.preload(r, :approvals) end))
+
     render(conn, "show.html", team: team)
   end
 
   def edit(conn, %{"id" => id}) do
     team = Teams.get_team!(id)
 
-    render(conn, "edit.html",
-      team: team
-    )
+    render(conn, "edit.html", team: team)
   end
 end

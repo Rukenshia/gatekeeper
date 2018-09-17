@@ -8,7 +8,10 @@ defmodule GatekeeperWeb.ReleaseController do
   alias Gatekeeper.Repo
 
   def index(conn, %{"team_id" => team_id}) do
-    releases = Releases.list_releases()
+    releases =
+      Releases.list_releases()
+      |> Enum.map(fn r -> Repo.preload(r, :approvals) end)
+
     render(conn, "index.html", releases: releases, team_id: team_id)
   end
 

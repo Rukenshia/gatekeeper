@@ -1,4 +1,6 @@
 defmodule Gatekeeper.ErrorHandler do
+  use GatekeeperWeb, :controller
+
   import Plug.Conn
 
   require Logger
@@ -8,8 +10,16 @@ defmodule Gatekeeper.ErrorHandler do
 
     Logger.error(inspect(reason))
 
-    conn
-    |> put_resp_content_type("text/plain")
-    |> send_resp(401, body)
+    case reason do
+      :token_expired ->
+        conn
+        |> put_flash(:info, "You have been logged out automatically, please log in again.")
+        |> redirect(to: "/")
+
+      _ ->
+        conn
+        |> put_resp_content_type("text/plain")
+        |> send_resp(401, body)
+    end
   end
 end

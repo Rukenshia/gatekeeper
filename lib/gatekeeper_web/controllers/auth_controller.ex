@@ -42,7 +42,7 @@ defmodule GatekeeperWeb.AuthController do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Good to see you, #{user.name}")
-        |> Guardian.Plug.sign_in(user)
+        |> Guardian.Plug.sign_in(user, %{}, ttl: {60, :minute})
         |> redirect(to: "/home")
 
       {:error, reason} ->

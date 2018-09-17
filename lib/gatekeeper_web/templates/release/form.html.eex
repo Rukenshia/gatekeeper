@@ -78,9 +78,10 @@
             </div>
           </div>
         </div>
-        <div v-else class="mdc-layout-grid__inner">
+        <div class="mdc-layout-grid__inner">
           <div class="mdc-layout-grid__cell--span-6">
-            <ul id="approver-selection-list" class="mdc-list" aria-orientation="vertical">
+            <span v-if="loading">&nbsp;</span>
+            <ul v-if="!loading" id="approver-selection-list" class="mdc-list" aria-orientation="vertical">
               <template v-for="member in members">
                 <template v-if="member.mandatory_approver">
                   <li class="mdc-list-item">

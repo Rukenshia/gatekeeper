@@ -54,7 +54,6 @@
           </header>
           <section id="gk-error-dialog-description" class="mdc-dialog__body">
             <%= get_flash(@conn, :error) %>
-            Some text
           </section>
           <footer class="mdc-dialog__footer">
             <button type="button" class="mdc-button gk-button__error mdc-dialog__footer__button mdc-dialog__footer__button--accept">Okay</button>

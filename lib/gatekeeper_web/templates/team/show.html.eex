@@ -12,7 +12,7 @@
     </div>
   </div>
   <div class="mdc-layout-grid__cell--span-12">
-    <h3 class="mdc-typography--headline4">Members</h3>
+    <h3 class="mdc-typography--headline3">Members</h3>
   </div>
   <%= for member <- @team.members do %>
   <div class="mdc-layout-grid__cell mdc-card">

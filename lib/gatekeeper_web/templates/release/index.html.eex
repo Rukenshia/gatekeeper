@@ -1,55 +1,81 @@
 <h4 class="mdc-typography--headline3">Pending</h4>
-<ul class="mdc-card mdc-card--outlined mdc-list mdc-list--avatar-list mdc-list--two-line mdc-list--non-interactive" aria-orientation="vertical">
-  <%= with releases <- @releases |> Enum.filter(fn r -> is_nil(r.released_at) end) |> Enum.with_index() do %>
-    <%= for {release, idx} <- releases do %>
-      <li class="mdc-list-item">
-        <span class="mdc-list-item__text">
-          <span class="mdc-list-item__primary-text">
-            <%= release.version %>
+<%= with releases <- @releases |> Enum.filter(fn r -> is_nil(r.released_at) end) |> Enum.with_index() do %>
+  <%= if length(releases) == 0 do %>
+    <div class="mdc-layout-grid__cell--span-4 mdc-card gk-card--flat">
+      <div class="gk-card__media--text">
+        <div class="gk-card__media--text-title">
+          <span class="gk-card__media--text-headline">Nothing to do</span>
+        </div>
+        <div class="gk-card__media--text-body">
+          This team does not have any pending releases.
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <ul class="mdc-card mdc-card--outlined mdc-list mdc-list--avatar-list mdc-list--two-line mdc-list--non-interactive" aria-orientation="vertical">
+      <%= for {release, idx} <- releases do %>
+        <li class="mdc-list-item">
+          <span class="mdc-list-item__text">
+            <span class="mdc-list-item__primary-text">
+              <%= release.version %>
+            </span>
+            <div class="mdc-list-item__secondary-text gk-tagline">
+              <div class="gk-tagline__item gk-tagline__item--text">
+                <div class="gk-tagline__item--content">
+                  <%= release.commit_hash %>
+                </div>
+              </div>
+              <div class="gk-tagline__divider"></div>
+              <div class="gk-tagline__item">
+                <i class="material-icons gk-typography--color__success">check</i>
+                <div class="gk-tagline__item--content gk-typography--color__success">
+                  <%= length(Enum.filter(release.approvals, fn a -> a.status == "approved" end)) %> /  <%= length(release.approvals) %>
+                </div>
+              </div>
+            </div>
           </span>
-          <div class="mdc-list-item__secondary-text gk-tagline">
-            <div class="gk-tagline__item gk-tagline__item--text">
-              <div class="gk-tagline__item--content">
-                <%= release.commit_hash %>
-              </div>
-            </div>
-            <div class="gk-tagline__divider"></div>
-            <div class="gk-tagline__item">
-              <i class="material-icons gk-typography--color__success">check</i>
-              <div class="gk-tagline__item--content gk-typography--color__success">
-                <%= length(Enum.filter(release.approvals, fn a -> a.status == "approved" end)) %> /  <%= length(release.approvals) %>
-              </div>
-            </div>
-          </div>
-        </span>
-        <span class="mdc-list-item__meta">
-          <%= link "Show", to: team_release_path(@conn, :show, release.team_id, release), class: "mdc-button" %>
-        </span>
-      </li>
-      <%= if idx != (length(releases) - 1) do %>
-        <li role="separator" class="mdc-list-divider"></li>
+          <span class="mdc-list-item__meta">
+            <%= link "Show", to: team_release_path(@conn, :show, release.team_id, release), class: "mdc-button" %>
+          </span>
+        </li>
+        <%= if idx != (length(releases) - 1) do %>
+          <li role="separator" class="mdc-list-divider"></li>
+        <% end %>
       <% end %>
-    <% end %>
+    </ul>
   <% end %>
-</ul>
+<% end %>
 <h4 class="mdc-typography--headline3">Released</h4>
-<ul class="mdc-card mdc-card--outlined mdc-list mdc-list--avatar-list mdc-list--two-line mdc-list--non-interactive" aria-orientation="vertical">
-  <%= with releases <- @releases |> Enum.filter(fn r -> !is_nil(r.released_at) end) |> Enum.with_index() do %>
-    <%= for {release, idx} <- releases do %>
-      <li class="mdc-list-item">
-        <span class="mdc-list-item__text">
-          <span class="mdc-list-item__primary-text">
-            <%= release.version %>
+<%= with releases <- @releases |> Enum.filter(fn r -> !is_nil(r.released_at) end) |> Enum.with_index() do %>
+  <%= if length(releases) == 0 do %>
+    <div class="mdc-layout-grid__cell--span-4 mdc-card gk-card--flat">
+      <div class="gk-card__media--text">
+        <div class="gk-card__media--text-title">
+          <span class="gk-card__media--text-headline">Not agile enough</span>
+        </div>
+        <div class="gk-card__media--text-body">
+          This team has not released anything yet.
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <ul class="mdc-card mdc-card--outlined mdc-list mdc-list--avatar-list mdc-list--two-line mdc-list--non-interactive" aria-orientation="vertical">
+      <%= for {release, idx} <- releases do %>
+        <li class="mdc-list-item">
+          <span class="mdc-list-item__text">
+            <span class="mdc-list-item__primary-text">
+              <%= release.version %>
+            </span>
+            <span class="mdc-list-item__secondary-text"><%= release.commit_hash %></span>
           </span>
-          <span class="mdc-list-item__secondary-text"><%= release.commit_hash %></span>
-        </span>
-        <span class="mdc-list-item__meta">
-          <%= link "Show", to: team_release_path(@conn, :show, release.team_id, release), class: "mdc-button" %>
-        </span>
-      </li>
-      <%= if idx != (length(releases) - 1) do %>
-        <li role="separator" class="mdc-list-divider"></li>
+          <span class="mdc-list-item__meta">
+            <%= link "Show", to: team_release_path(@conn, :show, release.team_id, release), class: "mdc-button" %>
+          </span>
+        </li>
+        <%= if idx != (length(releases) - 1) do %>
+          <li role="separator" class="mdc-list-divider"></li>
+        <% end %>
       <% end %>
-    <% end %>
+    </ul>
   <% end %>
-</ul>
+<% end %>

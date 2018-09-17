@@ -1,6 +1,6 @@
 <div class="mdc-layout-grid__inner">
   <div class="mdc-layout-grid__cell--span-12">
-    <h2 class="mdc-typography--headline3">Team <strong><%= @team.name %></strong></h2>
+    <h2 class="mdc-typography--headline2">Team <strong><%= @team.name %></strong></h2>
     <%= link "Create release", to: team_release_path(@conn, :new, @team.id), class: "mdc-button mdc-button--raised" %>
     <%= link "Edit team", to: team_path(@conn, :edit, @team), class: "mdc-button" %>
   </div>
@@ -11,21 +11,23 @@
       </div>
     </div>
   </div>
-  <div class="mdc-layout-grid__cell--span-12">
-    <h3 class="mdc-typography--headline3">Members</h3>
-  </div>
-  <%= for member <- @team.members do %>
-  <div class="mdc-layout-grid__cell mdc-card">
-    <div class="mdc-card__media gk-card__media--text">
-      <div class="gk-card__media--text-title">
-        <div class="gk-card__media--text-headline"><%= member.name %></div>
-        <%= with membership <- get_membership(member, @team.memberships) do %>
-          <div class="gk-card__media--text-subtitle gk-typography--role__<%= membership.role %>"><%= membership.role |> String.capitalize %></div>
-        <% end %>
-      </div>
+  <div class="mdc-layout-grid__cell--span-12 mdc-layout-grid__inner">
+    <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
+      <h3 class="mdc-typography--headline3">Members</h3>
     </div>
+    <%= for member <- @team.members do %>
+      <div class="mdc-layout-grid__cell mdc-card">
+        <div class="mdc-card__media gk-card__media--text">
+          <div class="gk-card__media--text-title">
+            <div class="gk-card__media--text-headline"><%= member.name %></div>
+            <%= with membership <- get_membership(member, @team.memberships) do %>
+              <div class="gk-card__media--text-subtitle gk-typography--role__<%= membership.role %>"><%= membership.role |> String.capitalize %></div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
-  <% end %>
   <div class="mdc-layout-grid__cell--span-12">
     <%= link "Back", to: page_path(@conn, :index), class: "mdc-button" %>
   </div>

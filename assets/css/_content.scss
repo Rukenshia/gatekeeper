@@ -3,3 +3,7 @@
 @mixin gk-content--success {
     background-color: $gk-color__background--success;
 }
+
+.gk-typography--inset {
+    padding: 8px;
+}

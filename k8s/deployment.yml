@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: gatekeeper
-        image: gcr.io/mps-gatekeeper/gatekeeper:0.5.0
+        image: gcr.io/mps-gatekeeper/gatekeeper:0.5.1
         ports:
         - containerPort: 4000

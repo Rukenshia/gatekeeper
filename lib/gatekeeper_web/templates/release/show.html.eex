@@ -1,5 +1,5 @@
 <div id="app">
-  <h2>Release <%= @release.version %></h2>
+  <h2 class="mdc-typography--headline2">Release <%= @release.version %></h2>
 
   <%= if @can_release do %>
     <div class="mdc-layout-grid__inner">
@@ -10,65 +10,36 @@
   <% end %>
 
   <%= if !is_nil(@user_approval) do %>
-  <div class="mdc-layout-grid__inner">
-    <div class="mdc-layout-grid__cell--span-12">
-      <%= if @user_approval.status == "initial" do %>
-        <div class="mdc-layout-grid__inner">
-          <div class="mdc-layout-grid__cell--span-6 mdc-card">
-            <div class="mdc-card__media gk-card__media--text">
-              <div class="gk-card__media--text-title">
+    <div class="mdc-layout-grid__inner">
+      <div class="mdc-layout-grid__cell--span-12">
+        <%= if @user_approval.status == "initial" do %>
+          <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__cell--span-6 mdc-card">
+              <div class="mdc-card__media gk-card__media--text">
+                <div class="gk-card__media--text-title">
                   This release is awaiting your approval
+                </div>
               </div>
-            </div>
-            <div class="mdc-card__actions">
-              <div class="mdc-card__action-buttons">
-                <a class="mdc-button mdc-button--raised mdc-card__action mdc-card__action--button" @click="approve">
-                  Approve
-                </a>
-                <a class="mdc-button gk-button__error mdc-card__action mdc-card__action--button" @click="decline">
-                  Decline
-                </a>
+              <div class="mdc-card__actions">
+                <div class="mdc-card__action-buttons">
+                  <a class="mdc-button mdc-button--raised mdc-card__action mdc-card__action--button" @click="approve">
+                    Approve
+                  </a>
+                  <a class="mdc-button gk-button__error mdc-card__action mdc-card__action--button" @click="decline">
+                    Decline
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-    <% end %>
+        <% end %>
+      </div>
     </div>
-  </div>
   <% end %>
 
-  <ul>
-
-    <li>
-      <strong>Commit hash:</strong>
-      <%= @release.commit_hash %>
-    </li>
-
-    <li>
-      <strong>Description:</strong>
-      <%= @release.description %>
-    </li>
-
-    <li>
-      <strong>Version:</strong>
-      <%= @release.version %>
-    </li>
-
-    <li>
-      <strong>Released at:</strong>
-      <%= if is_nil(@release.released_at) do %>
-        <span class="gk-typography--color__error">unreleased</span>
-      <% else %>
-        <%= @release.released_at %>
-    <% end %>
-    </li>
-
-  </ul>
-
-
-  <div class="mdc-layout-grid__inner">
-    <div class="mdc-layout-grid__cell--span-12">
-      <h3>Approvals</h3>
+  <div class="mdc-layout-grid__inner mdc-layout-grid__cell--span-12">
+    <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
+      <h3 class="mdc-typography--headline3">Approvals</h3>
     </div>
     <div class="mdc-layout-grid__cell--span-12">
       <div class="mdc-layout-grid__inner">
@@ -84,33 +55,91 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="mdc-layout-grid__cell--span-12 mdc-layout-grid__inner">
+    <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
+      <h3 class="mdc-typography--headline4">Release Information</h3>
+    </div>
+    <div class="mdc-layout-grid__inner mdc-layout-grid__cell--span-6">
+      <div class="mdc-layout-grid__cell--span-12">
+        <ul class="mdc-card mdc-card--outlined mdc-list mdc-list--avatar-list mdc-list--two-line mdc-list--non-interactive" aria-orientation="vertical">
+          <li class="mdc-list-item">
+            <div class="mdc-list-item__graphic">
+              <i class="material-icons">bookmark</i>
+            </div>
+            <span class="mdc-list-item__text">
+              <span class="mdc-list-item__primary-text">
+                Version
+              </span>
+              <div class="mdc-list-item__secondary-text">
+                <%= @release.version %>
+              </div>
+          </li>
+          <li role="separator" class="mdc-list-divider"></li>
+          <li class="mdc-list-item">
+            <div class="mdc-list-item__graphic">
+              <i class="material-icons">code</i>
+            </div>
+            <span class="mdc-list-item__text">
+              <span class="mdc-list-item__primary-text">
+                Commit hash
+              </span>
+              <div class="mdc-list-item__secondary-text">
+                <%= @release.commit_hash %>
+              </div>
+          </li>
+          <li role="separator" class="mdc-list-divider"></li>
+          <li class="mdc-list-item">
+            <div class="mdc-list-item__graphic">
+              <i class="material-icons">access_time</i>
+            </div>
+            <span class="mdc-list-item__text">
+              <span class="mdc-list-item__primary-text">
+                Released at
+              </span>
+              <div class="mdc-list-item__secondary-text">
+                <%= if is_nil(@release.released_at) do %>
+                  <span class="gk-typography--color__error">unreleased</span>
+                <% else %>
+                  <%= @release.released_at %>
+                <% end %>
+              </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="mdc-layout-grid__cell--span-12">
+        <h4 class="mdc-typography--headline5">Description</h4>
+        <span class="gk-typography--inset mdc-typography--body1"><%= @release.description %></span>
+      </div>
+    </div>
     <div class="mdc-layout-grid__cell--span-12">
       <span><%= link "Edit", to: team_release_path(@conn, :edit, @release.team_id, @release), class: "mdc-button mdc-button--raised gk-button" %></span>
       <span><%= link "Back", to: team_path(@conn, :show, @release.team_id), class: "mdc-button gk-button" %></span>
     </div>
-  </div>
 
-  <%= if !is_nil(@user_approval) do %>
-  <script>
-    new Vue({
-      el: '#app',
-      data: {
-      },
-      methods: {
-        release() {
-          axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/release', {})
-            .then(() => window.location.reload());
-        },
-        approve() {
-          axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/approve', {})
-            .then(() => window.location.reload());
-        },
-        decline() {
-          axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/decline', {})
-            .then(() => window.location.reload());
-        },
-      },
-    });
-  </script>
-  <% end %>
-</div>
+    <%= if !is_nil(@user_approval) do %>
+      <script>
+new Vue({
+  el: '#app',
+  data: {
+},
+  methods: {
+  release() {
+  axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/release', {})
+  .then(() => window.location.reload());
+},
+  approve() {
+  axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/approve', {})
+  .then(() => window.location.reload());
+},
+  decline() {
+  axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/decline', {})
+  .then(() => window.location.reload());
+},
+},
+});
+      </script>
+    <% end %>
+  </div>

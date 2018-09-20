@@ -2,6 +2,8 @@ defmodule Gatekeeper.Users.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  require Logger
+
   schema "users" do
     field(:email, :string)
     field(:name, :string)
@@ -19,7 +21,12 @@ defmodule Gatekeeper.Users.User do
     |> validate_required([:name, :email])
   end
 
-  def is_member_of(user, team) do
-    Enum.any?(user.teams, fn x -> x.id == team.id end)
+  def has_membership?(user, team_id) do
+    Logger.debug("User.has_membership?(#{inspect(user.id)}, #{inspect(team_id)})")
+    Enum.any?(user.memberships, fn x -> x.team_id == team_id end)
+  end
+
+  def get_membership(user, team_id) do
+    Enum.find(user.memberships, fn x -> x.team_id == team_id end)
   end
 end

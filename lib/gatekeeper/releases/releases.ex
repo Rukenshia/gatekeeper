@@ -56,26 +56,40 @@ defmodule Gatekeeper.Releases do
       attrs
       |> Map.pop("approvers", [])
 
+    release =
+      %Release{}
+      |> Release.changeset(attrs)
+
+    # TODO:
+    # Add mandatory approvers from the team regardless of input
+    team_id = Ecto.Changeset.get_field(release, :team_id)
+
     approvers =
       approvers
       |> String.split(",")
       |> Enum.map(fn s -> String.to_integer(s) end)
       |> Enum.map(fn id -> Gatekeeper.Users.get_user!(id) end)
+      |> Enum.map(fn u -> Repo.preload(u, :memberships) end)
+      |> Enum.filter(fn u ->
+        Gatekeeper.Users.User.has_membership?(u, team_id)
+      end)
 
     release =
-      %Release{}
-      |> Release.changeset(attrs)
+      release
       |> Repo.insert()
 
     case release do
       {:ok, release} ->
         for approver <- approvers do
+          membership = Gatekeeper.Users.User.get_membership(approver, team_id)
+
           Logger.debug("Creation empty approval for user #{approver.name}")
 
           create_approval(%{
             release_id: release.id,
             user_id: approver.id,
-            status: "initial"
+            status: "initial",
+            mandatory: membership.mandatory_approver
           })
         end
 

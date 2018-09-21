@@ -1,6 +1,8 @@
 defmodule GatekeeperWeb.ReleaseView do
   use GatekeeperWeb, :view
 
+  import Gatekeeper.Releases.Release
+
   def render("release_update.json", %{release: release}) do
     %{
       ok: true,
@@ -42,5 +44,9 @@ defmodule GatekeeperWeb.ReleaseView do
       _ ->
         "gk-typography--color__error"
     end
+  end
+
+  def format_date(date) do
+    "#{date.year}-#{date.month}-#{date.day}"
   end
 end

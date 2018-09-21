@@ -24,7 +24,7 @@
     font-size: 16px;
 
     .gk-card__media--text-headline {
-	font-size: 24px;
+        font-size: 24px;
         font-family: 'Display Sans';
     }
 
@@ -78,7 +78,23 @@
     }
 }
 
-.gk-card__error {
+.gk-card--error {
+    --mdc-theme-primary: $gk-color--error;
     padding: 8px;
-    color: #db3236;
+    background-color: lighten($gk-color--error, 40%);
+
+    &.mdc-card--outlined {
+        border-color: lighten($gk-color--error, 20%);
+    }
+
+    .gk-card__media--text {
+        @include gk-typography--color__error;
+    }
+
+
+    .gk-card__media--text-title .gk-card__media--text-headline {
+        @include mdc-typography(headline6);
+        font-family: 'Display Sans';
+        font-weight: bold;
+    }
 }

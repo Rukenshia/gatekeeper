@@ -43,7 +43,7 @@ defmodule Gatekeeper.Releases.Release do
          false <- declined?(release),
          true <-
            Enum.all?(release.approvals, fn a ->
-             !a.is_mandatory || (a.is_mandatory && a.status == "approved")
+             !a.mandatory || (a.mandatory && a.status == "approved")
            end) do
       true
     else

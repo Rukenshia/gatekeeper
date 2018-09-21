@@ -62,39 +62,60 @@ defmodule GatekeeperWeb.ReleaseController do
 
     Logger.debug(inspect(required_approvers))
 
-    can_release =
-      if length(required_approvers) == 0 && is_nil(release.released_at) &&
-           !Enum.any?(release.approvals, fn a -> a.status == "declined" end) do
-        true
-      else
-        false
-      end
-
     render(conn, "show.html",
       release: release,
       user_approval:
         Enum.find(release.approvals, fn a ->
           a.user_id == Gatekeeper.Guardian.Plug.current_resource(conn).id
         end),
-      can_release: can_release
+      can_release: Releases.Release.releasable?(release)
     )
   end
 
   def edit(conn, %{"id" => id}) do
     release = Releases.get_release!(id)
-    changeset = Releases.change_release(release)
-    render(conn, "edit.html", release: release, changeset: changeset, team_id: release.team_id)
+
+    if Releases.Release.released?(release) do
+      conn
+      |> put_flash(:error, "You cannot edit this release, it has already been released.")
+      |> redirect(to: team_release_path(conn, :show, release.team_id, release))
+    else
+      changeset = Releases.change_release(release)
+      render(conn, "edit.html", release: release, changeset: changeset, team_id: release.team_id)
+    end
+  end
+
+  @doc """
+    This function recursively resets the approval status to "initial". Upon the first failure,
+    the error from Ecto will be returned
+  """
+  def reset_approval([approval | t], _last) do
+    case Releases.update_approval(approval, %{status: "initial"}) do
+      {:ok, approval} ->
+        reset_approval(t, approval)
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:error, changeset}
+    end
+  end
+
+  def reset_approval([], last) do
+    {:ok, last}
   end
 
   def update(conn, %{"id" => id, "release" => release_params}) do
     release = Releases.get_release!(id)
 
-    case Releases.update_release(release, release_params) do
-      {:ok, release} ->
-        conn
-        |> put_flash(:info, "Release updated successfully.")
-        |> redirect(to: team_release_path(conn, :show, release.team_id, release))
+    with {:ok, release} <- Releases.update_release(release, release_params),
+         {:ok, _approval} <- reset_approval(Repo.preload(release, :approvals).approvals, nil) do
+      release =
+        release
+        |> Repo.preload(:approvals)
 
+      conn
+      |> put_flash(:info, "Release updated successfully.")
+      |> redirect(to: team_release_path(conn, :show, release.team_id, release))
+    else
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", release: release, changeset: changeset)
     end

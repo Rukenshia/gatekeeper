@@ -9,7 +9,25 @@
     </div>
   <% end %>
 
-  <%= if !is_nil(@user_approval) do %>
+  <%= if declined?(@release) do %>
+    <div class="mdc-layout-grid__inner">
+      <div class="mdc-layout-grid__cell--span-6">
+        <div class="mdc-card mdc-card--outlined gk-card--error">
+          <div class="gk-card__media--text">
+            <div class="gk-card__media--text-title">
+              <span class="gk-card__media--text-headline">Declined</span>
+            </div>
+            <div class="gk-card__media--text-body">
+              This release has been declined by at least one approver. You will either need to
+              create a new release or update this release to reset approval.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%= if !is_nil(@user_approval) and !declined?(@release) do %>
     <div class="mdc-layout-grid__inner">
       <div class="mdc-layout-grid__cell--span-12">
         <%= if @user_approval.status == "initial" do %>
@@ -99,10 +117,10 @@
                 Released at
               </span>
               <div class="mdc-list-item__secondary-text">
-                <%= if is_nil(@release.released_at) do %>
-                  <span class="gk-typography--color__error">unreleased</span>
+                <%= if released?(@release) do %>
+                  <%= format_date(@release.released_at) %>
                 <% else %>
-                  <%= @release.released_at %>
+                  <span class="gk-typography--color__error">unreleased</span>
                 <% end %>
               </div>
           </li>
@@ -115,31 +133,33 @@
       </div>
     </div>
     <div class="mdc-layout-grid__cell--span-12">
-      <span><%= link "Edit", to: team_release_path(@conn, :edit, @release.team_id, @release), class: "mdc-button mdc-button--raised gk-button" %></span>
+      <%= if !released?(@release) do %>
+        <span><%= link "Edit", to: team_release_path(@conn, :edit, @release.team_id, @release), class: "mdc-button mdc-button--raised gk-button" %></span>
+      <% end %>
       <span><%= link "Back", to: team_path(@conn, :show, @release.team_id), class: "mdc-button gk-button" %></span>
     </div>
 
     <%= if !is_nil(@user_approval) do %>
       <script>
-new Vue({
-  el: '#app',
-  data: {
-},
-  methods: {
-  release() {
-  axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/release', {})
-  .then(() => window.location.reload());
-},
-  approve() {
-  axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/approve', {})
-  .then(() => window.location.reload());
-},
-  decline() {
-  axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/decline', {})
-  .then(() => window.location.reload());
-},
-},
-});
+        new Vue({
+          el: '#app',
+          data: {
+          },
+          methods: {
+            release() {
+              axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/release', {})
+                .then(() => window.location.reload());
+            },
+            approve() {
+              axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/approve', {})
+                .then(() => window.location.reload());
+            },
+            decline() {
+              axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/decline', {})
+                .then(() => window.location.reload());
+            },
+          },
+        });
       </script>
     <% end %>
   </div>

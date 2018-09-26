@@ -1,6 +1,27 @@
 <h2>Edit Team</h2>
 
 <div id="app">
+  <div class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+      <div class="mdc-layout-grid__cell--span-6">
+        <div class="mdc-card">
+          <div class="gk-card__media--text">
+            <div class="gk-card__media--text-title">
+              <span class="gk-card__media--text-headline">API Key</span>
+            </div>
+            <div class="gk-card__media--text-body">
+              This is your teams API key. Please make sure to not share it with anyone else.
+              It is currently not possible to regenerate this key.
+
+              <pre><code>
+                <%= @team.api_key %>
+              </code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <h3>Members</h3>
 
   <div class="mdc-layout-grid">

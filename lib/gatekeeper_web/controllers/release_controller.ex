@@ -5,6 +5,7 @@ defmodule GatekeeperWeb.ReleaseController do
 
   alias Gatekeeper.Releases
   alias Gatekeeper.Releases.Release
+  alias Gatekeeper.Users.User
   alias Gatekeeper.Repo
 
   def index(conn, %{"team_id" => team_id}) do
@@ -139,47 +140,61 @@ defmodule GatekeeperWeb.ReleaseController do
   end
 
   def api_approve_release(conn, %{"approval_id" => approval}) do
-    # TODO: guard for user id
-    # TODO: guard for approval id -> release id
+    user = Guardian.Plug.current_resource(conn)
+
     approval = Releases.get_approval!(approval)
 
-    case Releases.update_approval(approval, %{status: "approved"}) do
-      {:ok, _} ->
-        conn
-        |> json(%{ok: true})
+    if user.id == approval.user_id do
+      case Releases.update_approval(approval, %{status: "approved"}) do
+        {:ok, _} ->
+          conn
+          |> json(%{ok: true})
 
-      {:error, _} ->
-        conn
-        |> put_status(500)
-        |> json(%{ok: false})
+        {:error, _} ->
+          conn
+          |> put_status(500)
+          |> json(%{ok: false})
+      end
+    else
+      conn
+      |> put_status(401)
+      |> json(%{ok: false})
     end
   end
 
   def api_decline_release(conn, %{"approval_id" => approval}) do
-    # TODO: guard for user id
-    # TODO: guard for approval id -> release id
+    user = Guardian.Plug.current_resource(conn)
     approval = Releases.get_approval!(approval)
 
-    case Releases.update_approval(approval, %{status: "declined"}) do
-      {:ok, _} ->
-        conn
-        |> json(%{ok: true})
+    if user.id == approval.user_id do
+      case Releases.update_approval(approval, %{status: "declined"}) do
+        {:ok, _} ->
+          conn
+          |> json(%{ok: true})
 
-      {:error, _} ->
-        conn
-        |> put_status(500)
-        |> json(%{ok: false})
+        {:error, _} ->
+          conn
+          |> put_status(500)
+          |> json(%{ok: false})
+      end
+    else
+      conn
+      |> put_status(401)
+      |> json(%{ok: false})
     end
   end
 
   def api_release(conn, %{"release_id" => release}) do
-    # TODO: guard for user id
-    # TODO: guard for release approval
+    user =
+      Guardian.Plug.current_resource(conn)
+      |> Repo.preload(:memberships)
+
     release =
       Releases.get_release!(release)
       |> Repo.preload(:approvals)
 
-    if is_nil(release.released_at) do
+    with _membership <- User.get_membership(user, release.team_id),
+         true <- Release.releasable?(release) do
       case Releases.update_release(release, %{
              released_at: Ecto.DateTime.to_string(Ecto.DateTime.utc())
            }) do
@@ -193,9 +208,15 @@ defmodule GatekeeperWeb.ReleaseController do
           |> json(%{ok: false, message: "Database update failed"})
       end
     else
-      conn
-      |> put_status(409)
-      |> json(%{ok: false, message: "Already released"})
+      nil ->
+        conn
+        |> put_status(401)
+        |> json(%{ok: false})
+
+      _ ->
+        conn
+        |> put_status(409)
+        |> json(%{ok: false, message: "Already released"})
     end
   end
 end

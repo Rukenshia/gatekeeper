@@ -16,7 +16,7 @@ const app = new Vue({
       ...window.vueData,
     };
 
-    const { data } = await axios.get(`/api/teams/${this.team.id}/members`);
+    const { data } = await axios.get(`/api/v1/teams/${this.team.id}/members`);
 
     this.team.members = data.map(m => ({ ...m.user, role: m.role }));
 

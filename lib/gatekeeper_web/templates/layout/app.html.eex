@@ -14,6 +14,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/4.13.0/bodymovin_light.min.js"></script>
     <link href="<%= static_path(@conn, "/css/material-icons.css") %>"
       rel="stylesheet">
+    <script>
+      axios.defaults.headers.common['Authorization'] = 'Bearer <%= assigns[:jwt] %>';
+    </script>
   </head>
 
   <body class="gk-typography">

@@ -147,15 +147,15 @@
           },
           methods: {
             release() {
-              axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/release', {})
+              axios.post('/api/v1/teams/<%= @release.team_id %>/releases/<%= @release.id %>/release', {})
                 .then(() => window.location.reload());
             },
             approve() {
-              axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/approve', {})
+              axios.post('/api/v1/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/approve', {})
                 .then(() => window.location.reload());
             },
             decline() {
-              axios.post('/api/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/decline', {})
+              axios.post('/api/v1/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/decline', {})
                 .then(() => window.location.reload());
             },
           },

@@ -18,9 +18,9 @@ defmodule GatekeeperWeb.TeamController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"team_id" => team_id}) do
     team =
-      Teams.get_team!(id)
+      Teams.get_team!(team_id)
       |> Repo.preload(:members)
       |> Repo.preload(:memberships)
       |> Repo.preload(:releases)
@@ -32,8 +32,8 @@ defmodule GatekeeperWeb.TeamController do
     render(conn, "show.html", team: team)
   end
 
-  def edit(conn, %{"id" => id}) do
-    team = Teams.get_team!(id)
+  def edit(conn, %{"team_id" => team_id}) do
+    team = Teams.get_team!(team_id)
 
     render(conn, "edit.html", team: team)
   end

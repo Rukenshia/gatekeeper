@@ -12,9 +12,9 @@
       </div>
     </div>
   <% else %>
-    <ul class="mdc-card mdc-card--outlined mdc-list mdc-list--avatar-list mdc-list--two-line mdc-list--non-interactive gk-card--error" aria-orientation="vertical">
+    <ul class="mdc-card mdc-card--outlined mdc-list mdc-list--avatar-list mdc-list--two-line mdc-list--non-interactive" aria-orientation="vertical">
       <%= for {release, idx} <- releases do %>
-        <li class="mdc-list-item">
+        <li class="mdc-list-item<%= if declined?(release) do %> gk-list-item--error<% end %>">
           <span class="mdc-list-item__text">
             <span class="mdc-list-item__primary-text">
               <%= release.version %>

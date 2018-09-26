@@ -9,7 +9,7 @@ const app = new Vue({
     selected: [],
   },
   async mounted() {
-    const { data } = await axios.get(`/api/teams/${window.vueData.teamId}/members`);
+    const { data } = await axios.get(`/api/v1/teams/${window.vueData.teamId}/members`);
 
     this.members = data.sort((a, b) => {
       if (a.mandatory_approver && !b.mandatory_approver) {

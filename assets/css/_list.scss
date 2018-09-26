@@ -1,0 +1,7 @@
+.gk-list-item--error {
+    --mdc-theme-primary: $gk-color--error;
+
+    .mdc-list-item__primary-text {
+        @include gk-typography--color__error;
+    }
+}

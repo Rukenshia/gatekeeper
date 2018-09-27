@@ -20,6 +20,7 @@ defmodule Gatekeeper.Releases.Release do
     release
     |> cast(attrs, [:commit_hash, :description, :version, :team_id, :released_at])
     |> validate_required([:commit_hash, :description, :version, :team_id])
+    |> unique_constraint(:version, name: :releases_team_id_version_index)
   end
 
   def released?(release) do

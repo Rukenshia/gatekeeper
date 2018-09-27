@@ -51,11 +51,7 @@ defmodule Gatekeeper.Releases do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_release(attrs \\ %{}) do
-    {approvers, attrs} =
-      attrs
-      |> Map.pop("approvers", [])
-
+  def create_release(attrs \\ %{}, approvers) do
     release =
       %Release{}
       |> Release.changeset(attrs)

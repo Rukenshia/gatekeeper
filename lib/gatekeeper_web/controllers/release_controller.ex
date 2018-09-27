@@ -23,12 +23,12 @@ defmodule GatekeeperWeb.ReleaseController do
     render(conn, "new.html", changeset: changeset, team_id: team_id)
   end
 
-  def create(conn, %{"release" => release_params, "team_id" => team_id}) do
+  def create(conn, %{"release" => release_params, "approvers" => approvers, "team_id" => team_id}) do
     release_params =
       release_params
       |> Map.put("team_id", team_id)
 
-    case Releases.create_release(release_params) do
+    case Releases.create_release(release_params, approvers) do
       {:ok, release} ->
         conn
         |> put_flash(:info, "Release created successfully.")
@@ -144,6 +144,28 @@ defmodule GatekeeperWeb.ReleaseController do
 
     conn
     |> render("releases.json", %{releases: releases})
+  end
+
+  def api_create_release(conn, %{
+        "release" => release_params,
+        "approvers" => approvers,
+        "team_id" => team_id
+      }) do
+    release_params =
+      release_params
+      |> Map.put("team_id", team_id)
+
+    case Releases.create_release(release_params, approvers) do
+      {:ok, release} ->
+        conn
+        |> put_status(:created)
+        |> render("release.json", %{release: release})
+
+      {:error, %Ecto.Changeset{}} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{ok: false, message: "bad request"})
+    end
   end
 
   def api_get_approvals(conn, %{"release_id" => id}) do

@@ -6,14 +6,23 @@ defmodule GatekeeperWeb.ReleaseView do
   def render("release_update.json", %{release: release}) do
     %{
       ok: true,
-      release: %{
-        id: release.id,
-        version: release.version,
-        commit_hash: release.commit_hash,
-        team_id: release.team_id,
-        description: release.description,
-        released_at: release.released_at
-      }
+      release: render("release.json", %{release: release})
+    }
+  end
+
+  def render("releases.json", %{releases: releases}) do
+    releases
+    |> Enum.map(fn r -> render("release.json", %{release: r}) end)
+  end
+
+  def render("release.json", %{release: release}) do
+    %{
+      id: release.id,
+      version: release.version,
+      commit_hash: release.commit_hash,
+      team_id: release.team_id,
+      description: release.description,
+      released_at: release.released_at
     }
   end
 

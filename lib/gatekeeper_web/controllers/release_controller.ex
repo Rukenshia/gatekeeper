@@ -1,6 +1,8 @@
 defmodule GatekeeperWeb.ReleaseController do
   require Logger
 
+  import Ecto.Query
+
   use GatekeeperWeb, :controller
 
   alias Gatekeeper.Releases
@@ -131,7 +133,20 @@ defmodule GatekeeperWeb.ReleaseController do
     |> redirect(to: team_release_path(conn, :index, release.team_id))
   end
 
-  def api_get_approvals(conn, %{"release_id" => id, "release_id" => id}) do
+  def api_get_releases(conn, %{"team_id" => team_id}) do
+    releases =
+      from(r in Release,
+        where: [
+          team_id: ^team_id
+        ]
+      )
+      |> Repo.all()
+
+    conn
+    |> render("releases.json", %{releases: releases})
+  end
+
+  def api_get_approvals(conn, %{"release_id" => id}) do
     release =
       Releases.get_release!(id)
       |> Repo.preload(:approvals)

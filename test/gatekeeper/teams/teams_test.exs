@@ -1,12 +1,12 @@
 defmodule Gatekeeper.TeamsTest do
-  use Gatekeeper.DataCase
+  use Gatekeeper.DataCase, async: true
 
   alias Gatekeeper.Teams
 
   describe "teams" do
     alias Gatekeeper.Teams.Team
 
-    @valid_attrs %{name: "some name"}
+    @valid_attrs %{name: "some name", api_key: "xxxxx"}
     @update_attrs %{name: "some updated name"}
     @invalid_attrs %{name: nil}
 

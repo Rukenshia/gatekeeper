@@ -6,8 +6,20 @@ defmodule Gatekeeper.ReleasesTest do
   describe "releases" do
     alias Gatekeeper.Releases.Release
 
-    @valid_attrs %{commit_hash: "some commit_hash", description: "some description", released_at: "2010-04-17 14:00:00.000000Z", version: "some version"}
-    @update_attrs %{commit_hash: "some updated commit_hash", description: "some updated description", released_at: "2011-05-18 15:01:01.000000Z", version: "some updated version"}
+    @valid_attrs %{
+      commit_hash: "some commit_hash",
+      description: "some description",
+      released_at: "2010-04-17 14:00:00.000000Z",
+      version: "some version",
+      status: "pending"
+    }
+    @update_attrs %{
+      commit_hash: "some updated commit_hash",
+      description: "some updated description",
+      released_at: "2011-05-18 15:01:01.000000Z",
+      version: "some updated version",
+      status: "pending"
+    }
     @invalid_attrs %{commit_hash: nil, description: nil, released_at: nil, version: nil}
 
     def release_fixture(attrs \\ %{}) do
@@ -33,7 +45,10 @@ defmodule Gatekeeper.ReleasesTest do
       assert {:ok, %Release{} = release} = Releases.create_release(@valid_attrs)
       assert release.commit_hash == "some commit_hash"
       assert release.description == "some description"
-      assert release.released_at == DateTime.from_naive!(~N[2010-04-17 14:00:00.000000Z], "Etc/UTC")
+
+      assert release.released_at ==
+               DateTime.from_naive!(~N[2010-04-17 14:00:00.000000Z], "Etc/UTC")
+
       assert release.version == "some version"
     end
 
@@ -47,7 +62,10 @@ defmodule Gatekeeper.ReleasesTest do
       assert %Release{} = release
       assert release.commit_hash == "some updated commit_hash"
       assert release.description == "some updated description"
-      assert release.released_at == DateTime.from_naive!(~N[2011-05-18 15:01:01.000000Z], "Etc/UTC")
+
+      assert release.released_at ==
+               DateTime.from_naive!(~N[2011-05-18 15:01:01.000000Z], "Etc/UTC")
+
       assert release.version == "some updated version"
     end
 
@@ -97,7 +115,10 @@ defmodule Gatekeeper.ReleasesTest do
 
     test "create_approval/1 with valid data creates a approval" do
       assert {:ok, %Approval{} = approval} = Releases.create_approval(@valid_attrs)
-      assert approval.approved_at == DateTime.from_naive!(~N[2010-04-17 14:00:00.000000Z], "Etc/UTC")
+
+      assert approval.approved_at ==
+               DateTime.from_naive!(~N[2010-04-17 14:00:00.000000Z], "Etc/UTC")
+
       assert approval.release_id == 42
       assert approval.user_id == 42
     end
@@ -110,7 +131,10 @@ defmodule Gatekeeper.ReleasesTest do
       approval = approval_fixture()
       assert {:ok, approval} = Releases.update_approval(approval, @update_attrs)
       assert %Approval{} = approval
-      assert approval.approved_at == DateTime.from_naive!(~N[2011-05-18 15:01:01.000000Z], "Etc/UTC")
+
+      assert approval.approved_at ==
+               DateTime.from_naive!(~N[2011-05-18 15:01:01.000000Z], "Etc/UTC")
+
       assert approval.release_id == 43
       assert approval.user_id == 43
     end

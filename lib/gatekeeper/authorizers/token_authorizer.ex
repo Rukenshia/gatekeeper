@@ -20,8 +20,7 @@ defmodule Gatekeeper.TokenAuthorizer do
       ) do
     with authorization <- headers |> Enum.find(fn {n, _} -> n == "authorization" end),
          false <- is_nil(authorization),
-         {:ok, uuid} <-
-           Ecto.UUID.cast(authorization |> elem(1) |> String.split(" ") |> List.last()) do
+         {:ok, uuid} <- authorization |> elem(1) |> String.split(" ") |> List.last() do
       team =
         from(t in Team,
           where: [

@@ -5,7 +5,7 @@ defmodule Gatekeeper.Teams.Team do
 
   schema "teams" do
     field(:name, :string)
-    field(:api_key, Ecto.UUID)
+    field(:api_key, Ecto.UUID, read_after_writes: true)
 
     many_to_many(:members, Gatekeeper.Users.User, join_through: "team_members")
     has_many(:memberships, Gatekeeper.Teams.TeamMember)

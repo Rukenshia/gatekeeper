@@ -17,5 +17,6 @@ defmodule Gatekeeper.Teams.TeamMember do
     team_member
     |> cast(attrs, [:user_id, :team_id, :role, :mandatory_approver])
     |> validate_required([:user_id, :team_id, :role, :mandatory_approver])
+    |> unique_constraint(:team_id, name: :team_members_user_id_team_id_index)
   end
 end

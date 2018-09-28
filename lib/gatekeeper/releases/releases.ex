@@ -51,24 +51,13 @@ defmodule Gatekeeper.Releases do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_release(attrs \\ %{}, approvers) do
+  def create_release(attrs, approvers) do
     release =
       %Release{}
       |> Release.changeset(attrs)
 
     # TODO:
     # Add mandatory approvers from the team regardless of input
-    team_id = Ecto.Changeset.get_field(release, :team_id)
-
-    approvers =
-      approvers
-      |> String.split(",")
-      |> Enum.map(fn s -> String.to_integer(s) end)
-      |> Enum.map(fn id -> Gatekeeper.Users.get_user!(id) end)
-      |> Enum.map(fn u -> Repo.preload(u, :memberships) end)
-      |> Enum.filter(fn u ->
-        Gatekeeper.Users.User.has_membership?(u, team_id)
-      end)
 
     release =
       release
@@ -76,18 +65,7 @@ defmodule Gatekeeper.Releases do
 
     case release do
       {:ok, release} ->
-        for approver <- approvers do
-          membership = Gatekeeper.Users.User.get_membership(approver, team_id)
-
-          Logger.debug("Creation empty approval for user #{approver.name}")
-
-          create_approval(%{
-            release_id: release.id,
-            user_id: approver.id,
-            status: "initial",
-            mandatory: membership.mandatory_approver
-          })
-        end
+        release = create_release_approvals_from_string(release, approvers)
 
         {:ok, release}
 
@@ -237,5 +215,47 @@ defmodule Gatekeeper.Releases do
   """
   def change_approval(%Approval{} = approval) do
     Approval.changeset(approval, %{})
+  end
+
+  def create_release_approvals_from_string(release, approvers) do
+    case approvers do
+      "" ->
+        release
+
+      _ ->
+        approvers =
+          approvers
+          |> String.split(",")
+          |> Enum.map(fn s -> String.to_integer(s) end)
+          |> Enum.map(fn id -> Gatekeeper.Users.get_user!(id) end)
+          |> Enum.map(fn u -> Repo.preload(u, :memberships) end)
+          |> Enum.filter(fn u ->
+            Gatekeeper.Users.User.has_membership?(u, release.team_id)
+          end)
+
+        release =
+          Map.put(
+            release,
+            :approvals,
+            approvers
+            |> Enum.map(fn approver ->
+              membership = Gatekeeper.Users.User.get_membership(approver, release.team_id)
+
+              Logger.debug("Creation empty approval for user #{approver.name}")
+
+              {:ok, approval} =
+                create_approval(%{
+                  release_id: release.id,
+                  user_id: approver.id,
+                  status: "initial",
+                  mandatory: membership.mandatory_approver
+                })
+
+              approval
+            end)
+          )
+
+        release
+    end
   end
 end

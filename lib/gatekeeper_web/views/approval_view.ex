@@ -11,9 +11,6 @@ defmodule GatekeeperWeb.ApprovalView do
   end
 
   def render("approval.json", %{approval: approval}) do
-    %{id: approval.id,
-      user_id: approval.user_id,
-      release_id: approval.release_id,
-      approved_at: approval.approved_at}
+    %{id: approval.id, user_id: approval.user_id, release_id: approval.release_id}
   end
 end

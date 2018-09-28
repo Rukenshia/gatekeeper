@@ -7,18 +7,17 @@ defmodule Gatekeeper.ReleasesTest do
     alias Gatekeeper.Releases.Release
 
     @valid_attrs %{
+      team_id: 1,
       commit_hash: "some commit_hash",
       description: "some description",
       released_at: "2010-04-17 14:00:00.000000Z",
-      version: "some version",
-      status: "pending"
+      version: "some version"
     }
     @update_attrs %{
       commit_hash: "some updated commit_hash",
       description: "some updated description",
       released_at: "2011-05-18 15:01:01.000000Z",
-      version: "some updated version",
-      status: "pending"
+      version: "some updated version"
     }
     @invalid_attrs %{commit_hash: nil, description: nil, released_at: nil, version: nil}
 
@@ -26,7 +25,7 @@ defmodule Gatekeeper.ReleasesTest do
       {:ok, release} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Releases.create_release()
+        |> Releases.create_release("")
 
       release
     end
@@ -42,7 +41,7 @@ defmodule Gatekeeper.ReleasesTest do
     end
 
     test "create_release/1 with valid data creates a release" do
-      assert {:ok, %Release{} = release} = Releases.create_release(@valid_attrs)
+      assert {:ok, %Release{} = release} = Releases.create_release(@valid_attrs, "")
       assert release.commit_hash == "some commit_hash"
       assert release.description == "some description"
 
@@ -53,7 +52,7 @@ defmodule Gatekeeper.ReleasesTest do
     end
 
     test "create_release/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Releases.create_release(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Releases.create_release(@invalid_attrs, "")
     end
 
     test "update_release/2 with valid data updates the release" do
@@ -90,9 +89,19 @@ defmodule Gatekeeper.ReleasesTest do
   describe "release_approvals" do
     alias Gatekeeper.Releases.Approval
 
-    @valid_attrs %{approved_at: "2010-04-17 14:00:00.000000Z", release_id: 42, user_id: 42}
-    @update_attrs %{approved_at: "2011-05-18 15:01:01.000000Z", release_id: 43, user_id: 43}
-    @invalid_attrs %{approved_at: nil, release_id: nil, user_id: nil}
+    @valid_attrs %{
+      release_id: 42,
+      user_id: 42,
+      status: "initial",
+      mandatory: true
+    }
+    @update_attrs %{
+      release_id: 43,
+      user_id: 43,
+      status: "approved",
+      mandatory: true
+    }
+    @invalid_attrs %{release_id: nil, user_id: nil, status: nil, mandatory: nil}
 
     def approval_fixture(attrs \\ %{}) do
       {:ok, approval} =
@@ -116,9 +125,6 @@ defmodule Gatekeeper.ReleasesTest do
     test "create_approval/1 with valid data creates a approval" do
       assert {:ok, %Approval{} = approval} = Releases.create_approval(@valid_attrs)
 
-      assert approval.approved_at ==
-               DateTime.from_naive!(~N[2010-04-17 14:00:00.000000Z], "Etc/UTC")
-
       assert approval.release_id == 42
       assert approval.user_id == 42
     end
@@ -131,9 +137,6 @@ defmodule Gatekeeper.ReleasesTest do
       approval = approval_fixture()
       assert {:ok, approval} = Releases.update_approval(approval, @update_attrs)
       assert %Approval{} = approval
-
-      assert approval.approved_at ==
-               DateTime.from_naive!(~N[2011-05-18 15:01:01.000000Z], "Etc/UTC")
 
       assert approval.release_id == 43
       assert approval.user_id == 43

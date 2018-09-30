@@ -142,6 +142,18 @@ defmodule GatekeeperWeb.ReleaseController do
       )
       |> Repo.all()
 
+    query = conn |> fetch_query_params() |> Map.get(:query_params)
+
+    releases =
+      case query do
+        %{"released" => r} when r == "true" or r == "1" ->
+          releases
+          |> Enum.filter(fn r -> Release.released?(r) end)
+
+        _ ->
+          releases
+      end
+
     conn
     |> render("releases.json", %{releases: releases})
   end

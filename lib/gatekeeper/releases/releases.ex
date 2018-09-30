@@ -56,22 +56,56 @@ defmodule Gatekeeper.Releases do
       %Release{}
       |> Release.changeset(attrs)
 
-    # TODO:
-    # Add mandatory approvers from the team regardless of input
-
     release =
       release
       |> Repo.insert()
 
     case release do
       {:ok, release} ->
-        release = create_release_approvals_from_string(release, approvers)
+        release =
+          create_release_approvals_from_string(release, approvers)
+          |> add_mandatory_approvals()
 
         {:ok, release}
 
       release ->
         release
     end
+  end
+
+  defp add_mandatory_approvals(release) do
+    release =
+      release
+      |> Repo.preload(:approvals)
+      |> Repo.preload(:team)
+
+    current_approvers =
+      release.approvals
+      |> Enum.map(fn a -> a.user_id end)
+
+    mandatory =
+      release.team
+      |> Repo.preload(:memberships)
+      |> Map.get(:memberships)
+      |> Enum.filter(fn m -> m.mandatory_approver end)
+      |> Enum.map(fn m -> m.user_id end)
+
+    approvals =
+      (mandatory -- current_approvers)
+      |> Enum.map(fn user_id ->
+        {:ok, approval} =
+          create_approval(%{
+            release_id: release.id,
+            user_id: user_id,
+            mandatory: true,
+            status: "initial"
+          })
+
+        approval
+      end)
+
+    release
+    |> Map.put(:approvals, release.approvals ++ approvals)
   end
 
   @doc """

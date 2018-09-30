@@ -20,7 +20,7 @@ defmodule Gatekeeper.TokenAuthorizer do
       ) do
     with authorization <- headers |> Enum.find(fn {n, _} -> n == "authorization" end),
          false <- is_nil(authorization),
-         {:ok, uuid} <- authorization |> elem(1) |> String.split(" ") |> List.last() do
+         uuid <- authorization |> elem(1) |> String.split(" ") |> List.last() do
       team =
         from(t in Team,
           where: [
@@ -39,10 +39,13 @@ defmodule Gatekeeper.TokenAuthorizer do
         |> halt()
       end
     else
-      _ ->
+      result ->
+        Logger.warn("TokenAuthorizer failed. result: #{inspect(result)}")
+
         conn
         |> put_status(401)
         |> json(%{ok: false, message: "authorization_failed"})
+        |> halt()
     end
   end
 end

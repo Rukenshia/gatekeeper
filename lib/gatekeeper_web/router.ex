@@ -79,6 +79,8 @@ defmodule GatekeeperWeb.Router do
           scope "/:team_id/releases" do
             get("/", ReleaseController, :api_get_releases)
             post("/", ReleaseController, :api_create_release)
+
+            get("/:release_id", ReleaseController, :api_get_release)
           end
         end
       end

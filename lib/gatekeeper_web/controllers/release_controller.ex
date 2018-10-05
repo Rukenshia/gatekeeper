@@ -133,12 +133,30 @@ defmodule GatekeeperWeb.ReleaseController do
     |> redirect(to: team_release_path(conn, :index, release.team_id))
   end
 
+  def api_get_release(conn, %{"release_id" => release_id}) do
+    with %Release{} = release <- Repo.get(Release, String.to_integer(release_id)) do
+      conn
+      |> render("release.json", %{release: release})
+    else
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{ok: false})
+
+      _ ->
+        conn
+        |> put_status(:internal_server_error)
+        |> json(%{ok: false})
+    end
+  end
+
   def api_get_releases(conn, %{"team_id" => team_id}) do
     releases =
       from(r in Release,
         where: [
           team_id: ^team_id
-        ]
+        ],
+        order_by: [desc: r.released_at]
       )
       |> Repo.all()
 

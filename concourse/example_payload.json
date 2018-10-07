@@ -1,0 +1,9 @@
+{
+	"source": {
+		"api_key": "53487cd0-ed84-4571-9d4a-703f73b2be45",
+		"team_url": "http://localhost:4000/api/v1/integrations/teams/1"
+	},
+	"version": {
+		"ref": "1.0.0"
+	}
+}

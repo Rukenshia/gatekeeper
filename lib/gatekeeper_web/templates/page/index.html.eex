@@ -59,6 +59,19 @@
   <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
     <h2 class="mdc-typography--headline3">Your teams</h2>
   </div>
+  <%= if length(assigns[:current_user].teams) == 0 do %>
+    <div class="mdc-layout-grid__cell--span-4 mdc-card gk-card--flat">
+      <div class="gk-card__media--text">
+        <div class="gk-card__media--text-title">
+          <span class="gk-card__media--text-headline">No teams yet</span>
+        </div>
+        <div class="gk-card__media--text-body">
+          It seems like you don't belong to any team yet. In some cases, you might have to
+          log out of your identity provider and log in again if you just joined a team.
+        </div>
+      </div>
+    </div>
+  <% end %>
   <%= for team <- assigns[:current_user].teams do %>
   <div class="mdc-layout-grid__cell mdc-card">
     <div class="mdc-card__media gk-card__media--text">

@@ -12,6 +12,7 @@ defmodule Gatekeeper.Releases.Release do
 
     belongs_to(:team, Gatekeeper.Teams.Team)
     has_many(:approvals, Gatekeeper.Releases.Approval)
+    has_many(:comments, Gatekeeper.Releases.Comment)
     timestamps()
   end
 

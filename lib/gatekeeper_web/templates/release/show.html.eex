@@ -37,6 +37,17 @@
                 <div class="gk-card__media--text-title">
                   This release is awaiting your approval
                 </div>
+                <div class="gk-validation" :class="{'gk-validation--failed': enableValidation && invalid}">
+                  <div class="mdc-text-field mdc-text-field--textarea">
+                    <label for="comment" class="mdc-floating-label">Comment</label>
+                    <textarea class="mdc-text-field__input" rows="4" cols="40" v-model="comment"></textarea>  
+                  </div>
+
+                  
+                  <p id="content-validation" v-if="enableValidation && invalid" class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--persistent">
+                    You need to leave a comment when declining a release.
+                  </p>
+                </div>
               </div>
               <div class="mdc-card__actions">
                 <div class="mdc-card__action-buttons">
@@ -62,11 +73,19 @@
     <div class="mdc-layout-grid__cell--span-12">
       <div class="mdc-layout-grid__inner">
         <div class="mdc-layout-grid__cell--span-6">
-          <ul id="approver-selection-list" class="mdc-list mdc-list--non-interactive" aria-orientation="vertical">
+          <ul id="approver-selection-list" class="mdc-list mdc-list--non-interactive mdc-list--two-line" aria-orientation="vertical">
             <%= for approval <- @release.approvals do %>
               <li class="mdc-list-item">
-                <span class="mdc-list-item__graphic material-icons <%= approval_icon_color_class approval %>"><%= approval_icon approval %></span>
-                <span class="mdc-list-item__text"><%= approval.user.name %></span>
+                <%= with %{} = approval_comment <- approval_comment(@release.comments, approval.id) do %>
+                  <span class="mdc-list-item__graphic material-icons <%= approval_icon_color_class approval %>"><%= approval_icon approval %></span>
+                  <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text"><%= approval.user.name %></span>
+                    <span class="mdc-list-item__secondary-text"><%= approval_comment.content %></span>
+                  </span>
+                <% else _ -> %>
+                  <span class="mdc-list-item__graphic material-icons <%= approval_icon_color_class approval %>"><%= approval_icon approval %></span>
+                  <span class="mdc-list-item__text"><%= approval.user.name %></span>
+                <% end %>
               </li>
             <% end %>
           </ul>
@@ -77,7 +96,7 @@
 
   <div class="mdc-layout-grid__cell--span-12 mdc-layout-grid__inner">
     <div class="mdc-layout-grid__cell--span-12 gk-layout-grid__cell--short">
-      <h3 class="mdc-typography--headline4">Release Information</h3>
+      <h3 class="mdc-typography--headline3">Release Information</h3>
     </div>
     <div class="mdc-layout-grid__inner mdc-layout-grid__cell--span-6">
       <div class="mdc-layout-grid__cell--span-12">
@@ -128,7 +147,7 @@
       </div>
 
       <div class="mdc-layout-grid__cell--span-12">
-        <h4 class="mdc-typography--headline5">Description</h4>
+        <h4 class="mdc-typography--headline4">Description</h4>
         <span class="gk-typography--inset mdc-typography--body1"><%= @release.description %></span>
       </div>
     </div>
@@ -144,19 +163,41 @@
         new Vue({
           el: '#app',
           data: {
+            comment: "",
+            enableValidation: false,
+          },
+          computed: {
+            invalid() {
+              return this.comment === '';
+            },
           },
           methods: {
             release() {
               axios.post('/api/v1/teams/<%= @release.team_id %>/releases/<%= @release.id %>/release', {})
-                .then(() => window.location.reload());
+              .then(() => window.location.reload());
             },
             approve() {
-              axios.post('/api/v1/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/approve', {})
-                .then(() => window.location.reload());
+
+              const comment = this.comment !== '' ? { content: this.comment } : undefined;
+
+              console.log(comment);
+              axios.post('/api/v1/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/approve', {
+                comment,
+              })
+              .then(() => window.location.reload());
             },
             decline() {
-              axios.post('/api/v1/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/decline', {})
-                .then(() => window.location.reload());
+              this.enableValidation = true;
+              if (this.invalid) {
+                return;
+              }
+
+              axios.post('/api/v1/teams/<%= @release.team_id %>/releases/<%= @release.id %>/approvals/<%= @user_approval.id %>/decline', {
+                comment: {
+                  content: this.comment,
+                },
+              })
+              .then(() => window.location.reload());
             },
           },
         });

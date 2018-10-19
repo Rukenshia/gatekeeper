@@ -7,6 +7,7 @@ defmodule Gatekeeper.Releases.Approval do
     field(:mandatory, :boolean)
     belongs_to(:release, Gatekeeper.Releases.Release)
     belongs_to(:user, Gatekeeper.Users.User)
+    has_one(:comment, Gatekeeper.Releases.Comment, on_delete: :delete_all)
     timestamps()
   end
 

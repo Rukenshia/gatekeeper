@@ -18,7 +18,7 @@ defmodule Gatekeeper.Releases.Comment do
   @doc false
   def changeset(comment, attrs) do
     comment
-    |> cast(attrs, [:content])
+    |> cast(attrs, [:content, :approval_id, :user_id, :release_id])
     |> validate_required([:content])
   end
 end

@@ -1,5 +1,6 @@
 defmodule GatekeeperWeb.ReleaseView do
   use GatekeeperWeb, :view
+  require Logger
 
   import Gatekeeper.Releases.Release
 
@@ -13,6 +14,12 @@ defmodule GatekeeperWeb.ReleaseView do
   def render("releases.json", %{releases: releases}) do
     releases
     |> Enum.map(fn r -> render("release.json", %{release: r}) end)
+  end
+
+  def render("release_comment.json", %{comment: comment}) do
+    %{
+      content: comment.content
+    }
   end
 
   def render("release.json", %{release: release}) do
@@ -57,5 +64,17 @@ defmodule GatekeeperWeb.ReleaseView do
 
   def format_date(date) do
     "#{date.year}-#{date.month}-#{date.day}"
+  end
+
+  def approval_comment(comments, approval_id) do
+    comment =
+      comments
+      |> Enum.find(fn c -> c.approval_id == approval_id end)
+
+    if comment != nil do
+      render("release_comment.json", %{comment: comment})
+    else
+      nil
+    end
   end
 end

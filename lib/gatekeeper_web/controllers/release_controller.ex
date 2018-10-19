@@ -7,6 +7,7 @@ defmodule GatekeeperWeb.ReleaseController do
 
   alias Gatekeeper.Releases
   alias Gatekeeper.Releases.Release
+  alias Gatekeeper.Releases.Comment
   alias Gatekeeper.Users.User
   alias Gatekeeper.Repo
 
@@ -43,6 +44,7 @@ defmodule GatekeeperWeb.ReleaseController do
     release =
       Releases.get_release!(id)
       |> Repo.preload(:approvals)
+      |> Repo.preload(:comments)
 
     release =
       Map.put(
@@ -206,6 +208,46 @@ defmodule GatekeeperWeb.ReleaseController do
     render(conn, "approvals.json", approvals: release.approvals)
   end
 
+  def api_approve_release(conn, %{"approval_id" => approval, "comment" => comment_attrs}) do
+    user = Guardian.Plug.current_resource(conn)
+    approval = Releases.get_approval!(approval)
+
+    comment_attrs =
+      comment_attrs
+      |> Map.merge(%{
+        "release_id" => approval.release_id,
+        "approval_id" => approval.id,
+        "user_id" => user.id
+      })
+
+    if user.id == approval.user_id do
+      case %Comment{}
+           |> Comment.changeset(comment_attrs)
+           |> Repo.insert_or_update() do
+        {:ok, _} ->
+          case Releases.update_approval(approval, %{status: "approved"}) do
+            {:ok, _} ->
+              conn
+              |> json(%{ok: true})
+
+            {:error, _} ->
+              conn
+              |> put_status(500)
+              |> json(%{ok: false})
+          end
+
+        {:error, _} ->
+          conn
+          |> put_status(400)
+          |> json(%{ok: false, error: "failed comment insertion"})
+      end
+    else
+      conn
+      |> put_status(401)
+      |> json(%{ok: false})
+    end
+  end
+
   def api_approve_release(conn, %{"approval_id" => approval}) do
     user = Guardian.Plug.current_resource(conn)
 
@@ -229,20 +271,38 @@ defmodule GatekeeperWeb.ReleaseController do
     end
   end
 
-  def api_decline_release(conn, %{"approval_id" => approval}) do
+  def api_decline_release(conn, %{"approval_id" => approval, "comment" => comment_attrs}) do
     user = Guardian.Plug.current_resource(conn)
     approval = Releases.get_approval!(approval)
 
+    comment_attrs =
+      comment_attrs
+      |> Map.merge(%{
+        "release_id" => approval.release_id,
+        "approval_id" => approval.id,
+        "user_id" => user.id
+      })
+
     if user.id == approval.user_id do
-      case Releases.update_approval(approval, %{status: "declined"}) do
+      case %Comment{}
+           |> Comment.changeset(comment_attrs)
+           |> Repo.insert() do
         {:ok, _} ->
-          conn
-          |> json(%{ok: true})
+          case Releases.update_approval(approval, %{status: "declined"}) do
+            {:ok, _} ->
+              conn
+              |> json(%{ok: true})
+
+            {:error, _} ->
+              conn
+              |> put_status(500)
+              |> json(%{ok: false})
+          end
 
         {:error, _} ->
           conn
-          |> put_status(500)
-          |> json(%{ok: false})
+          |> put_status(400)
+          |> json(%{ok: false, error: "failed comment insertion"})
       end
     else
       conn

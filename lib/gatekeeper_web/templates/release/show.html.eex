@@ -147,7 +147,7 @@
       </div>
 
       <div class="mdc-layout-grid__cell--span-12">
-        <h4 class="mdc-typography--headline4">Description</h4>
+        <h3 class="mdc-typography--headline3">Description</h3>
         <span class="gk-typography--inset mdc-typography--body1"><%= @release.description %></span>
       </div>
     </div>

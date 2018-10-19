@@ -23,7 +23,7 @@ config :ueberauth, Ueberauth,
 
 config :ueberauth, Ueberauth.Strategy.Keycloak.OAuth,
   client_id: "gatekeeper",
-  client_secret: "bce77120-0247-46ec-9141-65ab81fc4bf5",
+  client_secret: "505055a7-4aa3-450d-b8fa-76f668fc354b",
   redirect_uri: "http://localhost:4000/auth/keycloak"
 
 config :gatekeeper, Gatekeeper.Guardian,

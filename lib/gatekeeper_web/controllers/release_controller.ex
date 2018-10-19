@@ -97,6 +97,12 @@ defmodule GatekeeperWeb.ReleaseController do
   def reset_approval([approval | t], _last) do
     case Releases.update_approval(approval, %{status: "initial"}) do
       {:ok, approval} ->
+        _ =
+          from(c in Comment,
+            where: c.approval_id == ^approval.id and c.release_id == ^approval.release_id
+          )
+          |> Repo.delete_all()
+
         reset_approval(t, approval)
 
       {:error, %Ecto.Changeset{} = changeset} ->

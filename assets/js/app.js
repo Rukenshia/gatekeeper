@@ -19,7 +19,7 @@ import "phoenix_html";
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
-import {MDCTopAppBar} from '@material/top-app-bar/index';
+import { MDCTopAppBar } from '@material/top-app-bar/index';
 
 // Instantiation
 const topAppBarElement = document.querySelector('.mdc-top-app-bar');
@@ -51,13 +51,23 @@ if (dialogSelector) {
   dialog.show();
 }
 
-import {MDCTextFieldHelperText} from '@material/textfield/helper-text';
+import { MDCTextFieldHelperText } from '@material/textfield/helper-text';
 
 const textFieldHelperSelector = document.querySelectorAll('.mdc-text-field-helper-text');
 
 if (textFieldHelperSelector) {
   textFieldHelperSelector.forEach(s => {
     new MDCTextFieldHelperText(s);
+  });
+}
+
+import { MDCTabBar } from '@material/tab-bar';
+
+const tabBarSelector = document.querySelectorAll('.mdc-tab-bar');
+
+if (tabBarSelector) {
+  textFieldHelperSelector.forEach(s => {
+    new MDCTabBar(s);
   });
 }
 

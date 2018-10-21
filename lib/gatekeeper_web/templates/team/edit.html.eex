@@ -1,4 +1,4 @@
-<h2>Edit Team</h2>
+<h2 class="mdc-typography--headline2">Edit Team</h2>
 
 <div id="app">
   <div class="mdc-layout-grid">
@@ -17,32 +17,35 @@
                 <%= @team.api_key %>
               </code></pre>
 
-              <h4 class="mdc-typography--headline4">Integrations</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-              <div class="mdc-tab-bar" role="tablist">
-                <div class="mdc-tab-scroller">
-                  <div class="mdc-tab-scroller__scroll-area">
-                    <div class="mdc-tab-scroller__scroll-content">
-                      <button class="mdc-tab mdc-tab--active" role="tab" aria-selected="true" tabindex="0">
-                        <span class="mdc-tab__content">
-                          <span class="mdc-tab__icon material-icons" aria-hidden="true">favorite</span>
-                          <span class="mdc-tab__text-label">Concourse</span>
-                        </span>
-                        <span class="mdc-tab-indicator mdc-tab-indicator--active">
-                          <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                        </span>
-                        <span class="mdc-tab__ripple"></span>
-                      </button>
-                      <button class="mdc-tab mdc-tab--disabled" role="tab" aria-selected="false" tabindex="1">
-                        <span class="mdc-tab__content">
-                          <span class="mdc-tab__icon material-icons" aria-hidden="true">favorite</span>
-                          <span class="mdc-tab__text-label">Rocket.Chat</span>
-                        </span>
-                        <span class="mdc-tab__ripple"></span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+  <h3 class="mdc-typography--headline3">Integrations</h3>
+  <div class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+      <div class="mdc-layout-grid__cell--span-6 mdc-card gk-card--expandable">
+        <div class="gk-card__toggle" data-teaser="concourse">
+          <i class="material-icons">keyboard_arrow_down</i>
+        </div>
+        <div class="mdc-card__media gk-card__media--text">
+          <div class="gk-card__media--text-title">
+            <div class="gk-card__toggle--teaser">
+              <div class="gk-card__media--text-headline">Concourse</div>
+            </div>
+            <div class="gk-card__toggle--content">
+              <div class="gk-card__media--text-body">
+                You can find an example pipeline for concourse here. Please note that due to some
+                Concourse internals, two separate resources are needed for creating a new release request
+                and triggering pipelines for approved releases.
+                <strong>This example is personalised to your team, so do not share it with others.</strong>
+
+                <pre><code>
+                </code></pre>
+              
               </div>
             </div>
           </div>
@@ -50,37 +53,26 @@
       </div>
     </div>
   </div>
-  <h3>Members</h3>
+
+  <h3 class="mdc-typography--headline3">Members</h3>
 
   <div class="mdc-layout-grid">
-    <div v-if="loading" class="mdc-layout-grid__inner">
-      <div class="mdc-layout-grid__cell--span-1"></div>
-      <div class="mdc-layout-grid__cell--span-6">
-        <div role="progressbar" style="width: 100%" class="mdc-linear-progress gk-linear-progress mdc-linear-progress--indeterminate">
-          <div class="mdc-linear-progress__buffer"></div>
-          <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
-            <span class="mdc-linear-progress__bar-inner"></span>
-          </div>
-          <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
-            <span class="mdc-linear-progress__bar-inner"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-else class="mdc-layout-grid__inner">
-      <div class="mdc-layout-grid__cell" v-for="member in team.members">
-        <div class="mdc-card">
+    <div class="mdc-layout-grid__inner">
+      <%= for member <- @team.members do %>
+        <div class="mdc-layout-grid__cell mdc-card">
           <div class="mdc-card__media gk-card__media--text">
             <div class="gk-card__media--text-title">
-              <div class="gk-card__media--text-headline">{{member.name}}</div>
-              <div class="gk-card__media--text-subtitle" :class="`gk-typography--role__${member.role}`">{{member.role | capitalize }}</div>
+              <div class="gk-card__media--text-headline"><%= member.name %></div>
+              <%= with membership <- get_membership(member, @team.memberships) do %>
+                <div class="gk-card__media--text-subtitle gk-typography--role__<%= membership.role %>"><%= membership.role |> String.capitalize %></div>
+              <% end %>
             </div>
           </div>
         </div>
-      </div>
+      <% end %>
     </div>
   </div>
-  <h3>Add new member</h3>
+  <h4 class="mdc-typography--headline4">Add new member</h4>
   <div class="mdc-layout-grid">
     <div class="mdc-layout-grid__inner">
       <div class="mdc-layout-grid__cell--span-8 mdc-card gk-card--flat">
@@ -100,8 +92,3 @@
 
 
 <%= link "Back", to: team_path(@conn, :show, @team.id), class: "mdc-button" %>
-
-<script>
-  window.vueData = <%= {:safe, Poison.encode!(render("team.json", %{team: @team})) } %>;
-</script>
-<script src="<%= static_path(@conn, "/js/team.js") %>" type="text/javascript"></script>

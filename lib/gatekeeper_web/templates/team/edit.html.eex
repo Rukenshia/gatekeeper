@@ -43,7 +43,83 @@
                 and triggering pipelines for approved releases.
                 <strong>This example is personalised to your team, so do not share it with others.</strong>
 
-                <pre><code>
+                <pre style="overflow: scroll"><code>
+---
+resource_types:
+- name: gatekeeper
+  type: docker-image
+  source:
+    repository: ruken/gatekeeper-resource
+- name: meta
+  type: docker-image
+  source:
+    repository: swce/metadata-resource
+
+resources:
+- name: metadata
+  type: meta
+
+- name: create-version
+  type: gatekeeper
+  source:
+    api_key: "<%= @team.api_key %>"
+    team_url: "http://gatekeeper.in.fkn.space/api/v1/integrations/teams/<%= @team.id %>"
+
+- name: version
+  type: gatekeeper
+  source:
+    api_key: "<%= @team.api_key %>"
+    team_url: "http://gatekeeper.in.fkn.space/api/v1/integrations/teams/<%= @team.id %>"
+
+jobs:
+- name: request new release
+  plan:
+  - get: metadata
+  - task: construct release payload
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: alpine
+      inputs:
+      - name: metadata
+      outputs:
+      - name: release-request
+      run:
+        path: /bin/sh
+        args:
+        - -excl
+        - >
+          apk add --update --no-cache jq
+
+          jq -n --arg version "$(cat metadata/build-name)" \
+             --arg description "Release $(cat metadata/build-name), automatically requested by Concourse pipeline $(cat metadata/build-team-name)/$(cat metadata/build-pipeline-name)" \
+             --arg commit_hash "unknown" \
+            '{release: {version: $version, description: $description, commit_hash: $commit_hash}, approvers: ""}' > release-request/payload
+  - put: create-version
+    params:
+      payload_path: release-request/payload
+
+- name: show release
+  plan:
+  - get: version
+    trigger: true
+  - task: construct release payload
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: alpine
+      inputs:
+      - name: version
+      run:
+        path: /bin/sh
+        args:
+        - -excl
+        - >
+          cat version/release
                 </code></pre>
               
               </div>

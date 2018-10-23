@@ -33,7 +33,10 @@ defmodule GatekeeperWeb.TeamController do
   end
 
   def edit(conn, %{"team_id" => team_id}) do
-    team = Teams.get_team!(team_id)
+    team =
+      Teams.get_team!(team_id)
+      |> Repo.preload(:members)
+      |> Repo.preload(:memberships)
 
     render(conn, "edit.html", team: team)
   end

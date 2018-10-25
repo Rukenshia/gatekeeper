@@ -5,6 +5,9 @@ defmodule Gatekeeper.ReleasesTest do
 
   describe "releases" do
     alias Gatekeeper.Releases.Release
+    alias Gatekeeper.Teams.Team
+
+    alias Gatekeeper.Repo
 
     @valid_attrs %{
       team_id: 1,
@@ -22,9 +25,21 @@ defmodule Gatekeeper.ReleasesTest do
     @invalid_attrs %{commit_hash: nil, description: nil, released_at: nil, version: nil}
 
     def release_fixture(attrs \\ %{}) do
+      team =
+        %Team{
+          id: 1,
+          name: "unit-test team"
+        }
+        |> Repo.insert!()
+
+      attrs =
+        @valid_attrs
+        |> Map.merge(attrs)
+        |> Map.put(:team_id, team.id)
+
       {:ok, release} =
         attrs
-        |> Enum.into(@valid_attrs)
+        |> Enum.into(attrs)
         |> Releases.create_release("")
 
       release
@@ -32,15 +47,22 @@ defmodule Gatekeeper.ReleasesTest do
 
     test "list_releases/0 returns all releases" do
       release = release_fixture()
-      assert Releases.list_releases() == [release]
+
+      assert Releases.list_releases()
+             |> Enum.map(fn r -> r |> Repo.preload(:approvals) |> Repo.preload(:team) end) == [
+               release
+             ]
     end
 
     test "get_release!/1 returns the release with given id" do
       release = release_fixture()
-      assert Releases.get_release!(release.id) == release
+
+      assert Releases.get_release!(release.id) |> Repo.preload(:approvals) |> Repo.preload(:team) ==
+               release
     end
 
     test "create_release/1 with valid data creates a release" do
+      %Team{id: 1, name: "unit-test"} |> Repo.insert!()
       assert {:ok, %Release{} = release} = Releases.create_release(@valid_attrs, "")
       assert release.commit_hash == "some commit_hash"
       assert release.description == "some description"
@@ -71,7 +93,11 @@ defmodule Gatekeeper.ReleasesTest do
     test "update_release/2 with invalid data returns error changeset" do
       release = release_fixture()
       assert {:error, %Ecto.Changeset{}} = Releases.update_release(release, @invalid_attrs)
-      assert release == Releases.get_release!(release.id)
+
+      assert release ==
+               Releases.get_release!(release.id)
+               |> Repo.preload(:approvals)
+               |> Repo.preload(:team)
     end
 
     test "delete_release/1 deletes the release" do

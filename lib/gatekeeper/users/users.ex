@@ -104,10 +104,38 @@ defmodule Gatekeeper.Users do
   end
 
   @doc """
+  Parses the desired role for a team member from the team name provided
+  from the auth provider
+
+  team_name => "member" of team "team_name"
+  team_name.foo => "foo" of team "team_name"
+  team_name.foo.bar => "foo" of team "team_name" (bar is ignored)
+
+  Predefined special roles:
+
+  "administrator" => Able to manage the team
+
+  """
+  defp parse_role_from_team_auth(team_name) do
+    [team_name, role] =
+      case String.split(team_name, ".") do
+        [name, role] -> [name, role]
+        [name] -> [name, "member"]
+        [name, role | _] -> [name, role]
+      end
+
+    [String.downcase(team_name), String.downcase(role)]
+  end
+
+  @doc """
   Finds or creates a user from Auth parameters
   """
   def find_or_create_from_auth(auth, teams) do
     Logger.debug("find_or_create_from_auth for #{inspect(auth.info)}")
+
+    teams =
+      teams
+      |> Enum.map(&parse_role_from_team_auth/1)
 
     case Repo.get_by(User, email: auth.info.email) do
       user when user != nil ->
@@ -118,24 +146,35 @@ defmodule Gatekeeper.Users do
 
         # Remove user from teams he is not part of anymore
         for team <- user.teams do
-          if is_nil(Enum.find(teams, fn t -> t == team.name end)) do
+          if is_nil(Enum.find(teams, fn [t, _] -> t == team.name end)) do
             Enum.find(user.memberships, fn m -> m.team_id == team.id end)
             |> Repo.delete!()
           end
         end
 
-        for team <- teams || [] do
-          if is_nil(Enum.find(user.teams, fn t -> t.name == team end)) do
-            team = Repo.get_by!(Gatekeeper.Teams.Team, name: team)
+        for [team_name, role] <- teams || [] do
+          team = Enum.find(user.teams, fn t -> t.name == team_name end)
+
+          if is_nil(team) do
+            team = Repo.get_by!(Gatekeeper.Teams.Team, name: team_name)
 
             %Gatekeeper.Teams.TeamMember{}
             |> Gatekeeper.Teams.TeamMember.changeset(%{
               user_id: user.id,
               team_id: team.id,
-              role: "administrator",
-              mandatory_approver: true
+              role: role,
+              mandatory_approver: if(role == "administrator", do: true, else: false)
             })
             |> Repo.insert!()
+          else
+            Enum.find(user.memberships, fn m -> m.team_id == team.id end)
+            |> Gatekeeper.Teams.TeamMember.changeset(%{
+              user_id: user.id,
+              team_id: team.id,
+              role: role,
+              mandatory_approver: if(role == "administrator", do: true, else: false)
+            })
+            |> Repo.update!()
           end
         end
 

@@ -1,45 +1,85 @@
 defmodule GatekeeperWeb.TeamControllerTest do
   use GatekeeperWeb.ConnCase
+  require Logger
 
   alias Gatekeeper.Teams
+  alias Gatekeeper.Users
+  alias Gatekeeper.Repo
 
   @create_attrs %{name: "some name"}
-  @update_attrs %{name: "some updated name"}
-  @invalid_attrs %{name: nil}
+  @create_user_attrs %{name: "some user", email: "some@user.com"}
 
   def fixture(:team) do
     {:ok, team} = Teams.create_team(@create_attrs)
     team
   end
 
-  describe "edit team" do
-    setup [:create_team]
+  def fixture(:user) do
+    {:ok, user} = Users.create_user(@create_user_attrs)
+    user
+  end
+
+  def fixture(:team_member, team, user) do
+    {:ok, membership} =
+      %Teams.TeamMember{
+        user_id: user.id,
+        team_id: team.id,
+        role: "administrator"
+      }
+      |> Repo.insert()
+
+    membership
+  end
+
+  describe "authenticated edit team when not part of the team" do
+    setup [:create_team, :create_user, :authenticate_user]
 
     test "renders form for editing chosen team", %{conn: conn, team: team} do
       conn = get(conn, team_path(conn, :edit, team))
-      assert html_response(conn, 200) =~ "Edit Team"
+      assert response(conn, 401) =~ "You are not a member of this team"
+    end
+
+    test "does not leak the teams api key", %{conn: conn, team: team} do
+      conn = get(conn, team_path(conn, :edit, team))
+      assert !(response(conn, 401) =~ team.api_key)
     end
   end
 
-  describe "update team" do
-    setup [:create_team]
+  describe "authenticated edit team" do
+    setup [:create_team, :create_user, :associate_user_with_team, :authenticate_user]
 
-    test "redirects when data is valid", %{conn: conn, team: team} do
-      conn = put(conn, team_path(conn, :update, team), team: @update_attrs)
-      assert redirected_to(conn) == team_path(conn, :show, team)
-
-      conn = get(conn, team_path(conn, :show, team))
-      assert html_response(conn, 200) =~ "some updated name"
+    test "shows the teams members", %{conn: conn, team: team} do
+      conn = get(conn, team_path(conn, :edit, team))
+      assert response(conn, 200) =~ "Members"
     end
 
-    test "renders errors when data is invalid", %{conn: conn, team: team} do
-      conn = put(conn, team_path(conn, :update, team), team: @invalid_attrs)
-      assert html_response(conn, 200) =~ "Edit Team"
+    test "shows the teams api key", %{conn: conn, team: team} do
+      conn = get(conn, team_path(conn, :edit, team))
+      assert response(conn, 200) =~ team.api_key
     end
   end
 
   defp create_team(_) do
     team = fixture(:team)
     {:ok, team: team}
+  end
+
+  defp create_user(_) do
+    user = fixture(:user)
+    {:ok, user: user}
+  end
+
+  defp authenticate_user(%{conn: conn, user: user}) do
+    conn =
+      conn
+      |> Gatekeeper.Guardian.Plug.sign_in(user, %{})
+
+    {:ok, conn: conn}
+  end
+
+  defp associate_user_with_team(%{user: user, team: team}) do
+    membership = fixture(:team_member, team, user)
+
+    {:ok, membership: membership}
   end
 end

@@ -18,8 +18,7 @@ defmodule Gatekeeper.TeamAuthorizer do
       conn
     else
       conn
-      |> put_flash(:error, "You are not a member of this team")
-      |> redirect(to: "/home")
+      |> send_resp(401, "You are not a member of this team")
       |> halt()
     end
   end
